@@ -216,8 +216,9 @@ public class UsuariosController extends HttpServlet {
                    //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
                    break;
                case 2:
-                   //Empresa                   
-                   request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
+                   //Empresa
+                   response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                    break;
                case 3:
                    //Empleado
@@ -228,7 +229,7 @@ public class UsuariosController extends HttpServlet {
                    //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                    break;
            }
-           response.sendRedirect(request.getContextPath()+ "/usuarios.do?operacion=login");
+           
        }catch(SQLException | IOException ex){
            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
        }
