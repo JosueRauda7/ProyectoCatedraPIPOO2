@@ -43,7 +43,6 @@ public class UsuariosController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
         String operacion = request.getParameter("operacion");
         switch(operacion){
 
@@ -212,16 +211,20 @@ public class UsuariosController extends HttpServlet {
                    request.getSession().setAttribute("fracaso","Cuenta no verificada");                   
                    break;
                case 1:
-                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   //Administrador
+                   //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
                    break;
                case 2:
-                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   //Empresa
+                   response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                    break;
                case 3:
-                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   //Empleado
+                   //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                    break;
                case 4:
-                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   //Cliente
+                   //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                    break;
            }
            response.sendRedirect(request.getContextPath()+ "/usuarios.do?operacion=login");
