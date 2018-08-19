@@ -59,6 +59,10 @@ public class UsuariosController extends HttpServlet {
             case "verificar":
                  confirmar(request,response);
                 break;
+            case "ingresar":
+                ingresar(request,response);
+                break;
+            
         }
     }
 
@@ -192,6 +196,38 @@ public class UsuariosController extends HttpServlet {
         }catch(SQLException | IOException ex){
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
         }
+    }
+
+    private void ingresar(HttpServletRequest request, HttpServletResponse response) {
+        try{
+           Usuario usuario = new Usuario();
+           usuario.setCorreo(request.getParameter("correo"));
+           usuario.setContrasenia(request.getParameter("password"));
+           int estado = UM.verificarSesion(usuario);
+           switch(estado){
+               case -1:
+                   request.getSession().setAttribute("fracaso","Usuario y/o contraseña incorrecta");
+                   break;
+               case 0:
+                   request.getSession().setAttribute("fracaso","Cuenta no verificada");                   
+                   break;
+               case 1:
+                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   break;
+               case 2:
+                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   break;
+               case 3:
+                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   break;
+               case 4:
+                   request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   break;
+           }
+           response.sendRedirect(request.getContextPath()+ "/usuarios.do?operacion=login");
+       }catch(SQLException | IOException ex){
+           Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
+       }
     }
 
 }
