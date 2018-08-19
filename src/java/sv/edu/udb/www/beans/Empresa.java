@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sv.edu.udb.www.beans;
 
 /**
@@ -18,6 +14,8 @@ public class Empresa {
     private Rubro rubro;
     private double comision;
     private Usuario usuario;
+    private int idRubro;
+    private int idUsuario;
     
     public Empresa(){
         this.codigoEmpresa="";
@@ -28,8 +26,24 @@ public class Empresa {
         this.rubro=null;
         this.comision=0;
         this.usuario=null;
+        this.idRubro=0;
+        this.idUsuario=0;
+    }
+public int getIdRubro() {
+        return idRubro;
     }
 
+    public void setIdRubro(int idRubro) {
+        this.idRubro = idRubro;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
     public String getCodigoEmpresa() {
         return codigoEmpresa;
     }
