@@ -69,18 +69,21 @@ public class UsuariosModel extends Conexion{
     
     public int verificarSesion(Usuario usuario) throws SQLException {
         try {
-            sql = "SELECT confirmado FROM usuarios WHERE correo=? AND contrasena=SHA2(?,256)";
+            int tipousuario=0;
+            sql = "SELECT Confirmado, IdTipoUsuario FROM usuarios WHERE Correo=? AND Contrasena=SHA2(?,256)";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setString(1, usuario.getCorreo());
             st.setString(2, usuario.getContrasenia());
             rs = st.executeQuery();
             if (rs.next()) {
-                if (rs.getBoolean("confirmado")) {                    
+                if (rs.getBoolean("Confirmado")) {
+
+                    tipousuario = rs.getInt("IdTipoUsuario");
                     this.desconectar();
                     
                     //Retorna el IdTipoUsuario por motivos de logeo
-                    return rs.getInt("IdTipoUsuario");
+                    return tipousuario;
                 } else {
                     this.desconectar();
                     return 0;

@@ -12,7 +12,7 @@ public class Empresa {
     private String direccion;
     private String telefono;
     private Rubro rubro;
-    private double comision;
+    private String comision;
     private Usuario usuario;
     private int idRubro;
     private int idUsuario;
@@ -24,11 +24,21 @@ public class Empresa {
         this.direccion="";
         this.telefono="";
         this.rubro=null;
-        this.comision=0;
+        this.comision="";
         this.usuario=null;
         this.idRubro=0;
         this.idUsuario=0;
     }
+
+    public String getComision() {
+        return comision;
+    }
+
+    public void setComision(String comision) {
+        this.comision = comision;
+    }
+    
+    
 public int getIdRubro() {
         return idRubro;
     }
@@ -92,13 +102,6 @@ public int getIdRubro() {
         this.rubro = rubro;
     }
 
-    public double getComision() {
-        return comision;
-    }
-
-    public void setComision(double comision) {
-        this.comision = comision;
-    }
 
     public Usuario getUsuario() {
         return usuario;

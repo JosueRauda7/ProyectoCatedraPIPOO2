@@ -78,6 +78,7 @@ public class UsuariosController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
     }
 
     /**
@@ -197,7 +198,7 @@ public class UsuariosController extends HttpServlet {
         }
     }
 
-    private void ingresar(HttpServletRequest request, HttpServletResponse response) {
+    private void ingresar(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try{
            Usuario usuario = new Usuario();
            usuario.setCorreo(request.getParameter("correo"));
@@ -215,8 +216,8 @@ public class UsuariosController extends HttpServlet {
                    //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
                    break;
                case 2:
-                   //Empresa
-                   response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   //Empresa                   
+                   request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                    break;
                case 3:
                    //Empleado
