@@ -217,6 +217,8 @@ public class UsuariosController extends HttpServlet {
                    break;
                case 2:
                    //Empresa
+                   //Este atributo me servira para reconocer quien es la empresa que accede
+                   request.getSession().setAttribute("empresa", usuario.getCorreo());
                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                    //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                    break;
