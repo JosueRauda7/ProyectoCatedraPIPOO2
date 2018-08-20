@@ -11,11 +11,13 @@ import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sv.edu.udb.www.model.EstadoOfertaModel;
 import sv.edu.udb.www.model.OfertasModel;
 
 /**
@@ -25,6 +27,7 @@ import sv.edu.udb.www.model.OfertasModel;
 @WebServlet(name = "EmpresasController", urlPatterns = {"/empresas.do"})
 public class EmpresasController extends HttpServlet {
     OfertasModel modeloOfertas = new OfertasModel();
+    EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,6 +49,9 @@ public class EmpresasController extends HttpServlet {
                 break;
             case "listar":
                 listar(request,response);
+                break;
+            case "nuevo":
+                //nuevo(request,response);
                 break;
             
         }
@@ -93,14 +99,24 @@ public class EmpresasController extends HttpServlet {
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setAttribute("listaOfertas",modeloOfertas.listarOferta());
+            String correo = (String) request.getSession().getAttribute("correo");
+            request.setAttribute("listaOfertas",modeloOfertas.listarOferta(correo));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
-            } catch (ServletException ex) {
-                Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (ServletException | IOException ex) {
                 Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+         try {
+            request.setAttribute("listaEstados",modeloEditorial.listarEditoriales());
+            request.setAttribute("listaAutores",modeloAutor.listarAutores());
+            request.setAttribute("listaGeneros",modeloGenero.listarGeneros());
+            request.getRequestDispatcher("/libros/nuevoLibro.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
