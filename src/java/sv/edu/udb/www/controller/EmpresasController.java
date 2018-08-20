@@ -28,6 +28,7 @@ import sv.edu.udb.www.model.OfertasModel;
 public class EmpresasController extends HttpServlet {
     OfertasModel modeloOfertas = new OfertasModel();
     EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -111,7 +112,7 @@ public class EmpresasController extends HttpServlet {
         }
     }
 
-    private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+   /* private void nuevo(HttpServletRequest request, HttpServletResponse response) {
          try {
             request.setAttribute("listaEstados",modeloEditorial.listarEditoriales());
             request.setAttribute("listaAutores",modeloAutor.listarAutores());
@@ -120,5 +121,5 @@ public class EmpresasController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 }
