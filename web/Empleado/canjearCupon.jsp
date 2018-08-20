@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Canjear cupón</title>
         <jsp:include page="/Empleado/head.jsp" />
     </head>
     <body>
@@ -30,7 +30,7 @@
                         </form>
 
                         <div class="form-group">
-                            <label for="nombre">Oferta: ${informacionCupon.tituloOferta}</label>
+                            <label for="nombre">Código cupón: ${informacionCupon.codigoCupo}</label>
                             
                         </div>
 

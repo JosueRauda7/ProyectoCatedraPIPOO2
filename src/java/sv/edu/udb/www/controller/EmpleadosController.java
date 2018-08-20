@@ -75,13 +75,10 @@ public class EmpleadosController extends HttpServlet {
         try {
             String codigo = request.getParameter("codigo");
             Cupon miCupon = modelo.obtenerCupon(codigo);
-
-            if (miCupon != null) {
-                request.setAttribute("informacionCupon", miCupon);
-                request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
-            } else {
-                response.sendRedirect(request.getContextPath() + "/error404.jsp");
-            }
+           
+            request.setAttribute("informacionCupon", miCupon);
+            request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
+      
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
