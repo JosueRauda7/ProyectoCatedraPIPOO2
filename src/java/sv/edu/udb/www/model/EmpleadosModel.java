@@ -10,13 +10,14 @@ import static sv.edu.udb.www.model.Conexion.conexion;
 
 
 public class EmpleadosModel extends Conexion{
+    
      public Cupon obtenerCupon(String codigo) throws SQLException {
         try {
             
             Cliente cliente = new Cliente();
             Oferta oferta = new Oferta();
             
-            String sql = "SELECT * FROM cupones AS cup INNER JOIN clientes AS cli ON cup.IdCliente=cli.IdCliente INNER JOIN ofertas AS ofer ON cup.IdOferta=ofer.IdOfeta WHERE CodigoCupo = ?";
+            String sql = "SELECT * FROM cupones AS cup INNER JOIN clientes AS cli ON cup.IdCliente=cli.IdCliente INNER JOIN ofertas AS ofer ON cup.IdOferta=ofer.IdOferta WHERE CodigoCupo = ?";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setString(1, codigo);
@@ -24,9 +25,9 @@ public class EmpleadosModel extends Conexion{
 
             if (rs.next()) {
                 Cupon cupon = new Cupon();
-                cupon.setCodigoCupo(rs.getString(""));
-                cupon.setFechaCompra(rs.getDate(""));
-                cupon.setFechaCanje(rs.getDate(""));
+                cupon.setCodigoCupo(rs.getString("CodigoCupo"));
+                cupon.setFechaCompra(rs.getDate("FechaCompra"));
+                cupon.setFechaCanje(rs.getDate("FechaCanje"));
                 cupon.setCliente(cliente);
                 cupon.setOferta(oferta);
                 
