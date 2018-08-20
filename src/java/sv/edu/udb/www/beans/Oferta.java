@@ -22,8 +22,11 @@ public class Oferta {
     private Date fechaLimite;
     private int cantidadLimite;
     private String descripcionOferta;
+    private String otrosDetalles;
+    private int idEstado;
     private EstadoOferta estadoOferta;
     private String justificacion;
+    private String codigoEmpresa;
     private Empresa empresa;
     private String url_foto;
     
@@ -37,9 +40,18 @@ public class Oferta {
         this.fechaLimite=new Date();
         this.cantidadLimite=0;
         this.descripcionOferta="";
+        this.otrosDetalles="";
         this.estadoOferta=null;
         this.justificacion="";
         this.empresa=null;
+    }
+
+    public String getOtrosDetalles() {
+        return otrosDetalles;
+    }
+
+    public void setOtrosDetalles(String otrosDetalles) {
+        this.otrosDetalles = otrosDetalles;
     }
 
     public int getIdOferta() {
@@ -114,6 +126,14 @@ public class Oferta {
         this.descripcionOferta = descripcionOferta;
     }
 
+    public int getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(int idEstado) {
+        this.idEstado = idEstado;
+    }
+
     public EstadoOferta getEstadoOferta() {
         return estadoOferta;
     }
@@ -128,6 +148,14 @@ public class Oferta {
 
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
+    }
+
+    public String getCodigoEmpresa() {
+        return codigoEmpresa;
+    }
+
+    public void setCodigoEmpresa(String codigoEmpresa) {
+        this.codigoEmpresa = codigoEmpresa;
     }
 
     public Empresa getEmpresa() {
@@ -145,7 +173,9 @@ public class Oferta {
     public void setUrl_foto(String url_foto) {
         this.url_foto = url_foto;
     }
-
+    
+    
+    
     
     
     

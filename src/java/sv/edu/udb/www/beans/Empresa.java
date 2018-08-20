@@ -29,6 +29,10 @@ public class Empresa {
         this.idRubro=0;
         this.idUsuario=0;
     }
+    
+    public Empresa(String nombreEmpresa){
+        this.nombreEmpresa=nombreEmpresa;
+    }
 
     public String getComision() {
         return comision;

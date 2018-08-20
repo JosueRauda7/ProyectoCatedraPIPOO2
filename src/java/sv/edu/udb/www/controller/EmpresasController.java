@@ -7,11 +7,16 @@ package sv.edu.udb.www.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sv.edu.udb.www.model.OfertasModel;
 
 /**
  *
@@ -19,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "EmpresasController", urlPatterns = {"/empresas.do"})
 public class EmpresasController extends HttpServlet {
-
+    OfertasModel modeloOfertas = new OfertasModel();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,12 +38,15 @@ public class EmpresasController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String operacion = request.getParameter("operacion");
+        
         switch(operacion){
 
             case "home":
-                request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
+                request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
                 break;
-            
+            case "listar":
+                listar(request,response);
+                break;
             
         }
         
@@ -83,4 +91,18 @@ public class EmpresasController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setAttribute("listaOfertas",modeloOfertas.listarOferta());
+            try {
+                request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

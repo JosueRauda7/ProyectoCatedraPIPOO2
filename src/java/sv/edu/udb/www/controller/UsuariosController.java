@@ -203,6 +203,7 @@ public class UsuariosController extends HttpServlet {
            Usuario usuario = new Usuario();
            usuario.setCorreo(request.getParameter("correo"));
            usuario.setContrasenia(request.getParameter("password"));
+           request.getSession().setAttribute("correo", request.getParameter("correo"));
            int estado = UM.verificarSesion(usuario);
            switch(estado){
                case -1:
@@ -217,8 +218,7 @@ public class UsuariosController extends HttpServlet {
                    break;
                case 2:
                    //Empresa
-                   //Este atributo me servira para reconocer quien es la empresa que accede
-                   request.getSession().setAttribute("empresa", usuario.getCorreo());
+                   //Este atributo me servira para reconocer quien es la empresa que accede                   
                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                    //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                    break;
