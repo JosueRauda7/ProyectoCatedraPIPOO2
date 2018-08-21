@@ -1,0 +1,17 @@
+.contenform{
+    background-color: white;
+    width: 50%;
+    margin-top: 1%;
+    margin-left: 25%;
+    padding: 2%;
+    color:black;
+    margin-bottom: 1%;
+    height: auto;
+}
+form h1{
+    color: #C2185B;
+    text-align: center;
+}
+form h4{
+    color:black;
+}
