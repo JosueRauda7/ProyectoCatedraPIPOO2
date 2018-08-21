@@ -9,7 +9,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <!-- <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo">Cuponera</a> --> 
-                <h2> <a href="Login.jsp" style="text-decoration: none; color:white;">CUPONERA UDB</a></h2>
+                <h2> <a href="Login.jsp" class="navbar-brand" style="text-decoration: none; color:white;">CUPONERA UDB</a></h2>
             </div>
 
         </div><!--/.container-->
