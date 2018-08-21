@@ -1,10 +1,12 @@
 package sv.edu.udb.www.model;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Cupon;
+import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Oferta;
 import static sv.edu.udb.www.model.Conexion.conexion;
 
@@ -43,4 +45,7 @@ public class EmpleadosModel extends Conexion{
         }
 
     }
+     
+    
+     }
 }

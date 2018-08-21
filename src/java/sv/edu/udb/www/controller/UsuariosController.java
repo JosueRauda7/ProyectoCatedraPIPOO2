@@ -219,7 +219,7 @@ public class UsuariosController extends HttpServlet {
                case 2:
                    //Empresa
                    //Este atributo me servira para reconocer quien es la empresa que accede                   
-                   response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
                    //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                    break;
                case 3:

@@ -28,6 +28,9 @@ public class EmpleadosController extends HttpServlet {
                 case "obtener":
                     obtenerCupon(request, response);
                     break;
+                case "listar":
+                    listar(request,response);
+                    break;
             }
         }
     }
@@ -82,6 +85,10 @@ public class EmpleadosController extends HttpServlet {
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 

@@ -7,11 +7,9 @@ package sv.edu.udb.www.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,9 +22,10 @@ import sv.edu.udb.www.model.OfertasModel;
  *
  * @author ivanm
  */
-@WebServlet(name = "EmpresasController", urlPatterns = {"/empresas.do"})
-public class EmpresasController extends HttpServlet {
-    
+@WebServlet(name = "OfertasController", urlPatterns = {"/ofertas.do"})
+public class OfertasController extends HttpServlet {
+    OfertasModel modeloOfertas = new OfertasModel();
+    EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,8 +38,23 @@ public class EmpresasController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String operacion = request.getParameter("operacion");
         
-        
+        switch(operacion){
+
+            case "home":
+                request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
+                break;
+            case "listar":                
+                listar(request,response);
+                break;
+            
+            case "nuevo":
+                //nuevo(request,response);
+                break;
+            
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,7 +95,31 @@ public class EmpresasController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
     
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String correo = (String) request.getSession().getAttribute("correo");
+            request.setAttribute("listaOfertas",modeloOfertas.listarOferta(correo));
+            try {
+                request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
+            } catch (ServletException | IOException ex) {
+                Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
+    /*private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+        private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+         try {
+            request.setAttribute("listaEstados",modeloEditorial.listarEditoriales());
+            request.setAttribute("listaAutores",modeloAutor.listarAutores());
+            request.setAttribute("listaGeneros",modeloGenero.listarGeneros());
+            request.getRequestDispatcher("/libros/nuevoLibro.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    }*/
 }
