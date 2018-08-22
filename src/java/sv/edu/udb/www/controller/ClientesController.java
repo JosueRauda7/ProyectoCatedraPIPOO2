@@ -7,11 +7,13 @@ package sv.edu.udb.www.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sv.edu.udb.www.model.ClientesModel;
 
 /**
  *
@@ -20,29 +22,24 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ClientesController", urlPatterns = {"/clientes.do"})
 public class ClientesController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    ClientesModel model = new ClientesModel();
+    ArrayList<String> listaErrores = new ArrayList<String>();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ClientesController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ClientesController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            if(request.getParameter("operacion")==null){
+                //listar(request,response);
+                return;
+            }
+            String operacion = request.getParameter("operacion");
+            switch(operacion){
+                case "listar":
+                    //listar(request,response);
+                    break;
+            }
         }
     }
 
