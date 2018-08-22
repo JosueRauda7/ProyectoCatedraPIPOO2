@@ -42,6 +42,12 @@ public class RubrosController extends HttpServlet {
                 case "agregar":
                     agregar(request, response);
                     break;
+                case "eliminar":
+                    eliminar(request, response);
+                    break;
+                case "modificar":
+                    modificar(request, response);
+                    break;
             }
         }
     }
@@ -115,6 +121,51 @@ public class RubrosController extends HttpServlet {
                request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
            }else{
                request.setAttribute("fracaso", "El rubro no se ha podido insertar");
+               request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);           
+           }           
+       }
+       
+    }   catch (ServletException | IOException | SQLException ex) {
+            Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            if(modelo.eliminarRubro(id)>0){
+                request.setAttribute("exito", "El rubro se ha eliminado correctamente");
+            }else{
+                request.setAttribute("exito", "Este rubro no puede eliminarse");
+            }
+            request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void modificar(HttpServletRequest request, HttpServletResponse response) {
+        try{
+       listaErrores.clear();
+       Rubro rubro = new Rubro();
+       rubro.setRubro(request.getParameter("rubro"));
+       rubro.setIdRubro(Integer.parseInt(request.getParameter("id")));
+       if(Validaciones.isEmpty(rubro.getRubro())){
+          listaErrores.add("El campo nombre del rubro es obligatorio");
+       }
+       if(modelo.validarRubro(rubro)>0){
+           listaErrores.add("Este rubro ya existe");
+       }
+       if(listaErrores.size() >0){
+          
+          request.setAttribute("fracaso", "Este rubro ya existe o esta vacio");
+          request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+       }else{
+           if(modelo.modificarRubro(rubro)>0){
+               request.setAttribute("exito", "El rubro ha sido modificado correctamente");
+               request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+           }else{
+               request.setAttribute("fracaso", "El rubro no se ha podido modificar");
                request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);           
            }           
        }
