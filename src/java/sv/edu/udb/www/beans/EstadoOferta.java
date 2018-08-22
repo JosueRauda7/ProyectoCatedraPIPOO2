@@ -17,6 +17,10 @@ public class EstadoOferta {
         this.idEstadoOferta=0;
         this.estado="";
     }
+    
+    public EstadoOferta(String estado){
+        this.estado=estado;
+    }
 
     public int getIdEstadoOferta() {
         return idEstadoOferta;

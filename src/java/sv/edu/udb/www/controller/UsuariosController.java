@@ -43,7 +43,6 @@ public class UsuariosController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
         String operacion = request.getParameter("operacion");
         switch(operacion){
 
@@ -59,6 +58,10 @@ public class UsuariosController extends HttpServlet {
             case "verificar":
                  confirmar(request,response);
                 break;
+            case "ingresar":
+                ingresar(request,response);
+                break;
+            
         }
     }
 
@@ -75,6 +78,7 @@ public class UsuariosController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
     }
 
     /**
@@ -192,6 +196,45 @@ public class UsuariosController extends HttpServlet {
         }catch(SQLException | IOException ex){
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
         }
+    }
+
+    private void ingresar(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        try{
+           Usuario usuario = new Usuario();
+           usuario.setCorreo(request.getParameter("correo"));
+           usuario.setContrasenia(request.getParameter("password"));
+           request.getSession().setAttribute("correo", request.getParameter("correo"));
+           int estado = UM.verificarSesion(usuario);
+           switch(estado){
+               case -1:
+                   request.getSession().setAttribute("fracaso","Usuario y/o contraseña incorrecta");
+                   break;
+               case 0:
+                   request.getSession().setAttribute("fracaso","Cuenta no verificada");                   
+                   break;
+               case 1:
+                   //Administrador
+                   //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                   break;
+               case 2:
+                   //Empresa
+                   //Este atributo me servira para reconocer quien es la empresa que accede                   
+                   response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
+                   break;
+               case 3:
+                   //Empleado
+                   //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   break;
+               case 4:
+                   //Cliente
+                   //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   break;
+           }
+           
+       }catch(SQLException | IOException ex){
+           Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
+       }
     }
 
 }

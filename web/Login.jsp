@@ -43,10 +43,10 @@
                     </div>
                     <div class="col-sm-4 col-sm-offset-4">                    
                             <form action="${base}/usuarios.do" method="POST">
-                                <input type="hidden" name="operacion" value="check_login"/>
+                                <input type="hidden" name="operacion" value="ingresar"/>
                                 <div class="form-group">
-                                    <label for="usuario" style="color: black;">Correo:</label>
-                                    <input type="text" name="usuario" id="usuario" class="form-control"/>
+                                    <label for="correo" style="color: black;">Correo:</label>
+                                    <input type="text" name="correo" id="correo" class="form-control"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" style="color: black;">Contraseña:</label>
