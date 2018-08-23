@@ -23,6 +23,10 @@ public class Usuario {
         this.contrasenia="";
         this.tipoUsuario=null;
     }
+    
+    public Usuario(String correo){
+        this.correo=correo;
+    }
 
     public int getIdUsuario() {
         return idUsuario;

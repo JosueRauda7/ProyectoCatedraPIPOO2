@@ -26,7 +26,7 @@
             <div class="panel panel-default col-lg-6 col-sm-offset-3" style="margin-top: 5%; margin-bottom: 5%;" >
                 <div class="row" >
                     <div class="thumbnail">
-                        <h2 style="color:#c2185b;">Nuevo empleado</h2>
+                        <h2 style="color:#c2185b;">Nueva Oferta</h2>
                     </div>
                     <c:if test="${not empty requestScope.listaErrores}">
                         <div class="alert alert-danger">
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="direccion" style="color:black;">Correo:</label>
+                                <label for="direccion" style="color:black;">Dirección:</label>
                                 <div class="input-group">
                                     <input type="text" name="direccion" id="direccion" class="form-control" value="${cliente.direccion}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
