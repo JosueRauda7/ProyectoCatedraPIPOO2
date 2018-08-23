@@ -30,7 +30,11 @@
                         </form>
 
                         <div class="form-group">
-                            <label for="nombre">Código cupón: ${informacionCupon.codigoCupo}</label>
+                            <label for="nombre">Código cupón: ${informacionCupon.codigoCupo}</label><br><br>
+                            <label for="fechaCompra">Fecha de compra: ${informacionCupon.fechaCompra}</label><br><br>
+                            <label for="fechaCanje">Código canje: ${informacionCupon.fechaCanje}</label>
+                            <label for="idCliente">Código canje: ${informacionCupon.cliente.idCliente}</label>
+                            <label for="idOferta">Código canje: ${informacionCupon.oferta.idOferta}</label>
                             
                         </div>
 
