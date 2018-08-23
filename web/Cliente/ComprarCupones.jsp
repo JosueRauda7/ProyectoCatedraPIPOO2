@@ -7,6 +7,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="base" value="${pageContext.request.contextPath}"/> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,11 +17,16 @@
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
         <!-- core CSS -->
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../css/animate.min.css" rel="stylesheet"> 
-        <link href="../css/prettyPhoto.css" rel="stylesheet">
-        <link href="../css/styles.css" rel="stylesheet"> 
+        <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
+        <link href="${base}/css/animate.min.css" rel="stylesheet"> 
+        <link href="${base}/css/prettyPhoto.css" rel="stylesheet">
+        <link href="${base}/css/styles.css" rel="stylesheet"> 
+        <script src="${pageContext.request.contextPath}/js/jquery-1.12.0.min.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     </head>
@@ -43,10 +49,11 @@
                                     <h4>Rubro: </h4>
                                 </div>
                                 <div class="col-xs-6">
-                                    <select id="rubroFiltro" name="rubroFiltro" class="form-control">
+                                    <select id="rubroFiltros" name="rubroFiltro" class="form-control">
                                         <option value="0">Todos</option>
-                                        <option value="2">Cupones Canjeados</option>
-                                        <option value="3">Cupones Vencidos</option>
+                                        <c:forEach var="rubrito" items="${requestScope.rubrito}">
+                                            <option value="${rubrito.getIdRubro()}">${rubrito.getRubro()}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <div class="col-xs-2">
@@ -59,47 +66,27 @@
                     <br><br><br>
                 </section>
                 <div class="row">
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img class="img-responsive" src="../images/portfolio/01.jpg" alt="">
-                            <div class="caption">
-                                <h3>Título Cupón</h3>
-                                <p>Descripción Oferta</p>
-                                <p class="price">Fecha fin</p>
-                                <p class="price">Fecha Límite</p>
-                                <p><h4>Precio Regular</h4></p>
-                                <p><h4>Precio Oferta</h4></p>
-                                <a class="btn btn-primary" href="#">Ver Detalles</a>
-                                <a class="btn btn-primary" href="#">Añadir al Carrito</a>
+                    <c:forEach var="oferta" items="${requestScope.ofertita}">
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail">
+                                <img class="img-responsive" src="${base}/images/portfolio/${oferta.getUrl_foto()}" alt="">
+                                <div class="caption">
+                                    <h3>${oferta.getTituloOferta()}</h3>
+                                    <p>Descripción:<br>${oferta.getDescripcionOferta()}</p>
+                                    <p class="price">Fecha fin: ${oferta.getFechaFin()}</p>
+                                    <p class="price">Fecha Límite: ${oferta.getFechaLimite()}</p>
+                                    <p><h4>Precio Regular: $ ${oferta.getPrecioRegular()}</h4></p>
+                                    <p><h4>Precio Oferta: $ ${oferta.getPrecioOferta()}</h4></p>
+                                    <a class="btn btn-primary" href="#">Ver Detalles</a>
+                                    <a class="btn btn-primary" href="${base}/clientes.do?operacion=add">Añadir al Carrito</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img class="img-responsive" src="../images/portfolio/02.jpg" alt="">
-                            <div class="caption">
-                                <h3>Workout</h3>
-                                <p>Praesent vulputate fermentum lorem, id rhoncus sem vehicula eu. Quisque ullamcorper, orci adipiscing auctor viverra, veli</p>
-                                <p class="price">Mon to Fri: 7am to 6pm</p>
-                                <p><h4>$90.00/mo</h4></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img class="img-responsive" src="../images/portfolio/03.jpg" alt="">
-                            <div class="caption">
-                                <h3>Aerobic</h3>
-                                <p>Praesent vulputate fermentum lorem, id rhoncus sem vehicula eu. Quisque ullamcorper, orci adipiscing auctor viverra, veli</p>
-                                <p class="price">Mon to Fri: 7am to 6pm</p>
-                                <p><h4>$90.00/mo</h4></p>
-                            </div>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
         </section>
-        <script>
+        <script type="text/javascript">
             $(document).ready(function () {
                 $('#rubroFiltro').select2();
             });
