@@ -55,6 +55,25 @@ public class RubrosModel extends Conexion{
           this.desconectar();
         }
     }
+    public int modificarRubro(Rubro rubro) throws SQLException{
+        try {
+            int filasAfectadas;
+            String sql = "UPDATE rubros SET Rubro = ? WHERE IdRubro = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, rubro.getRubro());
+            st.setInt(2, rubro.getIdRubro());
+            filasAfectadas = st.executeUpdate();
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(RubrosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }finally{
+          this.desconectar();
+        }
+    }
     public int validarRubro(Rubro rubro) throws SQLException{
         try {
             int repetido = 0;
@@ -74,6 +93,24 @@ public class RubrosModel extends Conexion{
             return 0;
         }finally{
             this.desconectar();
+        }
+    }
+    public int eliminarRubro(int idRubro) throws SQLException{
+        try {
+            int filasAfectadas=0;
+            String sql = "DELETE FROM rubros WHERE IdRubro = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, idRubro);
+            filasAfectadas = st.executeUpdate();
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(RubrosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }finally{
+         this.desconectar();
         }
     }
 }

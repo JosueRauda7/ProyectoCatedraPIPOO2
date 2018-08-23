@@ -10,26 +10,67 @@
         <jsp:include page="enlaces.jsp" />
 
     </head> 
-
+    <style>
+        .alertify-message{
+            color: black;
+        }
+    </style>
     <body id="home">
         <jsp:include page="MenuAdmin.jsp" />
         <h1 class="text-center titulo">Lista rubros</h1>
         <section class="contentabla">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="tabla">
+                <thead>
                 <tr>
                     <th>Id rubro</th>
                     <th>Rubro</th>
                     <th>Modificar</th>
                     <th>Eliminar</th>
                 </tr>
+                </thead>
+                <tbody>
                 <c:forEach items="${requestScope.listaRubros}" var="rubro">
                     <tr>
                         <td>${rubro.idRubro}</td>
-                        <td>${rubro.rubro}</td>
-                        <td><button class="btn btn-info">Modificar</button></td>
-                        <td><button class="btn btn-danger">Eliminar</button></td>
+                        <td><p id="text${rubro.idRubro}">${rubro.rubro}</p>
+                            <input type="text" id="txtval${rubro.idRubro}" style="display:none;" class="form-control"></td>
+                        <td><button class="btn btn-info" id="btnmostrar${rubro.idRubro}"  ><span class="glyphicon glyphicon-edit"></span> Modificar</button>
+                            <section id="conten${rubro.idRubro}" style="display:none;" class="conten">
+                                <div style="display:flex;">
+                                <form action="${pageContext.request.contextPath}/rubros.do" method="get"> 
+                                    <button value="${rubro.idRubro}" id="btnprueba${rubro.idRubro}" name="id" class="btn btn-success">Aceptar</button>
+                                    <input type="hidden" value="modificar" name="operacion">
+                                    <input type="hidden" name="rubro" id="txtprueba${rubro.idRubro}">
+                                </form>
+                                <br>
+                                <button class="btn btn-danger" id="btncancel${rubro.idRubro}">Canelar</button>
+                                </div>
+                            </section>
+                        </td>
+                        <td><a class="btn btn-danger" href="javascript:eliminar('${rubro.idRubro}')"><span class="glyphicon glyphicon-trash"></span> Eliminar</a></td>
                     </tr>
+                <script>
+                    document.getElementById("btnmostrar${rubro.idRubro}").addEventListener("click", function(){
+          
+    
+                        document.getElementById("btnmostrar${rubro.idRubro}").style.display="none";
+                        document.getElementById("text${rubro.idRubro}").style.display="none";
+                        document.getElementById("txtval${rubro.idRubro}").style.display="block";
+                        document.getElementById("conten${rubro.idRubro}").style.display="block";
+                        document.getElementById("txtval${rubro.idRubro}").value="${rubro.rubro}";
+                    });
+                    document.getElementById("btnprueba${rubro.idRubro}").addEventListener("click", function(){
+                        document.getElementById("txtprueba${rubro.idRubro}").value = document.getElementById("txtval${rubro.idRubro}").value;
+                    });
+                    document.getElementById("btncancel${rubro.idRubro}").addEventListener("click", function(){
+                         document.getElementById("btnmostrar${rubro.idRubro}").style.display="block";
+                        document.getElementById("text${rubro.idRubro}").style.display="block";
+                        document.getElementById("txtval${rubro.idRubro}").style.display="none";
+                        document.getElementById("conten${rubro.idRubro}").style.display="none";
+                    });
+                </script>
                 </c:forEach>
+                </tbody>
             </table>
         </section>
         
@@ -78,6 +119,25 @@
             </div>
         </footer><!--/#footer-->
 
-
+<script>
+            
+                       <c:if test="${not empty exito}">
+                           alertify.success('${exito}');
+                          <c:set var="exito" value="" scope="session" />
+                       </c:if>
+                           <c:if test="${not empty fracaso}">
+                           alertify.error('${fracaso}');
+                           <c:set var="fracaso" value="" scope="session" />
+                       </c:if>
+                           
+         function eliminar(id){
+           alertify.confirm("¿Realmente decea eliminar este genero?", function(e){
+              if(e){
+                  location.href="rubros.do?operacion=eliminar&id="+ id;
+              } 
+           });
+  }
+        </script>
+        <script src="${pageContext.request.contextPath}/js/modificrub.js"></script>
     </body>
 </html>
