@@ -41,6 +41,13 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                 </div>
             </div>
+            <div class="form-group">            
+                <label for="codigo">Correo:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="correo"  id="codigo" value="${usuario.correo}" placeholder="Ingresa el correo de la empresa" >
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                </div>
+            </div>
              <div class="form-group">            
                 <label for="codigo">Dirección:</label>
                 <div class="input-group col-md-12">

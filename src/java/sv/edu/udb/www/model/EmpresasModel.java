@@ -48,7 +48,7 @@ public class EmpresasModel extends Conexion{
         try {
             int filasAfectadas=0;
             int numero=0;
-            String cadena = "EM";
+            String cadena = "EMP";
             String resultado ="";
             this.conectar();
             st = conexion.prepareStatement("SELECT SUBSTRING(MAX(CodigoEmpresa) , 4,6) AS Numero FROM empresas WHERE CodigoEmpresa LIKE 'EMP%'");
@@ -57,10 +57,10 @@ public class EmpresasModel extends Conexion{
                 numero = rs.getInt("Numero") + 1;
                 
                 if (numero <= 9) {
-                    resultado = cadena + "000" + numero;
+                    resultado = cadena + "00" + numero;
                 }
                 else if (numero >=10 && numero <=99 ) {
-                    resultado = cadena + "00" + numero;
+                    resultado = cadena + "0" + numero;
                 }
                 else if (numero>=100 && numero <=999) {
                     resultado = cadena + numero;

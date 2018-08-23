@@ -13,6 +13,7 @@ public class Usuario {
     private int idUsuario;
     private String correo;
     private String contrasenia;
+    private int idTipoUsuario;
     private TipoUsuario tipoUsuario;
     private int confirmado;
     private String id_confirmacion;
@@ -24,6 +25,15 @@ public class Usuario {
         this.tipoUsuario=null;
     }
 
+    public int getIdTipoUsuario() {
+        return idTipoUsuario;
+    }
+
+    public void setIdTipoUsuario(int idTipoUsuario) {
+        this.idTipoUsuario = idTipoUsuario;
+    }
+
+    
     public int getIdUsuario() {
         return idUsuario;
     }

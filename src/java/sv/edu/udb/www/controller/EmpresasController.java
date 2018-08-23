@@ -1,10 +1,11 @@
-
 package sv.edu.udb.www.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -13,8 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Empresa;
+import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.RubrosModel;
+import sv.edu.udb.www.model.UsuariosModel;
+import sv.edu.udb.www.utils.Correo;
 import sv.edu.udb.www.utils.Validaciones;
 
 /**
@@ -26,16 +30,17 @@ public class EmpresasController extends HttpServlet {
 
     RubrosModel rubro = new RubrosModel();
     EmpresasModel modelo = new EmpresasModel();
+    UsuariosModel modelo2 = new UsuariosModel();
     ArrayList listaErrores = new ArrayList<>();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           
+
             String operacion = request.getParameter("operacion");
-            
-            
-            switch(operacion){
+
+            switch (operacion) {
                 case "listar":
                     listar(request, response);
                     break;
@@ -98,47 +103,88 @@ public class EmpresasController extends HttpServlet {
     }
 
     private void agregar(HttpServletRequest request, HttpServletResponse response) {
-      try{
-          listaErrores.clear();
-       Empresa empresa = new Empresa();
-       empresa.setNombreEmpresa(request.getParameter("nombreEmpresa"));
-       empresa.setNombreContacto(request.getParameter("nombreContacto"));
-       empresa.setDireccion(request.getParameter("direccion"));
-       empresa.setTelefono(request.getParameter("telefono"));
-       empresa.setIdRubro(Integer.parseInt(request.getParameter("rubro")));
-       empresa.setComision(request.getParameter("comision"));
-       empresa.setIdUsuario(1);
-       
-       if(Validaciones.isEmpty(empresa.getNombreEmpresa())){
-           listaErrores.add("El nombre de la empresa es obligatorio");
-       }
-       if(Validaciones.isEmpty(empresa.getNombreContacto())){
-           listaErrores.add("El nombre del contacto es obligatorio");
-       }
-       if(Validaciones.isEmpty(empresa.getDireccion())){
-           listaErrores.add("La direccion es obligatoria obligatorio");
-       }
-       if(Validaciones.isEmpty(empresa.getTelefono())){
-           listaErrores.add("El telefono es obligatorio");
-       }
-       if(Validaciones.isEmpty(String.valueOf(empresa.getComision()))){
-           listaErrores.add("El nombre del contacto es obligatorio");
-       }
-       
-       if(listaErrores.size()>0){
-            request.setAttribute("listaErrores", listaErrores);
-            request.setAttribute("empresa", empresa);
-            request.getRequestDispatcher("empresas.do?operacion=nuevo").forward(request, response);
-       }else{
-            if(modelo.agregarEmpresa(empresa)>0){
-             request.setAttribute("exito", "La empresa se ha ingresado exitosamente");
-             request.getRequestDispatcher("/Administrador/ListarEmpresas.jsp").forward(request, response);
-            }else{
-                request.setAttribute("fracaso", "La empresa no se ha ingresado");
-             request.getRequestDispatcher("/Administrador/ListarEmpresas.jsp").forward(request, response);
+        try {
+            listaErrores.clear();
+            
+            String cadenaAleatoria = UUID.randomUUID().toString();
+            //Creacion password
+            char[] caracteres;
+            caracteres = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+            String pass = "";
+            for (int i = 0; i < 8; i++) {
+                pass += caracteres[new Random().nextInt(62)];
             }
-       }
-      }catch (ServletException | IOException | SQLException ex) {
+            //fin contraseña
+
+            Usuario usuario = new Usuario();
+            usuario.setCorreo(request.getParameter("correo"));
+            usuario.setContrasenia(pass);
+            usuario.setIdTipoUsuario(2);
+            usuario.setConfirmado(0);
+            usuario.setId_confirmacion(cadenaAleatoria);
+            
+            Empresa empresa = new Empresa();
+            empresa.setNombreEmpresa(request.getParameter("nombreEmpresa"));
+            empresa.setNombreContacto(request.getParameter("nombreContacto"));
+            empresa.setDireccion(request.getParameter("direccion"));
+            empresa.setTelefono(request.getParameter("telefono"));
+            empresa.setIdRubro(Integer.parseInt(request.getParameter("rubro")));
+            empresa.setComision(request.getParameter("comision"));
+            
+            if(Validaciones.isEmpty(usuario.getCorreo())){
+               listaErrores.add("El correo de la empresa es obligatorio");
+            }else if(!Validaciones.esCorreo(usuario.getCorreo())){
+               listaErrores.add("El correo no tiene el formato correcto");
+            }
+            
+            if (Validaciones.isEmpty(empresa.getNombreEmpresa())) {
+                listaErrores.add("El nombre de la empresa es obligatorio");
+            }
+            if (Validaciones.isEmpty(empresa.getNombreContacto())) {
+                listaErrores.add("El nombre del contacto es obligatorio");
+            }
+            if (Validaciones.isEmpty(empresa.getDireccion())) {
+                listaErrores.add("La direccion es obligatoria obligatorio");
+            }
+            if (Validaciones.isEmpty(empresa.getTelefono())) {
+                listaErrores.add("El telefono es obligatorio");
+            }
+            if (Validaciones.isEmpty(String.valueOf(empresa.getComision()))) {
+                listaErrores.add("El nombre del contacto es obligatorio");
+            }
+
+            if (listaErrores.size() > 0) {
+                request.setAttribute("listaErrores", listaErrores);
+                request.setAttribute("empresa", empresa);
+                request.setAttribute("usuario", usuario);
+                request.getRequestDispatcher("empresas.do?operacion=nuevo").forward(request, response);
+            } else {
+                if ( modelo2.isertarUsuarioEmpresa(usuario)>0) {
+                    request.setAttribute("exito", "La empresa se ha ingresado exitosamente");
+                    String texto = "Te has registrado exitosamente.<br>";
+                    texto += "Para confirmar tu cuenta debes dar click ";
+                    
+                    String enlace=request.getRequestURL().toString()+
+                            "?operacion=verificar&id="+cadenaAleatoria;
+                    texto += "<a target='a_blank' "
+                           + "href='" + enlace + "'>aqui</a>";
+                    
+                    Correo correo = new Correo();
+                    correo.setAsunto("Confirmacion de registro");
+                    correo.setMensaje(texto);
+                    correo.setDestinatario(usuario.getCorreo());
+                    correo.enviarCorreo();
+                    
+                    empresa.setIdUsuario(modelo2.ultimoUsuarioEmpresa());
+                    
+                    modelo.agregarEmpresa(empresa);
+                    request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                } else {
+                    request.setAttribute("fracaso", "La empresa no se ha ingresado");
+                    request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                }
+            }
+        } catch (ServletException | IOException | SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -151,6 +197,5 @@ public class EmpresasController extends HttpServlet {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 
 }
