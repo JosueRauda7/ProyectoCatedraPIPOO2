@@ -7,11 +7,19 @@ package sv.edu.udb.www.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sv.edu.udb.www.beans.EstadoCupon;
+import sv.edu.udb.www.beans.Rubro;
+import sv.edu.udb.www.model.ClientesModel;
 
 /**
  *
@@ -20,29 +28,33 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ClientesController", urlPatterns = {"/clientes.do"})
 public class ClientesController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    ClientesModel model = new ClientesModel();
+    ArrayList<String> listaErrores = new ArrayList<String>();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ClientesController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ClientesController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            if (request.getParameter("operacion") == null) {
+                listar(request, response);
+                return;
+            }
+            String operacion = request.getParameter("operacion");
+            switch (operacion) {
+                case "listar":
+                    listar(request, response);
+                    break;
+                case "filtrar":
+                    filtrar(request, response);
+                    break;
+                case "misCupones":
+                    misCupones(request,response);
+                    break;
+                case "categorizar":
+                    categorizar(request,response);
+                    break;
+            }
         }
     }
 
@@ -84,5 +96,83 @@ public class ClientesController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+        List<Rubro> rubro = new ArrayList();
+        listaErrores.clear();
+        try {
+            if (model.obtenerRubro() == null) {
+                listaErrores.add("Error al cargar los rubros");
+            } else if (model.listarCupones() == null) {
+                listaErrores.add("Error al cargar los cupones");
+            } else {
+                rubro = model.obtenerRubro();
+                request.setAttribute("ofertita", model.listarCupones());
+                request.setAttribute("rubrito", rubro);
+                request.getRequestDispatcher("/Cliente/ComprarCupones.jsp").forward(request, response);
+            }
+        } catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void filtrar(HttpServletRequest request, HttpServletResponse response) {
+        List<Rubro> rubro = new ArrayList();
+        listaErrores.clear();
+        try {
+            if (model.obtenerRubro() == null) {
+                listaErrores.add("Error al cargar los rubros");
+            }else {
+                if (request.getParameter("rubroFiltro")==null) {
+                    response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=misCupones");
+                } else {
+                    rubro = model.obtenerRubro();
+                    request.setAttribute("ofertita", model.listarCupones(request.getParameter("rubroFiltro")));
+                    request.setAttribute("rubrito", rubro);
+                    request.getRequestDispatcher("/Cliente/ComprarCupones.jsp").forward(request, response);
+                }
+            }
+        } catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void misCupones(HttpServletRequest request, HttpServletResponse response) {
+        List<EstadoCupon> estado = new ArrayList();
+        listaErrores.clear();
+        try {
+            if (model.listarEstadosCupon() == null) {
+                listaErrores.add("Error al cargar los rubros");
+            } else if (model.listarMisCupones("1") == null) {
+                listaErrores.add("Error al cargar los cupones");
+            } else {
+                estado = model.listarEstadosCupon();
+                request.setAttribute("ofertita", model.listarMisCupones("1"));
+                request.setAttribute("estado", estado);
+                request.getRequestDispatcher("/Cliente/MisCupones.jsp").forward(request, response);
+            }
+        } catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void categorizar(HttpServletRequest request, HttpServletResponse response) {
+        List<EstadoCupon> estado = new ArrayList();
+        listaErrores.clear();
+        try {
+            if (model.listarEstadosCupon() == null) {
+                listaErrores.add("Error al cargar los rubros");
+            } else if (model.listarMisCupones(request.getParameter("categoriaFiltro")) == null) {
+                listaErrores.add("Error al cargar los cupones");
+            } else {
+                estado = model.listarEstadosCupon();
+                request.setAttribute("ofertita", model.listarMisCupones(request.getParameter("categoriaFiltro")));
+                request.setAttribute("estado", estado);
+                request.getRequestDispatcher("/Cliente/MisCupones.jsp").forward(request, response);
+            }
+        } catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }
