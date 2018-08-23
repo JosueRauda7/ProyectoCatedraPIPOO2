@@ -1,6 +1,7 @@
 package sv.edu.udb.www.model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,6 +9,7 @@ import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Cupon;
 import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Oferta;
+import sv.edu.udb.www.beans.Usuario;
 import static sv.edu.udb.www.model.Conexion.conexion;
 
 public class EmpleadosModel extends Conexion {
@@ -43,6 +45,32 @@ public class EmpleadosModel extends Conexion {
             return null;
         }
 
+    }
+    
+    public List<Empleado> listarEmpleados(String correo) throws SQLException{
+        try {
+            List<Empleado> lista=new ArrayList<>();
+            String sql="Select * from empleado e inner join empresas em on e.CodigoEmpresa=em.CodigoEmpresa"
+                     + " inner join usuarios u on em.IdUsuario=u.IdUsuario where u.correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1, correo);
+            rs=st.executeQuery();
+            while(rs.next()){
+                Empleado empleado = new Empleado();
+                empleado.setIdEmpleado(rs.getInt("IdEmpleado"));
+                empleado.setNombreEmpleado(rs.getString("NombreEmpleado"));
+                empleado.setApellidoEmpleado(rs.getString("ApellidoEmpleado"));
+                empleado.setUsuario(new Usuario(rs.getString("correo")));
+                lista.add(empleado);
+            }
+            this.desconectar();
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
     }
      
     

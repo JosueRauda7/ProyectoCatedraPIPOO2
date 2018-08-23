@@ -31,6 +31,9 @@ public class EmpleadosController extends HttpServlet {
                 case "listar":
                     listar(request,response);
                     break;
+                case "nuevo":
+                    Dispa
+                    break;
             }
         }
     }
@@ -88,7 +91,17 @@ public class EmpleadosController extends HttpServlet {
     }
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String correo = (String) request.getSession().getAttribute("correo");
+            request.setAttribute("listaEmpleados",modelo.listarEmpleados(correo));
+            try {
+                request.getRequestDispatcher("/Empresa/ListaEmpleados.jsp").forward(request, response);
+            } catch (ServletException | IOException ex) {
+                Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
 
