@@ -38,6 +38,10 @@ public class ClientesController extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            if(request.getSession().getAttribute("correo")==null||!request.getSession().getAttribute("estadoUsuario").toString().equals("4")){
+                response.sendRedirect(request.getContextPath()+"/Login.jsp");
+                return;
+            }
             if (request.getParameter("operacion") == null) {
                 listar(request, response);
                 return;
@@ -61,6 +65,9 @@ public class ClientesController extends HttpServlet {
                     break;
                 case "agregar":
                     agregar(request, response);
+                    break;
+                case "cerrar":
+                    cerrarSesion(request,response);
                     break;
             }
         }
@@ -191,8 +198,8 @@ public class ClientesController extends HttpServlet {
 
     private void inicio(HttpServletRequest request, HttpServletResponse response) {
         try {
-            response.sendRedirect(request.getContextPath() + "/Cliente/InicioCliente.jsp");
-        } catch (IOException ex) {
+            request.getRequestDispatcher("/Cliente/InicioCliente.jsp").forward(request, response);
+        } catch (IOException | ServletException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -202,8 +209,18 @@ public class ClientesController extends HttpServlet {
             int idOferta = Integer.parseInt(request.getParameter("id"));
             ofertas.add(model.obtenerOferta(idOferta));
             request.getSession().setAttribute("ofertas", ofertas);
-            response.sendRedirect(request.getContextPath() + "/Cliente/VerCarrito.jsp");
-        } catch (IOException ex) {
+            request.getRequestDispatcher("/Cliente/VerCarrito.jsp").forward(request, response);
+        } catch (IOException | ServletException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getSession().setAttribute("correo",null);
+            request.getSession().setAttribute("estadoUsuario",null);
+            request.getRequestDispatcher("/Login.jsp").forward(request, response);
+        } catch (IOException | ServletException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
