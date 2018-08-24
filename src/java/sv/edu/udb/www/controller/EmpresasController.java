@@ -50,6 +50,9 @@ public class EmpresasController extends HttpServlet {
                 case "agregar":
                     agregar(request, response);
                     break;
+                case "verificar":
+                    confirmar(request, response);
+                    break;
             }
         }
     }
@@ -105,7 +108,7 @@ public class EmpresasController extends HttpServlet {
     private void agregar(HttpServletRequest request, HttpServletResponse response) {
         try {
             listaErrores.clear();
-            
+
             String cadenaAleatoria = UUID.randomUUID().toString();
             //Creacion password
             char[] caracteres;
@@ -122,7 +125,7 @@ public class EmpresasController extends HttpServlet {
             usuario.setIdTipoUsuario(2);
             usuario.setConfirmado(0);
             usuario.setId_confirmacion(cadenaAleatoria);
-            
+
             Empresa empresa = new Empresa();
             empresa.setNombreEmpresa(request.getParameter("nombreEmpresa"));
             empresa.setNombreContacto(request.getParameter("nombreContacto"));
@@ -130,13 +133,13 @@ public class EmpresasController extends HttpServlet {
             empresa.setTelefono(request.getParameter("telefono"));
             empresa.setIdRubro(Integer.parseInt(request.getParameter("rubro")));
             empresa.setComision(request.getParameter("comision"));
-            
-            if(Validaciones.isEmpty(usuario.getCorreo())){
-               listaErrores.add("El correo de la empresa es obligatorio");
-            }else if(!Validaciones.esCorreo(usuario.getCorreo())){
-               listaErrores.add("El correo no tiene el formato correcto");
+
+            if (Validaciones.isEmpty(usuario.getCorreo())) {
+                listaErrores.add("El correo de la empresa es obligatorio");
+            } else if (!Validaciones.esCorreo(usuario.getCorreo())) {
+                listaErrores.add("El correo no tiene el formato correcto");
             }
-            
+
             if (Validaciones.isEmpty(empresa.getNombreEmpresa())) {
                 listaErrores.add("El nombre de la empresa es obligatorio");
             }
@@ -159,24 +162,24 @@ public class EmpresasController extends HttpServlet {
                 request.setAttribute("usuario", usuario);
                 request.getRequestDispatcher("empresas.do?operacion=nuevo").forward(request, response);
             } else {
-                if ( modelo2.isertarUsuarioEmpresa(usuario)>0) {
+                if (modelo2.isertarUsuarioEmpresa(usuario) > 0) {
                     request.setAttribute("exito", "La empresa se ha ingresado exitosamente");
                     String texto = "Te has registrado exitosamente.<br>";
                     texto += "Para confirmar tu cuenta debes dar click ";
-                    
-                    String enlace=request.getRequestURL().toString()+
-                            "?operacion=verificar&id="+cadenaAleatoria;
+
+                    String enlace = request.getRequestURL().toString()
+                            + "?operacion=verificar&id=" + cadenaAleatoria;
                     texto += "<a target='a_blank' "
-                           + "href='" + enlace + "'>aqui</a>";
-                    
+                            + "href='" + enlace + "'>aqui</a>";
+
                     Correo correo = new Correo();
                     correo.setAsunto("Confirmacion de registro");
                     correo.setMensaje(texto);
                     correo.setDestinatario(usuario.getCorreo());
                     correo.enviarCorreo();
-                    
+
                     empresa.setIdUsuario(modelo2.ultimoUsuarioEmpresa());
-                    
+
                     modelo.agregarEmpresa(empresa);
                     request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
                 } else {
@@ -186,6 +189,17 @@ public class EmpresasController extends HttpServlet {
             }
         } catch (ServletException | IOException | SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void confirmar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            modelo2.confirmarCuenta(request.getParameter("id"));
+            request.getSession().setAttribute("exito", "Cuenta verificada exitosamente, "
+                    + "ya puedes iniciar sesion");
+            response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
