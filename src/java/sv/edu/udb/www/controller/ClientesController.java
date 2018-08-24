@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.EstadoCupon;
+import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.model.ClientesModel;
 
@@ -30,6 +31,7 @@ public class ClientesController extends HttpServlet {
 
     ClientesModel model = new ClientesModel();
     ArrayList<String> listaErrores = new ArrayList<String>();
+    List<Oferta> ofertas = new ArrayList();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,6 +44,9 @@ public class ClientesController extends HttpServlet {
             }
             String operacion = request.getParameter("operacion");
             switch (operacion) {
+                case "inicio":
+                    inicio(request, response);
+                    break;
                 case "listar":
                     listar(request, response);
                     break;
@@ -49,10 +54,13 @@ public class ClientesController extends HttpServlet {
                     filtrar(request, response);
                     break;
                 case "misCupones":
-                    misCupones(request,response);
+                    misCupones(request, response);
                     break;
                 case "categorizar":
-                    categorizar(request,response);
+                    categorizar(request, response);
+                    break;
+                case "agregar":
+                    agregar(request, response);
                     break;
             }
         }
@@ -122,14 +130,19 @@ public class ClientesController extends HttpServlet {
         try {
             if (model.obtenerRubro() == null) {
                 listaErrores.add("Error al cargar los rubros");
-            }else {
-                if (request.getParameter("rubroFiltro")==null) {
-                    response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=misCupones");
+            } else {
+                if (request.getParameter("rubroFiltro") == null) {
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=listar");
                 } else {
-                    rubro = model.obtenerRubro();
-                    request.setAttribute("ofertita", model.listarCupones(request.getParameter("rubroFiltro")));
-                    request.setAttribute("rubrito", rubro);
-                    request.getRequestDispatcher("/Cliente/ComprarCupones.jsp").forward(request, response);
+                    if (request.getParameter("rubroFiltro").equals("0")) {
+                        response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=listar");
+                    } else {
+                        request.setAttribute("rubro", request.getParameter("rubroFiltro"));
+                        rubro = model.obtenerRubro();
+                        request.setAttribute("ofertita", model.listarCupones(request.getParameter("rubroFiltro")));
+                        request.setAttribute("rubrito", rubro);
+                        request.getRequestDispatcher("/Cliente/ComprarCupones.jsp").forward(request, response);
+                    }
                 }
             }
         } catch (IOException | ServletException | SQLException ex) {
@@ -165,12 +178,32 @@ public class ClientesController extends HttpServlet {
             } else if (model.listarMisCupones(request.getParameter("categoriaFiltro")) == null) {
                 listaErrores.add("Error al cargar los cupones");
             } else {
+                request.setAttribute("categoria", request.getParameter("categoriaFiltro"));
                 estado = model.listarEstadosCupon();
                 request.setAttribute("ofertita", model.listarMisCupones(request.getParameter("categoriaFiltro")));
                 request.setAttribute("estado", estado);
                 request.getRequestDispatcher("/Cliente/MisCupones.jsp").forward(request, response);
             }
         } catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void inicio(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.sendRedirect(request.getContextPath() + "/Cliente/InicioCliente.jsp");
+        } catch (IOException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void agregar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int idOferta = Integer.parseInt(request.getParameter("id"));
+            ofertas.add(model.obtenerOferta(idOferta));
+            request.getSession().setAttribute("ofertas", ofertas);
+            response.sendRedirect(request.getContextPath() + "/Cliente/VerCarrito.jsp");
+        } catch (IOException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
