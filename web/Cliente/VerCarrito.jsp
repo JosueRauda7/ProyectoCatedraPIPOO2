@@ -77,7 +77,7 @@
                             </div>
                             <div class="form-group col-lg-8 col-sm-offset-2">
                                 <button type="submit" class="btn btn-lg btn-primary btn-block">Finalizar Compra</button>
-                                <small><a style="text-align: center;" href="${base}/usuarios.do?operacion=registro">Regresar</a></small> 
+                                <small><a style="text-align: center;" href="${base}/clientes.do?operacion=listar">Regresar</a></small> 
                             </div>
                         </form>
 

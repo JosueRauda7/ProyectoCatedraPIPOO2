@@ -30,38 +30,36 @@
     </head>
     <body>
         <jsp:include page="menuCliente.jsp"/>
+        <section id="hero-banner">
+            <div class="banner-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">                                 
+                            <h2>Bienvenido a La Cuponera UDB</h2>
+                            <p>Tu sitio online de cupones.</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!--/#main-slider-->
         <section id="mainservice" >
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title wow fadeInDown">Bienvenido a La Cuponera UDB</h2>
+                    <h2 class="section-title wow fadeInDown">Ofertas de Cupones</h2>
                     <p class="wow fadeInDown">Conoce las ofertas de cupones de diferentes rubros de empresas, ahorra dinero, 
                         ahorra tiempo y conoce muchos lugares.</p>
+                    <a class="btn btn-primary" href="${base}/clientes.do?operacion=listar">Ver Ofertas de Cupones</a>
                 </div>
             </div>
         </section>
-        <section id="about">
+        <section id="mainservice" >
             <div class="container">
-
                 <div class="section-header">
-                    <h2 class="section-title wow fadeInDown">About Us</h2>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-6 wow fadeInLeft">
-                        <img class="img-responsive" src="${base}/images/about.png" alt="">
-                    </div>
-
-                    <div class="col-sm-6 wow fadeInRight">
-                        <h3 class="column-title">Our Fitness Center</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget risus vitae massa semper aliquam quis mattis quam. Morbi vitae tortor tempus, placerat leo et, suscipit lectus. Phasellus ut euismod massa, eu eleifend ipsum.</p>
-
-                        <p>Nulla eu neque commodo, dapibus dolor eget, dictum arcu. In nec purus eu tellus consequat ultricies. Donec feugiat tempor turpis, rutrum sagittis mi venenatis at. Sed molestie lorem a blandit congue. Ut pellentesque odio quis leo volutpat, vitae vulputate felis condimentum. </p>
-                        <p class="wow fadeInDown">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget risus vitae massa <br> semper aliquam quis mattis quam.</p>
-                        <p>Praesent vulputate fermentum lorem, id rhoncus sem vehicula eu. Quisque ullamcorper, orci adipiscing auctor viverra, velit arcu malesuada metus, in volutpat tellus sem at justo.</p>
-
-
-                    </div>
+                    <h2 class="section-title wow fadeInDown">Mis Cupones</h2>
+                    <p class="wow fadeInDown">Verifica los cupones que has comprado, aquí puede visualizar 
+                        los cupones que disponibles, cupones canjeados y sus cupones vencidos.</p>
+                    <a class="btn btn-primary" href="${base}/clientes.do?operacion=misCupones">Ver Mis Cupones</a>
                 </div>
             </div>
         </section>

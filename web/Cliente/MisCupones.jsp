@@ -74,7 +74,7 @@
                     <c:forEach var="oferta" items="${requestScope.ofertita}">
                         <div class="col-sm-6 col-md-4">
                             <div class="thumbnail">
-                                <img class="img-responsive" src="${base}/images/portfolio/${oferta.getUrl_foto()}" alt="">
+                                <img class="img-responsive" src="${base}/images/${oferta.getUrl_foto()}" alt="">
                                 <div class="caption">
                                     <h3>${oferta.getTituloOferta()}</h3>
                                     <p>Descripción:<br>${oferta.getDescripcionOferta()}</p>

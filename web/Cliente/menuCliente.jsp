@@ -9,13 +9,14 @@
                     <span class="icon-bar"></span>
                 </button>
                 <!-- <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo">Cuponera</a> --> 
-                <h1> <a href="Login.jsp" class="navbar-brand" style="text-decoration: none; color:white;">CUPONERA UDB</a></h1>
+                <h1> <a href="${pageContext.request.contextPath}/clientes.do?operacion=inicio" class="navbar-brand" style="text-decoration: none; color:white;">CUPONERA UDB</a></h1>
             </div>
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=inicio"">Inicio</a></li>  
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=inicio">Inicio</a></li>  
                     <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=listar">Comprar Cupones</a></li>
-                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=misCupones">Mis Cupones</a></li>                       
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=misCupones">Mis Cupones</a></li>
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=cerrar">Cerrar Sesión</a></li>
                 </ul>
             </div>
         </div><!--/.container-->
