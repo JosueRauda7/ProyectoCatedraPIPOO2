@@ -236,11 +236,11 @@ public class UsuariosController extends HttpServlet {
                         + "existosamente.");
 
                 String texto = "Has sido registrado exitosamente a la cuponera.<br>";
-                texto += "Anota tu contraseña (puedes cambiarla cuando quieras)<br> ";
+                texto += "Anota tu contraseña: "+ pass +" (puedes cambiarla cuando quieras)<br> ";
                 texto += "Para confirmar tu cuenta debes dar click ";
 
                 String enlace=request.getRequestURL().toString()+
-                        "?operacion=val&id="+cadenaAleatoria;
+                        "?operacion=verificar&id="+cadenaAleatoria;
                 texto += "<a target='a_blank' "
                        + "href='" + enlace + "'>aqui</a>";
 

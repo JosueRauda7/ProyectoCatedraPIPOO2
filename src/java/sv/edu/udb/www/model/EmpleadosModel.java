@@ -7,11 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Cupon;
-<<<<<<< HEAD
 import sv.edu.udb.www.beans.EstadoCupon;
-=======
 import sv.edu.udb.www.beans.Empleado;
->>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Usuario;
 import static sv.edu.udb.www.model.Conexion.conexion;

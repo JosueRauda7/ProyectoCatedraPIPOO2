@@ -38,19 +38,15 @@ public class EmpleadosController extends HttpServlet {
                 case "obtener":
                     obtenerCupon(request, response);
                     break;
-<<<<<<< HEAD
                 case "canjear":
                     canjearCupon(request, response);
                     break;
-=======
                 case "listar":
                     listar(request,response);
                     break;
                 case "nuevo":
-
                     request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
-                    break;               
->>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
+                    break; 
             }
         } catch (SQLException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex); //Si no funciona, eliminar esto
@@ -107,8 +103,6 @@ public class EmpleadosController extends HttpServlet {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-<<<<<<< HEAD
-=======
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -124,12 +118,8 @@ public class EmpleadosController extends HttpServlet {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     
-}
->>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
-
-    private void canjearCupon(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        private void canjearCupon(HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
         try {
             String codigoCupon = request.getParameter("codigoCupon");;
@@ -156,4 +146,9 @@ public class EmpleadosController extends HttpServlet {
         }
 
     }
+
+    
 }
+
+
+
