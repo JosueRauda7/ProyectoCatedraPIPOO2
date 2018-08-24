@@ -31,12 +31,18 @@ public class EmpleadosController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+
             String operacion = request.getParameter("operacion");
 
             switch (operacion) {
                 case "obtener":
                     obtenerCupon(request, response);
                     break;
+<<<<<<< HEAD
+                case "canjear":
+                    canjearCupon(request, response);
+                    break;
+=======
                 case "listar":
                     listar(request,response);
                     break;
@@ -44,7 +50,10 @@ public class EmpleadosController extends HttpServlet {
 
                     request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
                     break;               
+>>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex); //Si no funciona, eliminar esto
         }
     }
 
@@ -90,15 +99,16 @@ public class EmpleadosController extends HttpServlet {
     private void obtenerCupon(HttpServletRequest request, HttpServletResponse response) {
         try {
             String codigo = request.getParameter("codigo");
-            Cupon miCupon = modelo.obtenerCupon(codigo);
-           
-            request.setAttribute("informacionCupon", miCupon);
+            request.setAttribute("listaCupones", modelo.obtenerCupon(codigo));
+
             request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
-      
+
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+<<<<<<< HEAD
+=======
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -117,5 +127,33 @@ public class EmpleadosController extends HttpServlet {
 
     
 }
+>>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
 
+    private void canjearCupon(HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
+        try {
+            String codigoCupon = request.getParameter("codigoCupon");;
+            String estadoCupon = request.getParameter("estadoCupon");
+            String duiCanjeador = request.getParameter("duiCanjeador");
+            String duiComprador = request.getParameter("duiComprador"); 
+
+            if (!"Disponible".equals(estadoCupon)) {
+                request.setAttribute("Fracaso", "El cupón no esta disponible");
+                request.setAttribute("listaCupones", modelo.obtenerCupon(codigoCupon));
+                request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
+            } else if (!duiComprador.equals(duiCanjeador)) {
+                request.setAttribute("Fracaso", "El DUI no coincide");
+                request.setAttribute("listaCupones", modelo.obtenerCupon(codigoCupon));
+                request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
+            } else {
+                if(modelo.canjearCupon(codigoCupon) > 0){
+                    request.setAttribute("Exito", "El cupón ha sido canjeado, exitosamente");
+                    response.sendRedirect("/Empleado/canjearCupon.jsp");
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+}

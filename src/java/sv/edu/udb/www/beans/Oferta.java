@@ -45,6 +45,10 @@ public class Oferta {
         this.justificacion="";
         this.empresa=null;
     }
+    
+    public Oferta(String tituloOferta){
+        this.tituloOferta = tituloOferta;
+    }
 
     public String getOtrosDetalles() {
         return otrosDetalles;

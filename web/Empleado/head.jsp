@@ -17,3 +17,6 @@
 <script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/smoothscroll.js"></script>
 <script src="${pageContext.request.contextPath}/js/wow.min.js"></script>
+<link href="${pageContext.request.contextPath}/css/alertify.core.css" rel="stylesheet" type="text/css"/>
+<link href="${pageContext.request.contextPath}/css/alertify.default.css" rel="stylesheet" type="text/css"/>
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>

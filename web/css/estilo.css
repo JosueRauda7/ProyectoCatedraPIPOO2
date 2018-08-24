@@ -4,7 +4,7 @@
     width: 42%;
     margin-left: 30%;
     padding: 2%;
-    margin-top: 3%;
+    margin-top: 2%;
 }
 
 .h3{
@@ -13,13 +13,42 @@
 
 #codigoCupon{
     background-color: red;
-    margin-right: -50%;
+    margin-right: -52%;
     margin-left: 23%;
     padding: 2%;
     margin-top: 5%;
+    padding-right: 5%;
+    padding-left: 5%;
+    padding-top: 6%;
+    padding-bottom: 3%;
 }
 
 #verificar{
     margin-top: 2%;
     margin-left: 40%;
+}
+
+.separador{
+    width: 178%;
+}
+
+.fechaCanje{
+    margin-left: 90%;
+    width: 150%;
+}
+
+.fechaC{
+    margin-top: -10%;
+}
+
+#duiCanjeador{
+    margin-left: 70%;
+    margin-top: -11.3%;
+    width: 100%;
+    border-style: solid;
+    border-color: black;
+}
+
+#codigo{
+    width: 100%;
 }
