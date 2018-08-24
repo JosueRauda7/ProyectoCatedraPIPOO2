@@ -45,6 +45,23 @@ public class UsuariosController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        if(request.getSession().getAttribute("correo")!=null||request.getSession().getAttribute("estadoUsuario")!=null){
+                switch(request.getSession().getAttribute("estadoUsuario").toString()){
+                    case "1":
+                        //Administrador
+                        return;
+                    case "2":
+                        //Empresa
+                        return;
+                    case "3":
+                        //Empleado
+                        return;
+                    case "4":
+                        //Cliente
+                        response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=inicio");
+                        return;
+                }
+            }
         String operacion = request.getParameter("operacion");
         switch(operacion){
 
@@ -283,6 +300,7 @@ public class UsuariosController extends HttpServlet {
            usuario.setContrasenia(request.getParameter("password"));
            request.getSession().setAttribute("correo", request.getParameter("correo"));
            int estado = UM.verificarSesion(usuario);
+           request.getSession().setAttribute("estadoUsuario", estado);
            switch(estado){
                case -1:
                    request.getSession().setAttribute("fracaso","Usuario y/o contraseña incorrecta");
@@ -306,7 +324,7 @@ public class UsuariosController extends HttpServlet {
                    break;
                case 4:
                    //Cliente
-                   //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
                    break;
            }
            
