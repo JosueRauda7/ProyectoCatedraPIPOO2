@@ -240,7 +240,7 @@ public class UsuariosController extends HttpServlet {
                 texto += "Para confirmar tu cuenta debes dar click ";
 
                 String enlace=request.getRequestURL().toString()+
-                        "?operacion=val&id="+cadenaAleatoria;
+                        "?operacion=verificar&id="+cadenaAleatoria;
                 texto += "<a target='a_blank' "
                        + "href='" + enlace + "'>aqui</a>";
 
