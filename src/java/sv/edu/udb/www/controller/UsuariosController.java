@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Cliente;
+import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.utils.Correo;
 import sv.edu.udb.www.model.UsuariosModel;
@@ -51,6 +53,9 @@ public class UsuariosController extends HttpServlet {
                 break;
             case "insertar":
                 insertar(request,response);
+                break;
+            case "insertarE":
+                insertarUsuarioEmpleado(request, response);
                 break;
             case "login":
                 request.getRequestDispatcher("/Login.jsp").forward(request, response);
@@ -170,7 +175,7 @@ public class UsuariosController extends HttpServlet {
                     correo.enviarCorreo();
                     response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 }else{
-                        listaErrores.add("Este nombre de usuario ya esta registrado");
+                        listaErrores.add("Este correo ya esta registrado");
                         request.setAttribute("listaErrores", listaErrores);
                         request.setAttribute("usuario", newUsuario);
                         request.setAttribute("cliente", newCliente);
@@ -183,6 +188,79 @@ public class UsuariosController extends HttpServlet {
                         request.getRequestDispatcher("/usuarios.do?operacion=registro").forward(request, response);
             }
         }catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void insertarUsuarioEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        listaErrores.clear();
+        try{
+        Usuario usuario = new Usuario();
+        Empleado empleado=new Empleado();
+        
+        //Creacion password
+            char[] caracteres;
+            caracteres = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+            String pass = "";
+            for (int i = 0; i < 8; i++) {
+                pass += caracteres[new Random().nextInt(62)];
+            }
+            //fin contraseña
+        
+        usuario.setCorreo(request.getParameter("correo"));
+        usuario.setContrasenia(pass);
+        empleado.setNombreEmpleado("nombre");
+        empleado.setApellidoEmpleado("apellido");
+        
+        
+        if(Validaciones.isEmpty(empleado.getNombreEmpleado())){
+            listaErrores.add("El nombre es obligatorio");
+        }
+        if(Validaciones.isEmpty(empleado.getApellidoEmpleado())){
+            listaErrores.add("El apellido es obligatorio");
+        }
+        if(Validaciones.isEmpty(usuario.getCorreo())){
+            listaErrores.add("El correo es obligatorio");
+        }else if(!Validaciones.esCorreo(usuario.getCorreo())){
+            listaErrores.add("El correo electronico no tiene el formato correcto");
+        }
+        if(listaErrores.size()>0){
+            request.setAttribute("listaErrores",listaErrores);
+            request.setAttribute("usuario", usuario);
+            request.setAttribute("empleado", empleado);
+            request.getRequestDispatcher("/empleados.do?operacion=nuevo").forward(request, response);
+        }else{
+            String cadenaAleatoria = UUID.randomUUID().toString();
+            if(UM.insertarUsuarioEmpleado(usuario, empleado,(String) request.getSession().getAttribute("correo"),cadenaAleatoria)>0){
+                request.getSession().setAttribute("exito", "Empleado registrado "
+                        + "existosamente.");
+
+                String texto = "Has sido registrado exitosamente a la cuponera.<br>";
+                texto += "Anota tu contraseña (puedes cambiarla cuando quieras)<br> ";
+                texto += "Para confirmar tu cuenta debes dar click ";
+
+                String enlace=request.getRequestURL().toString()+
+                        "?operacion=val&id="+cadenaAleatoria;
+                texto += "<a target='a_blank' "
+                       + "href='" + enlace + "'>aqui</a>";
+
+                Correo correo = new Correo();
+                correo.setAsunto("Confirmacion de registro");
+                correo.setMensaje(texto);
+                correo.setDestinatario(usuario.getCorreo());
+                correo.enviarCorreo();
+                response.sendRedirect(request.getContextPath() + "/empleados.do?operacion=listar");
+            }else{
+                listaErrores.add("Este correo ya esta registrado");
+                request.setAttribute("listaErrores", listaErrores);
+                request.setAttribute("usuario", usuario);
+                request.setAttribute("empleado", empleado);
+                request.getRequestDispatcher("/empleados.do?operacion=listar").forward(request, response);
+            }
+        }
+        }catch(ServletException | IOException ex){
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE,null,ex);
+        } catch (SQLException ex) {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -219,7 +297,7 @@ public class UsuariosController extends HttpServlet {
                case 2:
                    //Empresa
                    //Este atributo me servira para reconocer quien es la empresa que accede                   
-                   response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                   request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
                    //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                    break;
                case 3:

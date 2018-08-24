@@ -7,8 +7,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Cupon;
+<<<<<<< HEAD
 import sv.edu.udb.www.beans.EstadoCupon;
+=======
+import sv.edu.udb.www.beans.Empleado;
+>>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
 import sv.edu.udb.www.beans.Oferta;
+import sv.edu.udb.www.beans.Usuario;
 import static sv.edu.udb.www.model.Conexion.conexion;
 
 public class EmpleadosModel extends Conexion {
@@ -91,4 +96,69 @@ public class EmpleadosModel extends Conexion {
             return 0;
         }
     }
+    
+    public List<Empleado> listarEmpleados(String correo) throws SQLException{
+        try {
+            List<Empleado> lista=new ArrayList<>();
+            
+            String sql="Select e.CodigoEmpresa from empresas e inner join usuarios u on e.IdUsuario=u.IdUsuario where u.correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1, correo);
+            rs=st.executeQuery();
+            rs.next();
+            
+            String CodigoEmpresa=rs.getString("CodigoEmpresa");
+            
+            sql="Select * from empleado e inner join empresas em on e.CodigoEmpresa=em.CodigoEmpresa"
+                    + " inner join usuarios u on e.IdUsuario=u.IdUsuario where em.CodigoEmpresa=?";
+            st=conexion.prepareStatement(sql);
+            st.setString(1,CodigoEmpresa);
+            
+            rs=st.executeQuery();
+            while(rs.next()){
+                Empleado empleado = new Empleado();
+                empleado.setIdEmpleado(rs.getInt("IdEmpleado"));
+                empleado.setNombreEmpleado(rs.getString("NombreEmpleado"));
+                empleado.setApellidoEmpleado(rs.getString("ApellidoEmpleado"));
+                empleado.setUsuario(new Usuario(rs.getString("correo")));
+                lista.add(empleado);
+            }
+            this.desconectar();
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
+    }
+    
+    public int insertarEmpleado(Empleado empleado,String correo, int idUsuario) throws SQLException{        
+        try {
+            int filasAfectadas=0;
+            String sql="select * from empresas e inner join usuarios u on e.IdUsuario=u.IdUsuario where u.correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1,correo);
+            rs=st.executeQuery();
+            rs.next();
+            String codigoEmpresa= rs.getString("CodigoEmpresa");
+            
+            sql ="Insert into empleado values(NULL,?,?,?,?)";
+            st=conexion.prepareStatement(sql);
+            st.setString(1,empleado.getNombreEmpleado());
+            st.setString(2, empleado.getApellidoEmpleado());
+            st.setInt(3, idUsuario);
+            st.setString(4,codigoEmpresa);
+            filasAfectadas=st.executeUpdate();
+            this.desconectar();            
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
+    
+     
 }

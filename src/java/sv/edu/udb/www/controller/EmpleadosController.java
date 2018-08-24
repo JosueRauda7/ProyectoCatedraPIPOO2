@@ -3,6 +3,9 @@ package sv.edu.udb.www.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -11,12 +14,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Cupon;
+import sv.edu.udb.www.beans.Empleado;
+import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.EmpleadosModel;
+import sv.edu.udb.www.model.UsuariosModel;
+import sv.edu.udb.www.utils.Correo;
+import sv.edu.udb.www.utils.Validaciones;
 
 @WebServlet(name = "EmpleadosController", urlPatterns = {"/empleados.do"})
 public class EmpleadosController extends HttpServlet {
-
+    ArrayList listaErrores = new ArrayList();
     EmpleadosModel modelo = new EmpleadosModel();
+    UsuariosModel modeloUsuario = new UsuariosModel();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,9 +38,19 @@ public class EmpleadosController extends HttpServlet {
                 case "obtener":
                     obtenerCupon(request, response);
                     break;
+<<<<<<< HEAD
                 case "canjear":
                     canjearCupon(request, response);
                     break;
+=======
+                case "listar":
+                    listar(request,response);
+                    break;
+                case "nuevo":
+
+                    request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
+                    break;               
+>>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
             }
         } catch (SQLException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex); //Si no funciona, eliminar esto
@@ -88,6 +107,27 @@ public class EmpleadosController extends HttpServlet {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+<<<<<<< HEAD
+=======
+
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+           
+            String correo = (String) request.getSession().getAttribute("correo");
+            request.setAttribute("listaEmpleados",modelo.listarEmpleados(correo));
+            try {
+                request.getRequestDispatcher("/Empresa/ListaEmpleados.jsp").forward(request, response);
+            } catch (ServletException | IOException ex) {
+                Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    
+}
+>>>>>>> 2926c3ebf23a9a126a90f6b9ed2ab88688aeacf4
 
     private void canjearCupon(HttpServletRequest request, HttpServletResponse response) throws SQLException {
 

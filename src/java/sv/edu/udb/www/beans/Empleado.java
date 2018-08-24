@@ -15,7 +15,9 @@ public class Empleado {
     private String apellidoEmpleado;
     private String correoEmpleado;
     private Usuario usuario;
+    private int IdUsuario;
     private Empresa empresa;
+    private String CodigoEmpresa;
     
     public Empleado(){
         this.idEmpleado=0;
@@ -24,8 +26,28 @@ public class Empleado {
         this.correoEmpleado="";
         this.usuario=null;
         this.empresa=null;
+        this.IdUsuario=0;
+        this.CodigoEmpresa="";
+    }
+  
+
+    public int getIdUsuario() {
+        return IdUsuario;
     }
 
+    public void setIdUsuario(int IdUsuario) {
+        this.IdUsuario = IdUsuario;
+    }
+
+    public String getCodigoEmpresa() {
+        return CodigoEmpresa;
+    }
+
+    public void setCodigoEmpresa(String CodigoEmpresa) {
+        this.CodigoEmpresa = CodigoEmpresa;
+    }
+
+    
     public int getIdEmpleado() {
         return idEmpleado;
     }

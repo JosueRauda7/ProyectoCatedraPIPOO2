@@ -30,7 +30,7 @@
                         <div class="thumbnail">
                             <img class="img-responsive" src="images/portfolio/01.jpg" alt="">
                             <div class="caption">
-                                <h3><a  href="${pageContext.request.contextPath}/empresas.do?operacion=listar" style="text-decoration: none; color:#c2185b;">Gestion de ofertas</a></h3>
+                                <h3><a  href="${pageContext.request.contextPath}/ofertas.do?operacion=listar" style="text-decoration: none; color:#c2185b;">Gestion de ofertas</a></h3>
                             <p>Propón nuevas ofertas en cupones.</p>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                         <div class="thumbnail">
                             <img class="img-responsive" src="images/portfolio/02.jpg" alt="">
                             <div class="caption">
-                                <h3>Gestion de empleados</h3>
+                                <h3><a href="${pageContext.request.contextPath}/empleados.do?operacion=listar" style="text-decoration: none; color:#c2185b;"> Gestion de empleados</a></h3>
                                 <p>Ten un control de los empleados de tu empresa.</p>
                             </div>
                         </div>

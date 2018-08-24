@@ -12,15 +12,14 @@ package sv.edu.udb.www.beans;
 public class Rubro {
     private int idRubro;
     private String rubro;
-    private String nombreRubro;
     public Rubro(){
         this.idRubro=0;
         this.rubro="";
-        this.nombreRubro="";
+       
     }
 
-    public Rubro(String nombreRubro) {
-        this.nombreRubro = nombreRubro;
+    public Rubro(String rubro) {
+        this.rubro = rubro;
     }
     
     public int getIdRubro() {
