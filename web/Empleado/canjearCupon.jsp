@@ -20,28 +20,53 @@
                         <form  role="form" action="${pageContext.request.contextPath}/empleados.do" method="POST">
                             <input type="hidden" name="operacion" value="obtener" />
                             <div class="form-group" id="codigoCupon">
-                                <label for="codigo">Código del cupón:</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control col-md-7" name="codigo" id="codigo" value="" placeholder="Ingresa el código del cupón" >                                    
-                                    <span class="input-group-addon"></span>
+                                <div class="form-group">
+                                    <input type="text" class="form-control col-md-7" name="codigo" id="codigo" value="" placeholder="Ingresa el código del cupón" >
                                 </div>
                                 <input type="submit" class="btn btn-info" id="verificar" value="Verificar" name="Verificar">    
                             </div><br>
                         </form>
 
-                        <div class="form-group">
-                            <label for="nombre">Código cupón: ${informacionCupon.codigoCupo}</label><br><br>
-                            <label for="fechaCompra">Fecha de compra: ${informacionCupon.fechaCompra}</label><br><br>
-                            <label for="fechaCanje">Código canje: ${informacionCupon.fechaCanje}</label>
-                            <label for="idCliente">Código canje: ${informacionCupon.cliente.idCliente}</label>
-                            <label for="idOferta">Código canje: ${informacionCupon.oferta.idOferta}</label>
-                            
-                        </div>
+                        <form role="form" action="${pageContext.request.contextPath}/empleados.do" method="POST">    
+                            <div class="form-group">
+                                <c:forEach items="${requestScope.listaCupones}" var="cupones">
+                                    <div class="informacionCupon">
+                                        <input type="hidden" name="operacion" value="canjear" />
+                                        <label for="nombre">Código cupón: ${cupones.codigoCupo}</label><br><br>
+                                        <input type="hidden" name="codigoCupon" value="${cupones.codigoCupo}" />
+                                        <label for="estadoCupon">Estado: ${cupones.estadoCupon.estado}</label>
+                                        <input type="hidden" name="estadoCupon" value="${cupones.estadoCupon.estado}" />
+                                        <label for="fechaCompra">Fecha de compra: ${cupones.fechaCompra}</label><div class="fechaC"><label for="fechaCanje" class="fechaCanje">Fecha canje: ${cupones.fechaCanje}</label></div>                                      
+                                        <hr class="separador" />
+                                    </div>
+                                    <div class="informacionCliente">
+                                        <!--<label for="duiCliente">DUI:</label><br>-->
+                                        <input type="hidden" name="duiComprador" value="${cupones.cliente.dui}" />
+                                        <label for="nombreCliente">Cliente: ${cupones.cliente.nombreClientes} ${cupones.cliente.apellidosClientes}</label>
+                                        <input type="text" class="form-control col-md-7" name="duiCanjeador" id="duiCanjeador" placeholder="Ingresa el DUI del canjeador"><br>
+                                        <hr class="separador" />
+                                    </div>
+                                    <div class="informacionOferta">
+                                        <label for="tituloOferta">Titulo oferta: ${cupones.oferta.tituloOferta}</label>
+                                    </div>                               
+                                </c:forEach>
+                            </div>
 
-                        <input type="submit" class="btn btn-info" value="Guardar" name="Guardar">
-                        <a class="btn btn-danger" href="${pageContext.request.contextPath}/editoriales.do?op=listar">Cancelar</a>
+                            <input type="submit" class="btn btn-info" value="Canjear" name="Canjear">
+                            <a class="btn btn-danger" href="#">Cancelar</a>
+                        </form>
                     </div>
                 </div> 
             </div>
+            <script>
+                <c:if test="${not empty Exito}">
+                alertify.success('${Exito}');
+                    <c:set var="Exito" value="" scope="session"></c:set>
+                </c:if>
+                <c:if test="${not empty Fracaso}">
+                alertify.error('${Fracaso}');
+                    <c:set var="Fracaso" value="" scope="session"></c:set>
+                </c:if>
+            </script>                
     </body>
 </html>

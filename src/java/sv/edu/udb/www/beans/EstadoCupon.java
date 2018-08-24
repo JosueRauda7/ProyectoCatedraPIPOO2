@@ -17,6 +17,10 @@ public class EstadoCupon {
         this.idEstadoCupon=0;
         this.estado="";
     }
+    
+    public EstadoCupon(String estado){
+        this.estado = estado;
+    }
 
     public int getIdEstadoCupon() {
         return idEstadoCupon;
