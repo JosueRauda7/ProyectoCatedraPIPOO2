@@ -194,4 +194,25 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
+    public Oferta obtenerOferta(int idOferta){
+        
+        try {
+            Oferta oferta = new Oferta();
+            String sql="SELECT * FROM ofertas WHERE idOferta=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setInt(1, idOferta);
+            rs=st.executeQuery();
+            while(rs.next()){
+                oferta.setIdOferta(Integer.parseInt(rs.getString("idOferta")));
+                oferta.setTituloOferta(rs.getString("TituloOferta"));
+                oferta.setPrecioOferta(Double.parseDouble(rs.getString("PrecioOferta")));
+            }
+            this.desconectar();
+            return oferta;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 }
