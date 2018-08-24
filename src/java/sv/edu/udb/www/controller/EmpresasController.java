@@ -56,6 +56,12 @@ public class EmpresasController extends HttpServlet {
                 case "eliminar":
                     eliminar(request, response);
                     break;
+                case "modificar":
+                    modificar(request, response);
+                    break;
+                case "editar":
+                    editar(request, response);
+                    break;
             }
         }
     }
@@ -241,6 +247,63 @@ public class EmpresasController extends HttpServlet {
                 request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
             }
         } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void modificar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String codigo = request.getParameter("codigo");
+            request.setAttribute("empresa", modelo.obtenerEmpresa(codigo));
+            request.setAttribute("listaRubros", rubro.obtenerRubro());
+           request.getRequestDispatcher("/Administrador/ModificarEmpresas.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void editar(HttpServletRequest request, HttpServletResponse response) {
+        try{   
+        Empresa empresa = new Empresa();
+            empresa.setNombreEmpresa(request.getParameter("nombreEmpresa"));
+            empresa.setNombreContacto(request.getParameter("nombreContacto"));
+            empresa.setDireccion(request.getParameter("direccion"));
+            empresa.setTelefono(request.getParameter("telefono"));
+            empresa.setIdRubro(Integer.parseInt(request.getParameter("rubro")));
+            empresa.setComision(request.getParameter("comision"));
+            empresa.setCodigoEmpresa(request.getParameter("codigoEmpresa"));
+         
+
+            if (Validaciones.isEmpty(empresa.getNombreEmpresa())) {
+                listaErrores.add("El nombre de la empresa es obligatorio");
+            }
+            if (Validaciones.isEmpty(empresa.getNombreContacto())) {
+                listaErrores.add("El nombre del contacto es obligatorio");
+            }
+            if (Validaciones.isEmpty(empresa.getDireccion())) {
+                listaErrores.add("La direccion es obligatoria obligatorio");
+            }
+            if (Validaciones.isEmpty(empresa.getTelefono())) {
+                listaErrores.add("El telefono es obligatorio");
+            }
+            if (Validaciones.isEmpty(String.valueOf(empresa.getComision()))) {
+                listaErrores.add("El nombre del contacto es obligatorio");
+            }
+
+            if (listaErrores.size() > 0) {
+                request.setAttribute("listaErrores", listaErrores);
+                request.setAttribute("empresa", empresa);
+                request.getRequestDispatcher("empresas.do?operacion=modificar").forward(request, response);
+            } else {
+                if(modelo.modificarEmpresa(empresa)>0){
+                request.setAttribute("exito", "La empresa se ha modificado exitosamente");
+                request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                }else{
+                request.setAttribute("fracaso", "error al modificar");
+                request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                }
+            }
+            } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

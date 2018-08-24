@@ -43,10 +43,11 @@
                         <td>$${empresas.comision}</td>
                         <td>${empresas.usuario.correo}</td>
                         <td>
-                             <a class="btn btn-danger" href="javascript:eliminar('${empresas.codigoEmpresa}', '${empresas.idUsuario}')"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                            <a class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?operacion=modificar&codigo=${empresas.codigoEmpresa}"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                            
                         </td>
                         <td>
-                            <button class="btn btn-info" value="${empresas.codigoEmpresa}">Modificar</button>
+                             <a class="btn btn-danger" href="javascript:eliminar('${empresas.codigoEmpresa}', '${empresas.idUsuario}')"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
                         </td>
                     </tr>
                 </c:forEach>

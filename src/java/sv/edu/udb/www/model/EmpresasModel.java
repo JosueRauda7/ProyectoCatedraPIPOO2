@@ -92,6 +92,35 @@ public class EmpresasModel extends Conexion{
         this.desconectar();
         }
     }
+     public int modificarEmpresa(Empresa empresa) throws SQLException{
+        try {
+            int filasAfectadas=0;
+           
+            this.conectar();
+            st = conexion.prepareStatement("SELECT SUBSTRING(MAX(CodigoEmpresa) , 4,6) AS Numero FROM empresas WHERE CodigoEmpresa LIKE 'EMP%'");
+            rs = st.executeQuery();
+            String sql = "UPDATE empresas SET NombreEmpresa = ?, NombreContacto = ?, Direccion = ?, Telefono = ?, IdRubro = ?, Comision = ? WHERE CodigoEmpresa = ?";
+            
+            st = conexion.prepareStatement(sql);
+           
+            st.setString(1, empresa.getNombreEmpresa());
+            st.setString(2, empresa.getNombreContacto());
+            st.setString(3, empresa.getDireccion());
+            st.setString(4, empresa.getTelefono());
+            st.setInt(5, empresa.getIdRubro());
+            st.setString(6, String.valueOf(empresa.getComision()));
+            st.setString(7, empresa.getCodigoEmpresa());
+            filasAfectadas= st.executeUpdate();
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }finally{
+        this.desconectar();
+        }
+    }
     public int eliminarEmpresas(String codigo) throws SQLException{
         try {
             int filasAfectadas=0;
@@ -108,6 +137,35 @@ public class EmpresasModel extends Conexion{
             return 0;
         }finally{
            this.desconectar();
+        }
+    }
+    public Empresa obtenerEmpresa(String codigo) throws SQLException{
+        try {
+            String sql = "SELECT * FROM empresas WHERE CodigoEmpresa = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, codigo);
+            rs = st.executeQuery();
+            if(rs.next()){
+                Empresa empresa = new Empresa();
+                empresa.setCodigoEmpresa(rs.getString("CodigoEmpresa"));
+                empresa.setNombreEmpresa(rs.getString("NombreEmpresa"));
+                empresa.setNombreContacto(rs.getString("NombreContacto"));
+                empresa.setDireccion(rs.getString("Direccion"));
+                empresa.setTelefono(rs.getString("Telefono"));
+                empresa.setIdRubro(rs.getInt("IdRubro"));
+                empresa.setComision(rs.getString("Comision"));
+                this.desconectar();
+                return empresa;
+            }
+            this.desconectar();
+            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }finally{
+          this.desconectar();
         }
     }
     
