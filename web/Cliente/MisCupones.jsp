@@ -50,7 +50,14 @@
                                 <div class="col-xs-6">
                                     <select id="categoriaFiltro" name="categoriaFiltro" class="form-control">
                                         <c:forEach var="estadito" items="${requestScope.estado}">
-                                            <option value="${estadito.getIdEstadoCupon()}">${estadito.getEstado()}</option>
+                                            <c:choose>
+                                                <c:when test="${estadito.getIdEstadoCupon() eq categoria}">
+                                                    <option value="${estadito.getIdEstadoCupon()}" selected="true">${estadito.getEstado()}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${estadito.getIdEstadoCupon()}">${estadito.getEstado()}</option>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -64,7 +71,7 @@
                     <br><br><br>
                 </section>
                 <div class="row">
-                        <c:forEach var="oferta" items="${requestScope.ofertita}">
+                    <c:forEach var="oferta" items="${requestScope.ofertita}">
                         <div class="col-sm-6 col-md-4">
                             <div class="thumbnail">
                                 <img class="img-responsive" src="${base}/images/portfolio/${oferta.getUrl_foto()}" alt="">
@@ -80,8 +87,8 @@
                             </div>
                         </div>
                     </c:forEach>
-                    
-                    
+
+
                 </div>
             </div>
         </section>

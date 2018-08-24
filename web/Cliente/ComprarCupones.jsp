@@ -22,6 +22,8 @@
         <link href="${base}/css/animate.min.css" rel="stylesheet"> 
         <link href="${base}/css/prettyPhoto.css" rel="stylesheet">
         <link href="${base}/css/styles.css" rel="stylesheet"> 
+        <link href="${pageContext.request.contextPath}/css/alertify.core.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/css/alertify.default.css" rel="stylesheet" type="text/css"/>
         <script src="${pageContext.request.contextPath}/js/jquery-1.12.0.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
@@ -52,7 +54,14 @@
                                     <select id="rubroFiltros" name="rubroFiltro" class="form-control">
                                         <option value="0">Todos</option>
                                         <c:forEach var="rubrito" items="${requestScope.rubrito}">
-                                            <option value="${rubrito.getIdRubro()}">${rubrito.getRubro()}</option>
+                                            <c:choose>
+                                                <c:when test="${rubrito.getIdRubro() eq rubro}">
+                                                    <option value="${rubrito.getIdRubro()}" selected="true">${rubrito.getRubro()}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${rubrito.getIdRubro()}">${rubrito.getRubro()}</option>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -78,7 +87,7 @@
                                     <p><h4>Precio Regular: $ ${oferta.getPrecioRegular()}</h4></p>
                                     <p><h4>Precio Oferta: $ ${oferta.getPrecioOferta()}</h4></p>
                                     <a class="btn btn-primary" href="#">Ver Detalles</a>
-                                    <a class="btn btn-primary" href="${base}/clientes.do?operacion=add">Añadir al Carrito</a>
+                                    <a class="btn btn-primary" href="javascript:agregar(${oferta.getIdOferta()})">Añadir al Carrito</a>
                                 </div>
                             </div>
                         </div>
@@ -90,6 +99,13 @@
             $(document).ready(function () {
                 $('#rubroFiltro').select2();
             });
+            function agregar(id){
+                alertify.confirm('¿Desea agregar este cupón del carrito de compras?', function (e) {
+                    if (e) {
+                        location.href = '${base}/clientes.do?operacion=agregar&id=' + id;
+                    }
+                });
+            }
         </script>
         <jsp:include page="footerCliente.jsp"/>
     </body>

@@ -13,9 +13,9 @@
             </div>
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li><a href="#home">Inicio</a></li>  
-                    <li><a href="#services">Comprar Cupones</a></li>
-                    <li><a href="#about">Mis Cupones</a></li>                       
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=inicio"">Inicio</a></li>  
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=listar">Comprar Cupones</a></li>
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=misCupones">Mis Cupones</a></li>                       
                 </ul>
             </div>
         </div><!--/.container-->
