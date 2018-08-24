@@ -50,11 +50,21 @@ public class EmpleadosModel extends Conexion {
     public List<Empleado> listarEmpleados(String correo) throws SQLException{
         try {
             List<Empleado> lista=new ArrayList<>();
-            String sql="Select * from empleado e inner join empresas em on e.CodigoEmpresa=em.CodigoEmpresa"
-                     + " inner join usuarios u on em.IdUsuario=u.IdUsuario where u.correo=?";
+            
+            String sql="Select e.CodigoEmpresa from empresas e inner join usuarios u on e.IdUsuario=u.IdUsuario where u.correo=?";
             this.conectar();
             st=conexion.prepareStatement(sql);
             st.setString(1, correo);
+            rs=st.executeQuery();
+            rs.next();
+            
+            String CodigoEmpresa=rs.getString("CodigoEmpresa");
+            
+            sql="Select * from empleado e inner join empresas em on e.CodigoEmpresa=em.CodigoEmpresa"
+                    + " inner join usuarios u on e.IdUsuario=u.IdUsuario where em.CodigoEmpresa=?";
+            st=conexion.prepareStatement(sql);
+            st.setString(1,CodigoEmpresa);
+            
             rs=st.executeQuery();
             while(rs.next()){
                 Empleado empleado = new Empleado();
@@ -72,7 +82,33 @@ public class EmpleadosModel extends Conexion {
             return null;
         }
     }
-     
+    
+    public int insertarEmpleado(Empleado empleado,String correo, int idUsuario) throws SQLException{        
+        try {
+            int filasAfectadas=0;
+            String sql="select * from empresas e inner join usuarios u on e.IdUsuario=u.IdUsuario where u.correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1,correo);
+            rs=st.executeQuery();
+            rs.next();
+            String codigoEmpresa= rs.getString("CodigoEmpresa");
+            
+            sql ="Insert into empleado values(NULL,?,?,?,?)";
+            st=conexion.prepareStatement(sql);
+            st.setString(1,empleado.getNombreEmpleado());
+            st.setString(2, empleado.getApellidoEmpleado());
+            st.setInt(3, idUsuario);
+            st.setString(4,codigoEmpresa);
+            filasAfectadas=st.executeUpdate();
+            this.desconectar();            
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
     
      
 }

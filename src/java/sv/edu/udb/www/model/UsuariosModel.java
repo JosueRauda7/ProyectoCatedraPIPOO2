@@ -7,9 +7,11 @@ package sv.edu.udb.www.model;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Cliente;
+import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.ClientesModel;
 import static sv.edu.udb.www.model.Conexion.conexion;
@@ -45,6 +47,38 @@ public class UsuariosModel extends Conexion {
 
             //Insertando fila en tabla Clientes teniendo el id de la tabla usuarios
             c.insertarCliente(idUsuario, cliente);
+
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
+    
+    public int insertarUsuarioEmpleado(Usuario usuario, Empleado empleado, String correo, String idConfirmacion) throws SQLException{
+        try {
+            EmpleadosModel em = new EmpleadosModel();
+            int idUsuario=0;
+            int filasAfectadas=0;
+            String sql = "Insert into usuarios Values(NULL,?,SHA2(?,256),?,?,?)";
+            this.conectar();
+            st=conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1,usuario.getCorreo());
+            st.setString(2,usuario.getContrasenia());
+            st.setBoolean(3, false);
+            st.setString(4, idConfirmacion);
+            st.setInt(5, 3);
+            
+            filasAfectadas = st.executeUpdate();
+
+            //Para obtener el ID del autonumerico ingresado...
+            rs = st.getGeneratedKeys();
+            rs.next();
+            idUsuario = rs.getInt(1);
+            this.desconectar();
+            
+            em.insertarEmpleado(empleado,correo,idUsuario);
 
             return filasAfectadas;
         } catch (SQLException ex) {

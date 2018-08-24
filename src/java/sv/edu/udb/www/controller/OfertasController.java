@@ -48,10 +48,12 @@ public class OfertasController extends HttpServlet {
                 break;
             case "listar":                
                 listar(request,response);
-                break;
-            
+                break;            
             case "nuevo":
-                //nuevo(request,response);
+                nuevo(request,response);
+                break;
+            case "ingresar":
+                ingresar(request,response);
                 break;
             
         }
@@ -110,16 +112,20 @@ public class OfertasController extends HttpServlet {
         }
     }
 
-    /*private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+ 
         private void nuevo(HttpServletRequest request, HttpServletResponse response) {
          try {
-            request.setAttribute("listaEstados",modeloEditorial.listarEditoriales());
-            request.setAttribute("listaAutores",modeloAutor.listarAutores());
-            request.setAttribute("listaGeneros",modeloGenero.listarGeneros());
+            request.setAttribute("listaEstados",modeloEstado.listarEstadoOferta());
             request.getRequestDispatcher("/libros/nuevoLibro.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }    
+
+    private void ingresar(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    }*/
+
 }

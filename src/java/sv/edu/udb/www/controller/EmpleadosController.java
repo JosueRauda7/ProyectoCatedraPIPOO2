@@ -3,6 +3,9 @@ package sv.edu.udb.www.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -11,12 +14,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Cupon;
+import sv.edu.udb.www.beans.Empleado;
+import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.EmpleadosModel;
+import sv.edu.udb.www.model.UsuariosModel;
+import sv.edu.udb.www.utils.Correo;
+import sv.edu.udb.www.utils.Validaciones;
 
 @WebServlet(name = "EmpleadosController", urlPatterns = {"/empleados.do"})
 public class EmpleadosController extends HttpServlet {
-
+    ArrayList listaErrores = new ArrayList();
     EmpleadosModel modelo = new EmpleadosModel();
+    UsuariosModel modeloUsuario = new UsuariosModel();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,8 +41,9 @@ public class EmpleadosController extends HttpServlet {
                     listar(request,response);
                     break;
                 case "nuevo":
-                    Dispa
-                    break;
+
+                    request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
+                    break;               
             }
         }
     }
@@ -92,6 +102,7 @@ public class EmpleadosController extends HttpServlet {
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
+           
             String correo = (String) request.getSession().getAttribute("correo");
             request.setAttribute("listaEmpleados",modelo.listarEmpleados(correo));
             try {
@@ -103,6 +114,8 @@ public class EmpleadosController extends HttpServlet {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    
 }
 
 
