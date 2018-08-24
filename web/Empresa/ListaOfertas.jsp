@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="webthemez">
-        <title>Cuponera - Login</title>
+        <title>Cuponera - listaOfertas</title>
         <!-- core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -27,9 +27,9 @@
          <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>     
         <link href="css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-         
-        
-       
+        <link href="css/alertify.core.css" rel="stylesheet" type="text/css"/>
+        <link href="css/alertify.default.css" rel="stylesheet" type="text/css"/>
+        <script src="js/alertify.js" type="text/javascript"></script>
     </head>
     <body>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-14" style="padding: 1%;">
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?op=nuevo"> Nueva Oferta</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=nuevo"> Nueva Oferta</a>
                         <br><br>
                         <table class="table table-striped table-bordered table-hover table-responsive table-condensed " id="tabla">
                             <thead>
@@ -84,6 +84,14 @@
                             $(document).ready(function (){
                                 $('#tabla').DataTable();
                             });
+                            <c:if test="${not empty exito}">
+                            alertify.success('${exito}');
+                            <c:set var="exito" value="" scope="session"/>
+                            </c:if>
+                            <c:if test="${not empty fracaso}">
+                                alertify.error('${fracaso}');
+                                <c:set var="fracaso" value="" scope="session"/>
+                            </c:if>
                         </script>
             </div>
         </section>

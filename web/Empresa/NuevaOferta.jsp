@@ -42,42 +42,42 @@
                         <div class="col-md-12" style="padding-bottom: 3%;">
                             <div class="well well-sm"><strong style="color:purple;"><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
                             <div class="form-group">
-                                <label for="nombre" style="color:black;">Nombres:</label>
+                                <label for="titulo" style="color:black;">Titulo de la oferta:</label>
                                 <div class="input-group">
-                                    <input type="text" name="nombre" id="nombre" class="form-control" value="${cliente.nombreClientes}"/>
+                                    <input type="text" name="titulo" id="titulo" class="form-control" value="${cliente.nombreClientes}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="apellido" style="color:black;">Apellidos:</label>
+                                <label for="precior" style="color:black;">Precio regular:</label>
                                 <div class="input-group">
-                                    <input type="text" name="apellido" id="apellido" class="form-control" value="${cliente.apellidosClientes}"/>
+                                    <input type="number" step="0.1" min="0" name="precior" id="precior" class="form-control" value="${cliente.apellidosClientes}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="direccion" style="color:black;">Correo:</label>
+                                <label for="precioo" style="color:black;">Precio oferta:</label>
                                 <div class="input-group">
-                                    <input type="text" name="direccion" id="direccion" class="form-control" value="${cliente.direccion}"/>
+                                    <input type="number" min="0" step="0.1" name="precioo" id="precioo" class="form-control" value="${cliente.direccion}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div> 
                             <div class="form-group">
-                                <label for="dui" style="color:black;">DUI:</label>
+                                <label for="fechaf" style="color:black;">Fecha final de la oferta:</label>
                                 <div class="input-group">
-                                    <input type="text" name="dui" id="dui" class="form-control" maxlength="10" value="${cliente.direccion}"/>
+                                    <input type="date" name="fechaf" id="fechaf" class="form-control" maxlength="10" value="${cliente.direccion}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="correo" style="color:black;">Correo:</label>
+                                <label for="fechal" style="color:black;">Fecha limite de la oferta:</label>
                                 <div class="input-group">
-                                    <input type="text" name="correo" id="correo" class="form-control" value="${usuario.correo}"/>
+                                    <input type="date" name="fechal" id="fechal" class="form-control" value="${usuario.correo}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
                                     <div class="form-group">
-                                <label for="contra" style="color:black;">Contraseña:</label>
+                                <label for="contra" style="color:black;">Cantidad límite de cupones:</label>
                                 <div class="input-group">
                                     <input type="password" name="contra" id="contra" class="form-control" value="${usuario.contrasenia}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
