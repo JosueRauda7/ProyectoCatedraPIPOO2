@@ -10,7 +10,11 @@
         <jsp:include page="enlaces.jsp" />
 
     </head> 
-
+  <style>
+        .alertify-message{
+            color: black;
+        }
+    </style>
     <body id="home">
         <jsp:include page="MenuAdmin.jsp" />
         <h1 class="text-center">Lista empresas</h1>
@@ -24,6 +28,7 @@
                 <th>Telefono</th>
                 <th>Rubro</th>
                 <th>Comision</th>
+                <th>Correo</th>
                 <th>Eliminar</th>
                 <th>Modificar</th>
                 </tr>
@@ -36,8 +41,9 @@
                         <td>${empresas.telefono}</td>
                         <td>${empresas.rubro.rubro}</td>
                         <td>$${empresas.comision}</td>
+                        <td>${empresas.usuario.correo}</td>
                         <td>
-                            <button class="btn btn-danger" value="${empresas.codigoEmpresa}">Eliminar</button>
+                             <a class="btn btn-danger" href="javascript:eliminar('${empresas.codigoEmpresa}', '${empresas.idUsuario}')"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
                         </td>
                         <td>
                             <button class="btn btn-info" value="${empresas.codigoEmpresa}">Modificar</button>
@@ -66,7 +72,25 @@
                 </div>
             </div>
         </footer><!--/#footer-->
-
+<script>
+            
+                       <c:if test="${not empty exito}">
+                           alertify.success('${exito}');
+                          <c:set var="exito" value="" scope="session" />
+                       </c:if>
+                           <c:if test="${not empty fracaso}">
+                           alertify.error('${fracaso}');
+                           <c:set var="fracaso" value="" scope="session" />
+                       </c:if>
+                           
+         function eliminar(id,iduser){
+           alertify.confirm("¿Realmente decea eliminar este genero?", function(e){
+              if(e){
+                  location.href="empresas.do?operacion=eliminar&idemp="+ id+"&iduser="+iduser;
+              } 
+           });
+  }
+        </script>
 
     </body>
 </html>

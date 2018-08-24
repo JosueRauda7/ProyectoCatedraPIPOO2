@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Rubro;
+import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.Conexion;
 
 /**
@@ -19,7 +20,7 @@ public class EmpresasModel extends Conexion{
     public List<Empresa> listarEmpresas() throws SQLException{
         try {
             List<Empresa> lista = new ArrayList<>();
-            String sql = "SELECT * FROM empresas e INNER JOIN rubros r on e.IdRubro = r.IdRubro";
+            String sql = "SELECT * FROM empresas e INNER JOIN rubros r on e.IdRubro = r.IdRubro INNER JOIN usuarios u ON e.IdUsuario = u.IdUsuario";
             this.conectar();
             st = conexion.prepareStatement(sql);
             rs = st.executeQuery();
@@ -32,6 +33,8 @@ public class EmpresasModel extends Conexion{
                 empresa.setTelefono(rs.getString("Telefono"));
                 empresa.setRubro(new Rubro(rs.getString("Rubro")));
                 empresa.setComision(rs.getString("Comision"));
+                empresa.setIdUsuario(rs.getInt("IdUsuario"));
+                empresa.setUsuario(new Usuario(rs.getString("Correo")));
                 lista.add(empresa);
             }
             this.desconectar();

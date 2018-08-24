@@ -53,6 +53,9 @@ public class EmpresasController extends HttpServlet {
                 case "verificar":
                     confirmar(request, response);
                     break;
+                case "eliminar":
+                    eliminar(request, response);
+                    break;
             }
         }
     }
@@ -169,7 +172,23 @@ public class EmpresasController extends HttpServlet {
 
                     String enlace = request.getRequestURL().toString()
                             + "?operacion=verificar&id=" + cadenaAleatoria;
-                    texto += "<a target='a_blank' "
+                    texto += "<a style='color: #fff; background-color: #428bca;border-color: #357ebd;display: inline-block; padding: 6px 12px;\n"
+                            + "    margin-bottom: 0;\n"
+                            + "    font-size: 14px;\n"
+                            + "    font-weight: normal;\n"
+                            + "    line-height: 1.428571429;\n"
+                            + "    text-align: center;\n"
+                            + "    white-space: nowrap;\n"
+                            + "    vertical-align: middle;\n"
+                            + "    cursor: pointer;\n"
+                            + "    background-image: none;\n"
+                            + "    border: 1px solid transparent;\n"
+                            + "    border-radius: 4px;\n"
+                            + "    -webkit-user-select: none;\n"
+                            + "    -moz-user-select: none;\n"
+                            + "    -ms-user-select: none;\n"
+                            + "    -o-user-select: none;\n"
+                            + "    user-select: none;'  target='a_blank' "
                             + "href='" + enlace + "'>aqui</a>";
 
                     Correo correo = new Correo();
@@ -210,6 +229,10 @@ public class EmpresasController extends HttpServlet {
         } catch (ServletException | IOException | SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+       
     }
 
 }
