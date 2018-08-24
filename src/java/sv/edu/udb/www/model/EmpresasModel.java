@@ -92,5 +92,23 @@ public class EmpresasModel extends Conexion{
         this.desconectar();
         }
     }
+    public int eliminarEmpresas(String codigo) throws SQLException{
+        try {
+            int filasAfectadas=0;
+            String sql = "DELETE FROM empresas WHERE CodigoEmpresa = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, codigo);
+            filasAfectadas = st.executeUpdate();
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }finally{
+           this.desconectar();
+        }
+    }
     
 }

@@ -232,7 +232,17 @@ public class EmpresasController extends HttpServlet {
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
-       
+        try {
+            String codigo = request.getParameter("idemp");
+            int iduser = Integer.parseInt(request.getParameter("iduser"));
+            
+            if(modelo.eliminarEmpresas(codigo)>0 && modelo2.eliminarUsuarioEmpresa(iduser)>0){
+                request.setAttribute("exito","La empresa ha sido eliminada exitosamente");
+                request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

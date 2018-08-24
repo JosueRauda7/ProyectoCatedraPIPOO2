@@ -176,4 +176,22 @@ public class UsuariosModel extends Conexion {
             return -1;
         }
     }
+    public int eliminarUsuarioEmpresa(int id) throws SQLException{
+        try {
+            int filasAfectadas=0;
+            sql = "DELETE FROM usuarios WHERE IdUsuario = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, id);
+            filasAfectadas = st.executeUpdate();
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }finally{
+         this.desconectar();
+        }
+    }
 }

@@ -84,7 +84,7 @@
                        </c:if>
                            
          function eliminar(id,iduser){
-           alertify.confirm("¿Realmente decea eliminar este genero?", function(e){
+           alertify.confirm("¿Realmente decea eliminar esta empresa?", function(e){
               if(e){
                   location.href="empresas.do?operacion=eliminar&idemp="+ id+"&iduser="+iduser;
               } 

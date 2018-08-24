@@ -43,7 +43,7 @@
                                     <input type="hidden" name="rubro" id="txtprueba${rubro.idRubro}">
                                 </form>
                                 <br>
-                                <button class="btn btn-danger" id="btncancel${rubro.idRubro}">Canelar</button>
+                                <button class="btn btn-danger" id="btncancel${rubro.idRubro}">Cancelar</button>
                                 </div>
                             </section>
                         </td>
