@@ -51,7 +51,7 @@
                                     <h4>Rubro: </h4>
                                 </div>
                                 <div class="col-xs-5">
-                                    <select id="rubroFiltros" name="rubroFiltro" class="form-control">
+                                    <select id="rubroFiltro" name="rubroFiltro" class="form-control">
                                         <option value="0">Todos</option>
                                         <c:forEach var="rubrito" items="${requestScope.rubrito}">
                                             <c:choose>
@@ -85,7 +85,7 @@
                                     <p class="price">Fecha Límite: ${oferta.getFechaLimite()}</p>
                                     <p><h4>Precio Regular: $ ${oferta.getPrecioRegular()}</h4></p>
                                     <p><h4>Precio Oferta: $ ${oferta.getPrecioOferta()}</h4></p>
-                                    <a class="btn btn-primary" href="#">Ver Detalles</a>
+                                    <a class="btn btn-primary" href="javascript:detalles(${oferta.getIdOferta()})">Ver Detalles</a>
                                     <a class="btn btn-primary" href="javascript:agregar(${oferta.getIdOferta()})">Añadir al Carrito</a>
                                 </div>
                             </div>
@@ -94,6 +94,32 @@
                 </div>
             </div>
         </section>
+                            <div class="modal fade" id="modal" tabindex="-1" role="dialog" style="color:black;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="titulo"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item"><b>Descripción Oferta: </b><span id="descripcion"></span></li>
+                            <li class="list-group-item"><b>Precio Regular: </b><span id="precioR"></span></li>
+                            <li class="list-group-item"><b>Precio Oferta: </b><span id="precioO"></span></li>
+                            <li class="list-group-item"><b>Fecha Inicio: </b><span id="fechaI"></span></li>
+                            <li class="list-group-item"><b>Fecha Fin: </b><span id="fechaF"></span></li>
+                            <li class="list-group-item"><b>Fecha Límite: </b><span id="fechaL"></span></li>
+                            <li class="list-group-item"><b>Cantidad Límite: </b><span id="cantidad"></span></li>
+                            <li class="list-group-item"><b>Otros Detalles: </b><span id="otros"></span></li>
+                            <li class="list-group-item"><b>Empresa: </b><span id="empresa"></span></li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#rubroFiltro').select2();
@@ -105,6 +131,25 @@
                     }
                 });
             }
+            function detalles(id) {
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/clientes.do?operacion=detalles&id=" + id,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $('.modal-title').text(data.titulo);
+                        $('#descripcion').text(data.descripcion);
+                        $('#precioR').text("$ "+data.precioR);
+                        $('#precioO').text("$ "+data.precioO);
+                        $('#fechaI').text(data.fechaI);
+                        $('#fechaF').text(data.fechaF);
+                        $('#fechaL').text(data.fechaL);
+                        $('#cantidad').text(data.cantidad);
+                        $('#otros').text(data.otros);
+                        $('#empresa').text(data.empresa);
+                        $('#modal').modal('show');
+                    }
+                })};
         </script>
         <jsp:include page="footerCliente.jsp"/>
     </body>
