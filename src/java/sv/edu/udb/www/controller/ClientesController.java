@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
 import sv.edu.udb.www.beans.EstadoCupon;
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Rubro;
@@ -71,6 +72,9 @@ public class ClientesController extends HttpServlet {
                     break;
                 case "cerrar":
                     cerrarSesion(request,response);
+                    break;
+                case "detalles":
+                    detalles(request,response);
                     break;
                 case "cancelar":
                     cancelar(request,response);
@@ -246,6 +250,32 @@ public class ClientesController extends HttpServlet {
             request.getSession().setAttribute("ofertas", ofertas);
             request.getRequestDispatcher("/Cliente/VerCarrito.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void detalles(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            PrintWriter out = null;
+            out = response.getWriter();
+            String codigo=request.getParameter("id");
+            Oferta oferta = model.obtenerCupones(codigo);
+            JSONObject json = new JSONObject();
+            json.put("codigo",oferta.getIdOferta());
+            json.put("titulo",oferta.getTituloOferta());
+            json.put("precioR",oferta.getPrecioRegular());
+            json.put("precioO",oferta.getPrecioOferta());
+            json.put("fechaI",oferta.getFechaInicio());
+            json.put("fechaF",oferta.getFechaFin());
+            json.put("fechaL",oferta.getFechaLimite());
+            json.put("cantidad",oferta.getCantidadLimite());
+            json.put("descripcion", oferta.getDescripcionOferta());
+            json.put("otros",oferta.getOtrosDetalles());
+            json.put("empresa", oferta.getNombreEmpresa());
+            out.print(json);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
