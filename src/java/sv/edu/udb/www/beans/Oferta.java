@@ -29,6 +29,7 @@ public class Oferta {
     private String codigoEmpresa;
     private Empresa empresa;
     private String url_foto;
+    private String NombreEmpresa;
     
     public Oferta(){
         this.idOferta=0;
@@ -176,6 +177,14 @@ public class Oferta {
 
     public void setUrl_foto(String url_foto) {
         this.url_foto = url_foto;
+    }
+
+    public String getNombreEmpresa() {
+        return NombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String NombreEmpresa) {
+        this.NombreEmpresa = NombreEmpresa;
     }
     
     
