@@ -60,6 +60,9 @@ public class UsuariosController extends HttpServlet {
                         //Cliente
                         response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=inicio");
                         return;
+                    default:
+                        response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=login");
+                        return;
                 }
             }
         String operacion = request.getParameter("operacion");
