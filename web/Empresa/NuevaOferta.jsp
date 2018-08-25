@@ -37,8 +37,8 @@
                             </ul>
                         </div>
                     </c:if>
-                    <form action="${base}/usuarios.do" method="POST" style="padding: 5%;">
-                        <input type="hidden" name="operacion" value="insertar"/>
+                    <form action="${base}/empleados.do" method="POST" style="padding: 5%;">
+                        <input type="hidden" name="operacion" value="ingresar"/>
                         <div class="col-md-12" style="padding-bottom: 3%;">
                             <div class="well well-sm"><strong style="color:purple;"><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
                             <div class="form-group">
