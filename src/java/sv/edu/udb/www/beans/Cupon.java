@@ -13,15 +13,15 @@ import java.util.Date;
  */
 public class Cupon {
     private String codigoCupo;
-    private Date fechaCompra;
-    private Date fechaCanje;
+    private String fechaCompra;
+    private String fechaCanje;
     private Cliente cliente;
     private Oferta oferta;
     private EstadoCupon estadoCupon;
 
     //datos de ofertas que se utilizaran en una vista
     private String tituloOferta;
-    private Date fechaLimite;
+    private String fechaLimite;
     private String url_foto;
     private String descripcionOferta;
     private double precioRegular;
@@ -29,8 +29,8 @@ public class Cupon {
     
     public Cupon(){
         this.codigoCupo="";
-        this.fechaCompra=new Date();
-        this.fechaCanje=new Date();
+        this.fechaCompra="";
+        this.fechaCanje="";
         this.cliente=null;
         this.oferta=null;
         this.estadoCupon=null;
@@ -44,21 +44,23 @@ public class Cupon {
         this.codigoCupo = codigoCupo;
     }
 
-    public Date getFechaCompra() {
+    public String getFechaCompra() {
         return fechaCompra;
     }
 
-    public void setFechaCompra(Date fechaCompra) {
+    public void setFechaCompra(String fechaCompra) {
         this.fechaCompra = fechaCompra;
     }
 
-    public Date getFechaCanje() {
+    public String getFechaCanje() {
         return fechaCanje;
     }
 
-    public void setFechaCanje(Date fechaCanje) {
+    public void setFechaCanje(String fechaCanje) {
         this.fechaCanje = fechaCanje;
     }
+
+    
 
     public Cliente getCliente() {
         return cliente;
@@ -92,13 +94,15 @@ public class Cupon {
         this.tituloOferta = tituloOferta;
     }
 
-    public Date getFechaLimite() {
+    public String getFechaLimite() {
         return fechaLimite;
     }
 
-    public void setFechaLimite(Date fechaLimite) {
+    public void setFechaLimite(String fechaLimite) {
         this.fechaLimite = fechaLimite;
     }
+
+    
 
     public String getUrl_foto() {
         return url_foto;
