@@ -134,6 +134,41 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
+    public Oferta obtenerCupones(String idOferta) throws SQLException {
+        try {
+            Oferta oferta = new Oferta();
+            String sql = "SELECT ofertas.IdOferta,ofertas.TituloOferta,ofertas.PrecioRegular,\n"
+                    + "       ofertas.PrecioOferta,ofertas.FechaInicio,ofertas.FechaFin,ofertas.FechaLimite,\n"
+                    + "       ofertas.CantidadLimite,ofertas.DescripcionOferta,ofertas.OtrosDetalles,ofertas.IdEstado,\n"
+                    + "       ofertas.Justificacion,ofertas.CodigoEmpresa,ofertas.Url_foto,empresas.IdRubro,empresas.NombreEmpresa\n"
+                    + "FROM ofertas inner join empresas\n"
+                    + "on (empresas.CodigoEmpresa=ofertas.CodigoEmpresa)  WHERE ofertas.IdOferta=?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, Integer.parseInt(idOferta));
+            rs = st.executeQuery();
+            while (rs.next()) {
+                oferta.setIdOferta(Integer.parseInt(rs.getString("IdOferta")));
+                oferta.setTituloOferta(rs.getString("TituloOferta"));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
+                oferta.setFechaFin(rs.getString("FechaFin"));
+                oferta.setFechaLimite(rs.getString("FechaLimite"));
+                oferta.setCantidadLimite(Integer.parseInt(rs.getString("Cantidadlimite")));
+                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
+                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
+                oferta.setUrl_foto(rs.getString("Url_foto"));
+                oferta.setNombreEmpresa(rs.getString("NombreEmpresa"));
+            }
+            this.desconectar();
+            return oferta;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
+    }
     public ArrayList listarMisCupones(String id) throws SQLException{
         try{
             ArrayList cupones = new ArrayList();
@@ -149,17 +184,17 @@ public class ClientesModel extends Conexion {
                 Cupon cupon =new Cupon();
                 cupon.setTituloOferta(rs.getString("TituloOferta"));
                 cupon.setDescripcionOferta(rs.getString("DescripcionOferta"));
-                cupon.setFechaLimite(new SimpleDateFormat("dd-MM-yyyy").parse(rs.getString("FechaLimite")));
+                cupon.setFechaLimite(rs.getString("FechaLimite"));
                 cupon.setUrl_foto(rs.getString("Url_foto"));
                 cupon.setPrecioRegular(Double.parseDouble(rs.getString("PrecioRegular")));
                 cupon.setPrecioOferta(Double.parseDouble(rs.getString("PrecioOferta")));
-                cupon.setFechaCompra(new SimpleDateFormat("dd-MM-yyyy").parse(rs.getString("FechaCompra")));
+                cupon.setFechaCompra(rs.getString("FechaCompra"));
                 cupon.setCodigoCupo(rs.getString("CodigoCupo"));
                 cupones.add(cupon);
             }
             this.desconectar();
             return cupones;
-        } catch (SQLException | ParseException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return null;

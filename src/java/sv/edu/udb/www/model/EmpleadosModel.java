@@ -60,8 +60,8 @@ public class EmpleadosModel extends Conexion {
             while(rs.next()){
                 Cupon cupon = new Cupon();
                 cupon.setCodigoCupo(rs.getString("CodigoCupo"));
-                cupon.setFechaCompra(rs.getDate("FechaCompra"));
-                cupon.setFechaCanje(rs.getDate("FechaCanje"));
+                cupon.setFechaCompra(rs.getString("FechaCompra"));
+                cupon.setFechaCanje(rs.getString("FechaCanje"));
                 cupon.setCliente(new Cliente (rs.getString("NombreClientes"),rs.getString("ApellidosClientes"), rs.getString("DUI")));
                 cupon.setOferta(new Oferta (rs.getString("TituloOferta")));   
                 cupon.setEstadoCupon(new EstadoCupon (rs.getString("Estado")));
