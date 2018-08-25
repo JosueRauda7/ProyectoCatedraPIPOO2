@@ -78,9 +78,9 @@ public class ClientesModel extends Conexion {
                 Oferta oferta = new Oferta();
                 oferta.setIdOferta(Integer.parseInt(rs.getString("IdOferta")));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular((rs.getString("PrecioRegular")));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
                 oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio((rs.getString("FechaInicio")));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
                 oferta.setFechaFin(rs.getString("FechaFin"));
                 oferta.setFechaLimite(rs.getString("FechaLimite"));
                 oferta.setCantidadLimite(Integer.parseInt(rs.getString("Cantidadlimite")));
@@ -115,9 +115,9 @@ public class ClientesModel extends Conexion {
                 Oferta oferta = new Oferta();
                 oferta.setIdOferta(Integer.parseInt(rs.getString("IdOferta")));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular((rs.getString("PrecioRegular")));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
                 oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio((rs.getString("FechaInicio")));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
                 oferta.setFechaFin(rs.getString("FechaFin"));
                 oferta.setFechaLimite(rs.getString("FechaLimite"));
                 oferta.setCantidadLimite(Integer.parseInt(rs.getString("Cantidadlimite")));
