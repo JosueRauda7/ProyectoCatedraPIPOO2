@@ -3,7 +3,8 @@
     Created on : Aug 20, 2018, 4:32:08 PM
     Author     : ivanm
 --%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="base" value="${pageContext.request.contextPath}"/> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,11 @@
         <link href="css/animate.min.css" rel="stylesheet"> 
         <link href="css/prettyPhoto.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet"> 
+        <link href="css/fileinput.min.css" rel="stylesheet" type="text/css"/>
+        <script src="js/jquery-1.12.0.min.js" type="text/javascript"></script>
+        <script src="js/fileinput.min.js" type="text/javascript"></script>
+        <script src="js/es.js" type="text/javascript"></script>
+        
     </head>
     <body>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
@@ -26,7 +32,7 @@
                 <div class="panel panel-default col-lg-6 col-sm-offset-3" style="margin-top: 5%; margin-bottom: 5%;" >
                     <div class="row" >
                         <div class="thumbnail">
-                            <h2 style="color:#c2185b;">Nuevo empleado</h2>
+                            <h2 style="color:#c2185b;">Nueva Oferta</h2>
                         </div>
                         <c:if test="${not empty requestScope.listaErrores}">
                         <div class="alert alert-danger">
@@ -37,7 +43,7 @@
                             </ul>
                         </div>
                     </c:if>
-                    <form action="${base}/usuarios.do" method="POST" style="padding: 5%;">
+                    <form action="${base}/usuarios.do" method="POST" enctype="multipart/form-data" style="padding: 5%;">
                         <input type="hidden" name="operacion" value="insertar"/>
                         <div class="col-md-12" style="padding-bottom: 3%;">
                             <div class="well well-sm"><strong style="color:purple;"><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
@@ -98,9 +104,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="imagen">Imagen de la oferta:</label>
-                                <input data-language="es" type="file" name="archivo" id="imagen" class="form-control
-                                       file file-loading" data-allowed-file-extensions='["jpg", "png"]'/>
+                                <label for="imagen" style="color:black;">Imagen de la oferta:</label>
+                                <input data-language="es" type="file" name="archivo" id="imagen" class="form-control file file-loading" data-allowed-file-extensions='["jpg", "png"]'/>
                             </div>
                             <button type="submit" class="btn" style="background-color: #c2185b">Registrar</button>
                             <button type="reset" class="btn btn-info">Limpiar</button>

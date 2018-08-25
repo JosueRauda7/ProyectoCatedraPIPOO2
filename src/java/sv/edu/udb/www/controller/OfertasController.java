@@ -116,7 +116,7 @@ public class OfertasController extends HttpServlet {
         private void nuevo(HttpServletRequest request, HttpServletResponse response) {
          try {
             request.setAttribute("listaEstados",modeloEstado.listarEstadoOferta());
-            request.getRequestDispatcher("/libros/nuevaOferta.jsp").forward(request, response);
+            request.getRequestDispatcher("/Empresa/NuevaOferta.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServletException | IOException ex) {
