@@ -226,8 +226,8 @@ public class UsuariosController extends HttpServlet {
         
         usuario.setCorreo(request.getParameter("correo"));
         usuario.setContrasenia(pass);
-        empleado.setNombreEmpleado("nombre");
-        empleado.setApellidoEmpleado("apellido");
+        empleado.setNombreEmpleado(request.getParameter("nombre"));
+        empleado.setApellidoEmpleado(request.getParameter("apellido"));
         
         
         if(Validaciones.isEmpty(empleado.getNombreEmpleado())){
