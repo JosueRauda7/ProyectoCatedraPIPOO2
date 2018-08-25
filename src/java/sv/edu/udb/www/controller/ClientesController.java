@@ -39,7 +39,7 @@ public class ClientesController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             if(request.getSession().getAttribute("correo")==null||!request.getSession().getAttribute("estadoUsuario").toString().equals("4")){
-                response.sendRedirect(request.getContextPath()+"/Login.jsp");
+                response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
             }
             if (request.getParameter("operacion") == null) {
@@ -66,8 +66,14 @@ public class ClientesController extends HttpServlet {
                 case "agregar":
                     agregar(request, response);
                     break;
+                case "ver":
+                    ver(request,response);
+                    break;
                 case "cerrar":
                     cerrarSesion(request,response);
+                    break;
+                case "cancelar":
+                    cancelar(request,response);
                     break;
             }
         }
@@ -209,8 +215,8 @@ public class ClientesController extends HttpServlet {
             int idOferta = Integer.parseInt(request.getParameter("id"));
             ofertas.add(model.obtenerOferta(idOferta));
             request.getSession().setAttribute("ofertas", ofertas);
-            request.getRequestDispatcher("/Cliente/VerCarrito.jsp").forward(request, response);
-        } catch (IOException | ServletException ex) {
+            response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=ver");
+        } catch (IOException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -221,6 +227,25 @@ public class ClientesController extends HttpServlet {
             request.getSession().setAttribute("estadoUsuario",null);
             request.getRequestDispatcher("/Login.jsp").forward(request, response);
         } catch (IOException | ServletException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void ver(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getSession().setAttribute("ofertas", ofertas);
+            request.getRequestDispatcher("/Cliente/VerCarrito.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cancelar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            ofertas.remove(Integer.parseInt(request.getParameter("id")));
+            request.getSession().setAttribute("ofertas", ofertas);
+            request.getRequestDispatcher("/Cliente/VerCarrito.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
