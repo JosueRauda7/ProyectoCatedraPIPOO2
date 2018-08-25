@@ -45,7 +45,7 @@ public class UsuariosController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        if(request.getSession().getAttribute("correo")!=null||request.getSession().getAttribute("estadoUsuario")!=null){
+        if(request.getSession().getAttribute("correo")==null||request.getSession().getAttribute("estadoUsuario")==null){
                 switch(request.getSession().getAttribute("estadoUsuario").toString()){
                     case "1":
                         //Administrador
