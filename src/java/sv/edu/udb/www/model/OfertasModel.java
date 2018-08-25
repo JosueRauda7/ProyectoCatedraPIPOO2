@@ -56,22 +56,5 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
-    public List<Oferta> ListarOfertasEspera(String codigo){
-        try {
-            String sql = "SELECT * FROM ofertas WHERE CodigoEmpresa = ? and IdEstado = 1";
-            List<Oferta> lista = new ArrayList<>();
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, codigo);
-            rs = st.executeQuery();
-            while(rs.next()){
-                Oferta oferta = new Oferta();
-                oferta.setIdOferta(rs.getInt("IdOferta"));
-                oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(rs.getString(codigo));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
 }
