@@ -5,6 +5,7 @@
 --%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="base" value="${pageContext.request.contextPath}"/> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -64,12 +65,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="oferta" items="${ofertas}">
+                                        <c:forEach var="oferta" items="${ofertas}" varStatus="loop">
                                         <tr>
                                             <td>${oferta.getTituloOferta()}</td>
                                             <td>${oferta.getPrecioOferta()}</td>
                                             <td><input name="cantidad" min="0" type="number" value="1"/></td>
-                                            <td><a class="btn btn-primary" href="javascript:cancelar('${oferta.getIdOferta()}')">Cancelar</a></td>
+                                            <td><a class="btn btn-primary" href="javascript:cancelar('${loop.index}')">Cancelar</a></td>
                                         </tr>
                                         </c:forEach>
                                     </tbody>
@@ -93,7 +94,7 @@
             function cancelar(id){
                 alertify.confirm('¿Desea retirar este cupón del carrito de compras?', function (e) {
                     if (e) {
-                        location.href = '${base}/clientes.do?op=cancelar&id=' + id;
+                        location.href = '${base}/clientes.do?operacion=cancelar&id=' + id;
                     }
                 });
             }

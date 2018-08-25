@@ -42,15 +42,15 @@
                         ahorra tiempo y conoce muchos lugares.</p>
                 </div>
                 <section>
-                    <div class="col-sm-6 col-md-12">
+                    <div class="col-sm-12 col-md-12">
 
                         <form class="form-inline" action="${base}/clientes.do" method="POST">
                             <input type="hidden" name="operacion" value="filtrar"/>
-                            <div class="form-group">
-                                <div class="col-md-4">
+                            <div class="form-group col-sm-6">
+                                <div class="col-md-2">
                                     <h4>Rubro: </h4>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-5">
                                     <select id="rubroFiltros" name="rubroFiltro" class="form-control">
                                         <option value="0">Todos</option>
                                         <c:forEach var="rubrito" items="${requestScope.rubrito}">
@@ -70,7 +70,6 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
                     <br><br><br>
                 </section>
@@ -78,7 +77,7 @@
                     <c:forEach var="oferta" items="${requestScope.ofertita}">
                         <div class="col-sm-6 col-md-4">
                             <div class="thumbnail">
-                                <img class="img-responsive" src="${base}/images/${oferta.getUrl_foto()}" alt="">
+                                <img class="img-responsive" style="max-height: 200px; min-height: 200px;" src="${base}/images/${oferta.getUrl_foto()}" alt="">
                                 <div class="caption">
                                     <h3>${oferta.getTituloOferta()}</h3>
                                     <p>Descripción:<br>${oferta.getDescripcionOferta()}</p>
@@ -99,7 +98,7 @@
             $(document).ready(function () {
                 $('#rubroFiltro').select2();
             });
-            function agregar(id){
+            function agregar(id) {
                 alertify.confirm('¿Desea agregar este cupón del carrito de compras?', function (e) {
                     if (e) {
                         location.href = '${base}/clientes.do?operacion=agregar&id=' + id;
