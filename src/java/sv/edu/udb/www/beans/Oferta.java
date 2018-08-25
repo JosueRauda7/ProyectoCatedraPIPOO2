@@ -15,8 +15,8 @@ import java.util.Date;
 public class Oferta {
     private int idOferta;
     private String tituloOferta;
-    private double precioRegular;
-    private double precioOferta;
+    private String precioRegular;
+    private String precioOferta;
     private Date fechaInicio;
     private Date fechaFin;
     private Date fechaLimite;
@@ -33,8 +33,8 @@ public class Oferta {
     public Oferta(){
         this.idOferta=0;
         this.tituloOferta="";
-        this.precioOferta=0;
-        this.precioRegular=0;
+        this.precioOferta="";
+        this.precioRegular="";
         this.fechaInicio=new Date();
         this.fechaFin=new Date();
         this.fechaLimite=new Date();
@@ -74,19 +74,19 @@ public class Oferta {
         this.tituloOferta = tituloOferta;
     }
 
-    public double getPrecioRegular() {
+    public String getPrecioRegular() {
         return precioRegular;
     }
 
-    public void setPrecioRegular(double precioRegular) {
+    public void setPrecioRegular(String precioRegular) {
         this.precioRegular = precioRegular;
     }
 
-    public double getPrecioOferta() {
+    public String getPrecioOferta() {
         return precioOferta;
     }
 
-    public void setPrecioOferta(double precioOferta) {
+    public void setPrecioOferta(String precioOferta) {
         this.precioOferta = precioOferta;
     }
 

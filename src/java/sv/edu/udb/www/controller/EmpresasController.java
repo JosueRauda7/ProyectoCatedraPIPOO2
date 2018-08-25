@@ -62,6 +62,9 @@ public class EmpresasController extends HttpServlet {
                 case "editar":
                     editar(request, response);
                     break;
+                case "ofertas":
+                    ofertas(request, response);
+                    break;
             }
         }
     }
@@ -306,6 +309,10 @@ public class EmpresasController extends HttpServlet {
             } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void ofertas(HttpServletRequest request, HttpServletResponse response) {
+        
     }
 
 }

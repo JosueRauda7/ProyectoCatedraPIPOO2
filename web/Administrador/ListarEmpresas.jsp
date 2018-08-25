@@ -21,7 +21,7 @@
         <section class="contentabla">
             <table class="table table-bordered" >
                 <tr>
-                <th>Codigo Empresa</th>
+                
                 <th>Nombre de la empresa</th>
                 <th>Nombre contacto</th>
                 <th>Dirección</th>
@@ -31,10 +31,11 @@
                 <th>Correo</th>
                 <th>Eliminar</th>
                 <th>Modificar</th>
+                <th>Ofertas</th>
                 </tr>
                 <c:forEach var="empresas" items="${requestScope.empresas}"> 
                     <tr>
-                        <td>${empresas.codigoEmpresa}</td>
+                        
                         <td>${empresas.nombreEmpresa}</td>
                         <td>${empresas.nombreContacto}</td>
                         <td>${empresas.direccion}</td>
@@ -48,6 +49,9 @@
                         </td>
                         <td>
                              <a class="btn btn-danger" href="javascript:eliminar('${empresas.codigoEmpresa}', '${empresas.idUsuario}')"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                        </td>
+                        <td>
+                            <a  class="btn btn-success" href="${pageContext.request.contextPath}/empresas.do?operacion=ofertas&codigo=${empresas.codigoEmpresa}"><span class="glyphicon glyphicon-tags"></span>  Ver ofertas</a>
                         </td>
                     </tr>
                 </c:forEach>

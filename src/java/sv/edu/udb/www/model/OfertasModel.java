@@ -34,8 +34,8 @@ public class OfertasModel extends Conexion{
                 Oferta oferta=new Oferta();
                 oferta.setIdOferta(rs.getInt("IdOferta"));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(rs.getDouble("PrecioRegular"));
-                oferta.setPrecioOferta(rs.getDouble("PrecioOferta"));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
                 oferta.setFechaInicio(rs.getDate("FechaInicio"));
                 oferta.setFechaFin(rs.getDate("FechaFin"));
                 oferta.setFechaLimite(rs.getDate("FechaLimite"));
@@ -54,6 +54,20 @@ public class OfertasModel extends Conexion{
             Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return null;
+        }
+    }
+    public List<Oferta> ListarOfertasEspera(String codigo){
+        String sql = "SELECT * FROM ofertas WHERE CodigoEmpresa = ? and IdEstado = 1";
+        List<Oferta> lista = new ArrayList<>();
+        this.conectar();
+        st = conexion.prepareStatement(sql);
+        st.setString(1, codigo);
+        rs = st.executeQuery();
+        while(rs.next()){
+         Oferta oferta = new Oferta();
+         oferta.setIdOferta(rs.getInt("IdOferta"));
+         oferta.setTituloOferta(rs.getString("TituloOferta"));
+         oferta.setPrecioRegular(rs.getString(codigo));
         }
     }
 }
