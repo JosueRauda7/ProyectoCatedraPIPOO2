@@ -78,11 +78,11 @@ public class ClientesModel extends Conexion {
                 Oferta oferta = new Oferta();
                 oferta.setIdOferta(Integer.parseInt(rs.getString("IdOferta")));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(Double.parseDouble(rs.getString("PrecioRegular")));
-                oferta.setPrecioOferta(Double.parseDouble(rs.getString("PrecioOferta")));
-                oferta.setFechaInicio(new SimpleDateFormat("dd-MM-yyyy").parse(rs.getString("FechaInicio")));
-                oferta.setFechaFin(new SimpleDateFormat("dd-MM-yyyy").parse(rs.getString("FechaFin")));
-                oferta.setFechaLimite(new SimpleDateFormat("dd-MM-yyyy").parse(rs.getString("FechaLimite")));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
+                oferta.setFechaFin(rs.getString("FechaFin"));
+                oferta.setFechaLimite(rs.getString("FechaLimite"));
                 oferta.setCantidadLimite(Integer.parseInt(rs.getString("Cantidadlimite")));
                 oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
                 oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
@@ -92,10 +92,6 @@ public class ClientesModel extends Conexion {
             this.desconectar();
             return ofertas;
         } catch (SQLException ex) {
-            Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return null;
-        } catch (ParseException ex) {
             Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return null;
