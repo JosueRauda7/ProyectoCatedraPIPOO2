@@ -17,9 +17,9 @@ public class Oferta {
     private String tituloOferta;
     private String precioRegular;
     private String precioOferta;
-    private Date fechaInicio;
-    private Date fechaFin;
-    private Date fechaLimite;
+    private String fechaInicio;
+    private String fechaFin;
+    private String fechaLimite;
     private int cantidadLimite;
     private String descripcionOferta;
     private String otrosDetalles;
@@ -35,9 +35,9 @@ public class Oferta {
         this.tituloOferta="";
         this.precioOferta="";
         this.precioRegular="";
-        this.fechaInicio=new Date();
-        this.fechaFin=new Date();
-        this.fechaLimite=new Date();
+        this.fechaInicio="";
+        this.fechaFin="";
+        this.fechaLimite="";
         this.cantidadLimite=0;
         this.descripcionOferta="";
         this.otrosDetalles="";
@@ -90,29 +90,29 @@ public class Oferta {
         this.precioOferta = precioOferta;
     }
 
-    public Date getFechaInicio() {
+    public String getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public String getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
     }
 
-    public Date getFechaLimite() {
+    public String getFechaLimite() {
         return fechaLimite;
     }
 
-    public void setFechaLimite(Date fechaLimite) {
+    public void setFechaLimite(String fechaLimite) {
         this.fechaLimite = fechaLimite;
-    }
+    }   
 
     public int getCantidadLimite() {
         return cantidadLimite;

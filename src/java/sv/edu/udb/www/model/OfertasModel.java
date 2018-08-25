@@ -36,9 +36,9 @@ public class OfertasModel extends Conexion{
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
                 oferta.setPrecioRegular(rs.getString("PrecioRegular"));
                 oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio(rs.getDate("FechaInicio"));
-                oferta.setFechaFin(rs.getDate("FechaFin"));
-                oferta.setFechaLimite(rs.getDate("FechaLimite"));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
+                oferta.setFechaFin(rs.getString("FechaFin"));
+                oferta.setFechaLimite(rs.getString("FechaLimite"));
                 oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
                 oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
                 oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
@@ -56,5 +56,7 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
-  
+
+ 
+
 }

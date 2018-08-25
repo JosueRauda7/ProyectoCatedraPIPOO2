@@ -22,18 +22,18 @@
     </head>
     <body>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
-        <section>
-            <div class="panel panel-default col-lg-6 col-sm-offset-3" style="margin-top: 5%; margin-bottom: 5%;" >
-                <div class="row" >
-                    <div class="thumbnail">
-                        <h2 style="color:#c2185b;">Nuevo empleado</h2>
-                    </div>
-                    <c:if test="${not empty requestScope.listaErrores}">
+            <section>
+                <div class="panel panel-default col-lg-6 col-sm-offset-3" style="margin-top: 5%; margin-bottom: 5%;" >
+                    <div class="row" >
+                        <div class="thumbnail">
+                            <h2 style="color:#c2185b;">Nuevo empleado</h2>
+                        </div>
+                        <c:if test="${not empty requestScope.listaErrores}">
                         <div class="alert alert-danger">
                             <ul>
                                 <c:forEach var="error" items="${requestScope.listaErrores}">
                                     <li>${error}</li>
-                                    </c:forEach>
+                                </c:forEach>
                             </ul>
                         </div>
                     </c:if>
@@ -76,14 +76,33 @@
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
-                                    <div class="form-group">
-                                <label for="contra" style="color:black;">Cantidad límite de cupones:</label>
+                            <div class="form-group">
+                                <label for="cantidad" style="color:black;">Cantidad límite de cupones:</label>
                                 <div class="input-group">
-                                    <input type="password" name="contra" id="contra" class="form-control" value="${usuario.contrasenia}"/>
+                                    <input type="number" min="0" step="1" name="cantidad" id="cantidad" class="form-control" value="${usuario.contrasenia}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
-                            </div>  
-                                    <button type="submit" class="btn" style="background-color: #c2185b">Registrar</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion" style="color:black;">Descripción:</label>
+                                <div class="input-group">
+                                    <input type="text" name="descripcion" id="descripcion" class="form-control" value="${usuario.correo}"/>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="detalles" style="color:black;">Otros detalles:</label>
+                                <div class="input-group">
+                                    <input type="text" name="detalles" id="detalles" class="form-control" value="${usuario.correo}"/>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="imagen">Imagen de la oferta:</label>
+                                <input data-language="es" type="file" name="archivo" id="imagen" class="form-control
+                                       file file-loading" data-allowed-file-extensions='["jpg", "png"]'/>
+                            </div>
+                            <button type="submit" class="btn" style="background-color: #c2185b">Registrar</button>
                             <button type="reset" class="btn btn-info">Limpiar</button>
                         </div>
                     </form>
