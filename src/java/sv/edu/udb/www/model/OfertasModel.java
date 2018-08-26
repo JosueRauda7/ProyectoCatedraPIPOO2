@@ -56,6 +56,7 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
+<<<<<<< HEAD
       public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException{
         try {
             String sql = "SELECT * FROM ofertas WHERE CodigoEmpresa = ? and IdEstado = 1";
@@ -88,6 +89,68 @@ public class OfertasModel extends Conexion{
             return null;
         }finally{
           this.desconectar();
+=======
+
+    public int insertarOferta(Oferta oferta, String correo) throws SQLException{
+            String codigoEmpresa="";
+            int filasAfectadas=0;
+        try {
+            String sql="SELECT DISTINCT e.CodigoEmpresa FROM empresas e inner join ofertas o on "
+                    + "e.CodigoEmpresa=o.CodigoEmpresa inner join usuarios u on "
+                    + "e.IdUsuario=u.IdUsuario where u.correo=?";
+            
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1, correo);
+            rs=st.executeQuery();
+            
+            rs.next();
+                codigoEmpresa=rs.getString("codigoEmpresa");
+            
+            
+            //Diferente insert segun hay limite de disponibilidad o no
+            if(oferta.getCantidadLimite()==0){
+                sql="INSERT into ofertas VALUES(NULL,?,?,?,?,?,?,?,NULL,?,?,?,?,?)";
+                st=conexion.prepareStatement(sql);
+                st.setString(1,oferta.getTituloOferta());
+                st.setString(2,oferta.getPrecioRegular());
+                st.setString(3,oferta.getPrecioOferta());
+                st.setString(4,oferta.getFechaInicio());               
+                st.setString(5,oferta.getFechaFin());
+                st.setString(6,oferta.getFechaLimite());
+                st.setString(7,oferta.getDescripcionOferta());
+                st.setString(8,oferta.getOtrosDetalles());
+                st.setInt(9,1);
+                st.setString(10," ");
+                st.setString(11,codigoEmpresa);
+                st.setString(12,oferta.getUrl_foto());
+            }else{
+                sql="INSERT into ofertas VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)";               
+                st=conexion.prepareStatement(sql);
+                st.setString(1,oferta.getTituloOferta());
+                st.setDouble(2,Double.parseDouble(oferta.getPrecioRegular()));
+                st.setDouble(3,Double.parseDouble(oferta.getPrecioOferta()));
+                st.setString(4,oferta.getFechaInicio());               
+                st.setString(5,oferta.getFechaFin());
+                st.setString(6,oferta.getFechaLimite());
+                st.setInt(7,oferta.getCantidadLimite());
+                st.setString(8,oferta.getDescripcionOferta());
+                st.setString(9,oferta.getOtrosDetalles());
+                st.setInt(10,1);
+                st.setString(11," ");
+                st.setString(12,codigoEmpresa);
+                st.setString(13,oferta.getUrl_foto());                
+            }
+            
+            filasAfectadas=st.executeUpdate();
+
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 4;
+>>>>>>> 0bccaa007df239d1fd9b69303911ff1058d2dd09
         }
     }
 

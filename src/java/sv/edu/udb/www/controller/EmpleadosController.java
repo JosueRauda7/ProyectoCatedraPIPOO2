@@ -23,6 +23,7 @@ import sv.edu.udb.www.utils.Validaciones;
 
 @WebServlet(name = "EmpleadosController", urlPatterns = {"/empleados.do"})
 public class EmpleadosController extends HttpServlet {
+
     ArrayList listaErrores = new ArrayList();
     EmpleadosModel modelo = new EmpleadosModel();
     UsuariosModel modeloUsuario = new UsuariosModel();
@@ -31,7 +32,15 @@ public class EmpleadosController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
+            if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("4")) {
+                response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
+                return;
+            }
+            
+            if (request.getParameter("operacion") == null) {
+                //Redireccionar a la página principal del empleado
+                return;
+            }
             String operacion = request.getParameter("operacion");
 
             switch (operacion) {
@@ -42,11 +51,11 @@ public class EmpleadosController extends HttpServlet {
                     canjearCupon(request, response);
                     break;
                 case "listar":
-                    listar(request,response);
+                    listar(request, response);
                     break;
                 case "nuevo":
                     request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
-                    break; 
+                    break;
             }
         } catch (SQLException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex); //Si no funciona, eliminar esto
@@ -106,9 +115,9 @@ public class EmpleadosController extends HttpServlet {
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
-           
+
             String correo = (String) request.getSession().getAttribute("correo");
-            request.setAttribute("listaEmpleados",modelo.listarEmpleados(correo));
+            request.setAttribute("listaEmpleados", modelo.listarEmpleados(correo));
             try {
                 request.getRequestDispatcher("/Empresa/ListaEmpleados.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
@@ -118,14 +127,14 @@ public class EmpleadosController extends HttpServlet {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-        private void canjearCupon(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+    private void canjearCupon(HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
         try {
             String codigoCupon = request.getParameter("codigoCupon");;
             String estadoCupon = request.getParameter("estadoCupon");
             String duiCanjeador = request.getParameter("duiCanjeador");
-            String duiComprador = request.getParameter("duiComprador"); 
+            String duiComprador = request.getParameter("duiComprador");
 
             if (!"Disponible".equals(estadoCupon)) {
                 request.setAttribute("Fracaso", "El cupón no esta disponible");
@@ -136,7 +145,7 @@ public class EmpleadosController extends HttpServlet {
                 request.setAttribute("listaCupones", modelo.obtenerCupon(codigoCupon));
                 request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
             } else {
-                if(modelo.canjearCupon(codigoCupon) > 0){
+                if (modelo.canjearCupon(codigoCupon) > 0) {
                     request.setAttribute("Exito", "El cupón ha sido canjeado, exitosamente");
                     response.sendRedirect("/Empleado/canjearCupon.jsp");
                 }
@@ -146,9 +155,4 @@ public class EmpleadosController extends HttpServlet {
         }
 
     }
-
-    
 }
-
-
-

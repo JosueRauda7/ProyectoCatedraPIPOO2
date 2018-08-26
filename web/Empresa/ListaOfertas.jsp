@@ -37,7 +37,7 @@
             <section style="margin-top: 5%;" >
                 <div class="container" style="background-color: white; color: black;">
                     <div class="row ">
-                        <h3 style="color:#c2185b; text-align: center;">Lista de ofertas</h3>
+                        <h3 style="color:#c2185b; text-align: center;">Lista de ofertas de ${sessionScope.correo}</h3>
                     </div>
                     <div class="row">
                         <div class="col-md-14" style="padding: 1%;">
@@ -68,7 +68,7 @@
                                         <td>${ofertas.fechaInicio}</td>
                                         <td>${ofertas.fechaLimite}</td>
                                         <td>${ofertas.estadoOferta.estado}</td>
-                                        <td><img height="100px" src="${base}/images/${ofertas.url_foto}"/></td>
+                                        <td><img height="100px" src="${base}/images/ofertas/${ofertas.url_foto}"/></td>
                                         <td>
                                             <a class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?op=obtener&id=${empleado.idEmpleado}"><span class="glyphicon glyphicon-edit"></span>Editar</a>
                                             <a class="btn btn-danger" href="#"><span class="glyphicon glyphicon-trash"></span>Eliminar</a>

@@ -4,7 +4,35 @@
     width: 42%;
     margin-left: 30%;
     padding: 2%;
-    margin-top: 2%;
+    margin-top: 1.5%;
+}
+
+#formularioCambiarContra{
+    background-color: white;
+    color: black;
+    width: 42%;
+    margin-left: 30%;
+    padding: 2%;
+    margin-top: 5%;
+}
+
+.contra{
+    width: 100%;
+    margin-left: 40%;
+    border-style: solid;
+    border-color: black;
+}
+
+.contraConf{
+    width: 100%;
+    margin-left: 40%;
+    margin-top: 5%;
+    border-style: solid;
+    border-color: black;
+}
+
+#actualizarContra{
+    margin-left: 63%;
 }
 
 .h3{
