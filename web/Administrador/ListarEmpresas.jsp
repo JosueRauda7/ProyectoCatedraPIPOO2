@@ -44,14 +44,14 @@
                         <td>$${empresas.comision}</td>
                         <td>${empresas.usuario.correo}</td>
                         <td>
-                            <a class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?operacion=modificar&codigo=${empresas.codigoEmpresa}"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
+                            <a class="btn btn-info" href="${pageContext.request.contextPath}/administrador.do?operacion=modificarEmpresa&codigo=${empresas.codigoEmpresa}"><span class="glyphicon glyphicon-edit"></span> Modificar</a>
                             
                         </td>
                         <td>
                              <a class="btn btn-danger" href="javascript:eliminar('${empresas.codigoEmpresa}', '${empresas.idUsuario}')"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
                         </td>
                         <td>
-                            <a  class="btn btn-success" href="${pageContext.request.contextPath}/empresas.do?operacion=ofertas&codigo=${empresas.codigoEmpresa}"><span class="glyphicon glyphicon-tags"></span>  Ver ofertas</a>
+                            <a  class="btn btn-success" href="${pageContext.request.contextPath}/administrador.do?operacion=ofertasEmpresa&codigo=${empresas.codigoEmpresa}"><span class="glyphicon glyphicon-tags"></span>  Ver ofertas</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -91,7 +91,7 @@
          function eliminar(id,iduser){
            alertify.confirm("¿Realmente decea eliminar esta empresa?", function(e){
               if(e){
-                  location.href="empresas.do?operacion=eliminar&idemp="+ id+"&iduser="+iduser;
+                  location.href="administrador.do?operacion=eliminarEmpresa&idemp="+ id+"&iduser="+iduser;
               } 
            });
   }
