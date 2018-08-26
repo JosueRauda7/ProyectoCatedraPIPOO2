@@ -56,7 +56,6 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
-<<<<<<< HEAD
       public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException{
         try {
             String sql = "SELECT * FROM ofertas WHERE CodigoEmpresa = ? and IdEstado = 1";
@@ -89,8 +88,8 @@ public class OfertasModel extends Conexion{
             return null;
         }finally{
           this.desconectar();
-=======
-
+        }
+      }
     public int insertarOferta(Oferta oferta, String correo) throws SQLException{
             String codigoEmpresa="";
             int filasAfectadas=0;
@@ -150,7 +149,7 @@ public class OfertasModel extends Conexion{
             Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return 4;
->>>>>>> 0bccaa007df239d1fd9b69303911ff1058d2dd09
+
         }
     }
 
