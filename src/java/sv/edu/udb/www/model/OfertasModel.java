@@ -20,12 +20,16 @@ import static sv.edu.udb.www.model.Conexion.conexion;
  * @author ivanm
  */
 public class OfertasModel extends Conexion{
-    public List<Oferta> listarOferta(String correo) throws SQLException{
+    public List<Oferta> listarOferta(String correo, int tipo) throws SQLException{
         try {
             List<Oferta> lista=new ArrayList<>();
+            
             String sql="Select * from ofertas o inner join estadooferta eo on o.idEstado=eo.idEstadoOferta "
                     + "inner join empresas e on o.CodigoEmpresa=e.CodigoEmpresa inner join usuarios u ON e.IdUsuario = u.IdUsuario "
                     + "WHERE u.correo = ?";
+            
+            sql="";
+            
             this.conectar();
             st=conexion.prepareStatement(sql);
             st.setString(1, correo);

@@ -134,8 +134,10 @@ public class EmpresasController extends HttpServlet {
 
     private void listarOferta(HttpServletRequest request, HttpServletResponse response) {
         try {
-            ;
-            request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo")));
+            int tipoOferta=0;
+            tipoOferta = Integer.parseInt(request.getParameter("tipoOferta"));
+            
+            request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo"),tipoOferta));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {

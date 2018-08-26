@@ -8,10 +8,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:include page="/Empresa/head.jsp"></jsp:include>
+        <jsp:include page="/Administrador/enlaces.jsp"></jsp:include>
     </head>
     <body>
-        <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
+        <jsp:include page="/Administrador/MenuAdmin.jsp"></jsp:include>
 
         <section style="margin-top: 5%;" >
             <div class="container">

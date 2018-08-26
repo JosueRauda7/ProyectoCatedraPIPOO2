@@ -41,7 +41,14 @@
                     </div>
                     <div class="row">
                         <div class="col-md-14" style="padding: 1%;">
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=nuevo"> Nueva Oferta</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=nuevo"> Nueva Oferta</a><br><br>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=0">Ver todas las ofertas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=1">Ofertas en espera</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=2">Ofertas aprovadas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=3">Ofertas activas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=4">Ofertas finalizadas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=5">Ofertas rechazadas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=6">Ofertas descartadas</a>
                         <br><br>
                         <table class="table table-striped table-bordered table-hover table-responsive table-condensed " id="tabla">
                             <thead>

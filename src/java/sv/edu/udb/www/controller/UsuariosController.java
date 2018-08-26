@@ -47,7 +47,7 @@ public class UsuariosController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
+       /* if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
             switch (request.getSession().getAttribute("estadoUsuario").toString()) {
                 case "1":
                     //Administrador
@@ -66,7 +66,7 @@ public class UsuariosController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
                     return;
             }
-        }
+        }*/
         String operacion = request.getParameter("operacion");
         switch (operacion) {
 
@@ -318,12 +318,11 @@ public class UsuariosController extends HttpServlet {
                     break;
                 case 1:
                     //Administrador
-                    //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                    request.getRequestDispatcher("/Administrador/Home.jsp").forward(request, response);
                     break;
                 case 2:
-                    //Empresa
-                    //Este atributo me servira para reconocer quien es la empresa que accede                   
-                    request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
+                    //Empresa                                     
+                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
                     //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
                     break;
                 case 3:
