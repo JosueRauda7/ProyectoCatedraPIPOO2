@@ -14,7 +14,7 @@
     <body id="home">
         <jsp:include page="MenuAdmin.jsp" />
 
-        <form class="contenform" action="${pageContext.request.contextPath}/empresas.do" method="post"> 
+        <form class="contenform" action="${pageContext.request.contextPath}/administrador.do" method="post"> 
             <h1>Registro empresas</h1>
             <c:if test="${not empty listaErrores}">
                     <div class="alert alert-danger">
@@ -25,7 +25,7 @@
                         </ul>
                     </div>
                     </c:if>
-            <input type="hidden" value="agregar" name="operacion">
+            <input type="hidden" value="agregarEmpresa" name="operacion">
             <div class="well well-sm" style="color:#C2185B;"><strong><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
             <div class="form-group">            
                 <label for="codigo">Nombre de la empresa:</label>
