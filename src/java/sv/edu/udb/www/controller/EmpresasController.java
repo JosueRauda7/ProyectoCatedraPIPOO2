@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.EmpresasModel;
+import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.RubrosModel;
 import sv.edu.udb.www.model.UsuariosModel;
 import sv.edu.udb.www.utils.Correo;
@@ -31,6 +32,7 @@ public class EmpresasController extends HttpServlet {
     RubrosModel rubro = new RubrosModel();
     EmpresasModel modelo = new EmpresasModel();
     UsuariosModel modelo2 = new UsuariosModel();
+    OfertasModel modelo3 = new OfertasModel();
     ArrayList listaErrores = new ArrayList<>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -312,7 +314,13 @@ public class EmpresasController extends HttpServlet {
     }
 
     private void ofertas(HttpServletRequest request, HttpServletResponse response) {
-        
+        try {
+            String codigo = request.getParameter("codigo");
+            request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
+            request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

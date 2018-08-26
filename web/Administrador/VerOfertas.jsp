@@ -14,8 +14,22 @@
     <body id="home">
         <jsp:include page="MenuAdmin.jsp" />
         <h1 class="text-center">Ofertas para la empresa</h1>
-        <section class="contentabla">
-            
+        <section class="contendatos">
+            <c:forEach var="ofertas" items="${requestScope.ofertasEspera}">
+                <div class="contenofer">
+                    <h3 class="text-center">${ofertas.tituloOferta}</h3>
+                    <div id="contenpre">
+                        <div>
+                            <h5>Precio regular:</h5>
+                            <p class="text-center">$${ofertas.precioRegular}</p>
+                        </div>
+                        <div>
+                            <h5>Precio oferta:</h5>
+                            <p class="text-center">$${ofertas.precioOferta}</p>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
         </section>
 
         <footer id="footer">
