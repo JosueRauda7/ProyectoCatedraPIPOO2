@@ -1,0 +1,59 @@
+.contendatos{
+    border: solid black;
+    width: 90%;
+    margin-left: 5%;
+    padding-top: 2%;
+    padding-left: 3%;
+    padding-bottom: 2%;
+    height: auto;
+    overflow: hidden;
+}
+.contenofer{
+    width: 30%;
+    border: solid black;
+    margin-right: 3%;
+    float: left;
+    background-color: white;
+    color:black;
+    padding: 1%;
+}
+.contenofer:nth-child(3n){
+     margin-bottom: 3%;
+}
+#contenpre{
+    display: flex;
+}
+#contenpre div{
+    margin-left: 10%;
+}
+#contenfech{
+    display: flex;
+    margin-left: 6%;
+}
+#contenfech div{
+    margin-right: 6%;
+}
+#contendescrip{
+    width: 100%;
+}
+#imagenofer{
+    width: 100px;
+    height: 100px;
+}
+.btnmostar{
+    margin-left: 24%;
+}
+.imagenoferta{
+    width: 200px;
+    border: solid black;
+    height: 200px;
+    margin-bottom: 1%;
+}
+.contencontable{
+    margin-left: 38%;
+    margin-top: -34%;
+    position: absolute;
+
+    width: 50%;
+    text-align: center;
+}

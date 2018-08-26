@@ -44,6 +44,11 @@ public class EmpresasController extends HttpServlet {
     EmpleadosModel modeloEmpleado = new EmpleadosModel();
     ArrayList listaErrores = new ArrayList();
 
+    RubrosModel rubro = new RubrosModel();
+    EmpresasModel modelo = new EmpresasModel();
+    UsuariosModel modelo2 = new UsuariosModel();
+    OfertasModel modelo3 = new OfertasModel();    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -277,6 +282,15 @@ public class EmpresasController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
-}
+    private void ofertas(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String codigo = request.getParameter("codigo");
+            request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
+            request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
