@@ -310,9 +310,11 @@ public class UsuariosController extends HttpServlet {
             switch (estado) {
                 case -1:
                     request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
                     break;
                 case 0:
                     request.getSession().setAttribute("fracaso", "Cuenta no verificada");
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
                     break;
                 case 1:
                     //Administrador
@@ -332,6 +334,7 @@ public class UsuariosController extends HttpServlet {
                     //Cliente
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
                     break;
+                    
             }
 
         } catch (SQLException | IOException ex) {
