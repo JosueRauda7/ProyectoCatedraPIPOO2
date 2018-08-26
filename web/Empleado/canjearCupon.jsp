@@ -15,7 +15,7 @@
                     <h3 class="h3">Canjear cupón</h3>
                 </div>
                 <div class="row">
-                    <div class=" col-md-7">
+                    <div class="col-md-7">
                         <!--<div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>-->
                         <form  role="form" action="${pageContext.request.contextPath}/empleados.do" method="POST">
                             <input type="hidden" name="operacion" value="obtener" />
@@ -50,7 +50,7 @@
                                         <label for="tituloOferta">Titulo oferta: ${cupones.oferta.tituloOferta}</label>
                                     </div>                               
                                 </c:forEach>
-                            </div>
+                            </div><br>
 
                             <input type="submit" class="btn btn-info" value="Canjear" name="Canjear">
                             <a class="btn btn-danger" href="#">Cancelar</a>

@@ -31,8 +31,10 @@ import sv.edu.udb.www.utils.Validaciones;
  */
 @WebServlet(name = "UsuariosController", urlPatterns = {"/usuarios.do"})
 public class UsuariosController extends HttpServlet {
+
     UsuariosModel UM = new UsuariosModel();
     ArrayList listaErrores = new ArrayList();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,34 +47,34 @@ public class UsuariosController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        if(request.getSession().getAttribute("correo")!=null||request.getSession().getAttribute("estadoUsuario")!=null){
-                switch(request.getSession().getAttribute("estadoUsuario").toString()){
-                    case "1":
-                        //Administrador
-                        return;
-                    case "2":
-                        //Empresa
-                        return;
-                    case "3":
-                        //Empleado
-                        return;
-                    case "4":
-                        //Cliente
-                        response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=inicio");
-                        return;
-                    default:
-                        response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=login");
-                        return;
-                }
+        if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
+            switch (request.getSession().getAttribute("estadoUsuario").toString()) {
+                case "1":
+                    //Administrador
+                    return;
+                case "2":
+                    //Empresa
+                    return;
+                case "3":
+                    //Empleado
+                    return;
+                case "4":
+                    //Cliente
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
+                    return;
+                default:
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
+                    return;
             }
+        }
         String operacion = request.getParameter("operacion");
-        switch(operacion){
+        switch (operacion) {
 
             case "registro":
                 request.getRequestDispatcher("/Registro.jsp").forward(request, response);
                 break;
             case "insertar":
-                insertar(request,response);
+                insertar(request, response);
                 break;
             case "insertarE":
                 insertarUsuarioEmpleado(request, response);
@@ -81,12 +83,14 @@ public class UsuariosController extends HttpServlet {
                 request.getRequestDispatcher("/Login.jsp").forward(request, response);
                 break;
             case "verificar":
-                 confirmar(request,response);
+                confirmar(request, response);
                 break;
             case "ingresar":
-                ingresar(request,response);
+                ingresar(request, response);
                 break;
-            
+            case "cambiarC":
+                cambiarContra(request, response);
+                break;
         }
     }
 
@@ -103,7 +107,7 @@ public class UsuariosController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
+
     }
 
     /**
@@ -134,91 +138,91 @@ public class UsuariosController extends HttpServlet {
         try {
             listaErrores.clear();
             PrintWriter out = response.getWriter();
-            
-            Usuario newUsuario=new Usuario();
+
+            Usuario newUsuario = new Usuario();
             Cliente newCliente = new Cliente();
-            
+
             newUsuario.setCorreo(request.getParameter("correo"));
             newUsuario.setContrasenia(request.getParameter("contra"));
             newUsuario.setConfirmado(0);
-            
+
             newCliente.setNombreClientes(request.getParameter("nombre"));
             newCliente.setApellidosClientes(request.getParameter("apellido"));
             newCliente.setDireccion(request.getParameter("direccion"));
             newCliente.setDui(request.getParameter("dui"));
-            
-            if(newCliente.getNombreClientes().isEmpty()){
+
+            if (newCliente.getNombreClientes().isEmpty()) {
                 listaErrores.add("Ingrese sus nombres.");
-            }else if(Validaciones.esEntero(newCliente.getNombreClientes())){
+            } else if (Validaciones.esEntero(newCliente.getNombreClientes())) {
                 listaErrores.add("Ingrese sus nombres correctamente.");
             }
-            if(newCliente.getApellidosClientes().isEmpty()){
+            if (newCliente.getApellidosClientes().isEmpty()) {
                 listaErrores.add("Ingrese sus apellidos.");
-            }else if(Validaciones.esEntero(newCliente.getApellidosClientes())){
+            } else if (Validaciones.esEntero(newCliente.getApellidosClientes())) {
                 listaErrores.add("Ingrese sus apellidos correctamente.");
             }
-            if(newCliente.getDireccion().isEmpty()){
+            if (newCliente.getDireccion().isEmpty()) {
                 listaErrores.add("Ingrese su dirección.");
             }
-            if(!Validaciones.esDui(newCliente.getDui())){
+            if (!Validaciones.esDui(newCliente.getDui())) {
                 listaErrores.add("Ingrese un DUI valido.");
             }
-            if(!Validaciones.esCorreo(newUsuario.getCorreo())){
+            if (!Validaciones.esCorreo(newUsuario.getCorreo())) {
                 listaErrores.add("Ingrese un correo valido.");
             }
-            if(Validaciones.esContraseña(newUsuario.getContrasenia())){
+            if (Validaciones.esContraseña(newUsuario.getContrasenia())) {
                 listaErrores.add("La contraseña debe tener una longitud mínima de 8 caracteres"
                         + " y debe contener al menos una mayuscula, "
                         + "una minuscula y un numero o caracter especial");
             }
-            
-            if(listaErrores.isEmpty()){
-            String cadenaAleatoria = UUID.randomUUID().toString();
-             
-                if(UM.insertarUsuario(newUsuario,newCliente, cadenaAleatoria)>0){
+
+            if (listaErrores.isEmpty()) {
+                String cadenaAleatoria = UUID.randomUUID().toString();
+
+                if (UM.insertarUsuario(newUsuario, newCliente, cadenaAleatoria) > 0) {
                     request.getSession().setAttribute("exito", "Usuario registrado "
                             + "existosamente. Se te ha enviado un correo para que "
                             + "confirmes tu cuenta");
-                    
+
                     String texto = "Te has registrado exitosamente.<br>";
                     texto += "Para confirmar tu cuenta debes dar click ";
-                    
-                    String enlace=request.getRequestURL().toString()+
-                            "?operacion=verificar&id="+cadenaAleatoria;
+
+                    String enlace = request.getRequestURL().toString()
+                            + "?operacion=verificar&id=" + cadenaAleatoria;
                     texto += "<a target='a_blank' "
-                           + "href='" + enlace + "'>aqui</a>";
-                    
+                            + "href='" + enlace + "'>aqui</a>";
+
                     Correo correo = new Correo();
                     correo.setAsunto("Confirmacion de registro");
                     correo.setMensaje(texto);
                     correo.setDestinatario(newUsuario.getCorreo());
                     correo.enviarCorreo();
                     response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
-                }else{
-                        listaErrores.add("Este correo ya esta registrado");
-                        request.setAttribute("listaErrores", listaErrores);
-                        request.setAttribute("usuario", newUsuario);
-                        request.setAttribute("cliente", newCliente);
-                        request.getRequestDispatcher("/usuarios.do?operacion=registro").forward(request, response);
-                    }
-            }else{
+                } else {
+                    listaErrores.add("Este correo ya esta registrado");
+                    request.setAttribute("listaErrores", listaErrores);
+                    request.setAttribute("usuario", newUsuario);
+                    request.setAttribute("cliente", newCliente);
+                    request.getRequestDispatcher("/usuarios.do?operacion=registro").forward(request, response);
+                }
+            } else {
                 request.setAttribute("listaErrores", listaErrores);
-                        request.setAttribute("usuario", newUsuario);
-                        request.setAttribute("cliente", newCliente);
-                        request.getRequestDispatcher("/usuarios.do?operacion=registro").forward(request, response);
+                request.setAttribute("usuario", newUsuario);
+                request.setAttribute("cliente", newCliente);
+                request.getRequestDispatcher("/usuarios.do?operacion=registro").forward(request, response);
             }
-        }catch (IOException | ServletException | SQLException ex) {
+        } catch (IOException | ServletException | SQLException ex) {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void insertarUsuarioEmpleado(HttpServletRequest request, HttpServletResponse response) {
         listaErrores.clear();
-        try{
-        Usuario usuario = new Usuario();
-        Empleado empleado=new Empleado();
-        
-        //Creacion password
+        try {
+            Usuario usuario = new Usuario();
+            Empleado empleado = new Empleado();
+
+            //Creacion password
             char[] caracteres;
             caracteres = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
             String pass = "";
@@ -226,114 +230,158 @@ public class UsuariosController extends HttpServlet {
                 pass += caracteres[new Random().nextInt(62)];
             }
             //fin contraseña
-        
-        usuario.setCorreo(request.getParameter("correo"));
-        usuario.setContrasenia(pass);
-        empleado.setNombreEmpleado(request.getParameter("nombre"));
-        empleado.setApellidoEmpleado(request.getParameter("apellido"));
-        
-        
-        if(Validaciones.isEmpty(empleado.getNombreEmpleado())){
-            listaErrores.add("El nombre es obligatorio");
-        }
-        if(Validaciones.isEmpty(empleado.getApellidoEmpleado())){
-            listaErrores.add("El apellido es obligatorio");
-        }
-        if(Validaciones.isEmpty(usuario.getCorreo())){
-            listaErrores.add("El correo es obligatorio");
-        }else if(!Validaciones.esCorreo(usuario.getCorreo())){
-            listaErrores.add("El correo electronico no tiene el formato correcto");
-        }
-        if(listaErrores.size()>0){
-            request.setAttribute("listaErrores",listaErrores);
-            request.setAttribute("usuario", usuario);
-            request.setAttribute("empleado", empleado);
-            request.getRequestDispatcher("/empleados.do?operacion=nuevo").forward(request, response);
-        }else{
-            String cadenaAleatoria = UUID.randomUUID().toString();
-            if(UM.insertarUsuarioEmpleado(usuario, empleado,(String) request.getSession().getAttribute("correo"),cadenaAleatoria)>0){
-                request.getSession().setAttribute("exito", "Empleado registrado "
-                        + "existosamente.");
 
-                String texto = "Has sido registrado exitosamente a la cuponera.<br>";
-                texto += "Anota tu contraseña: "+ pass +" (puedes cambiarla cuando quieras)<br> ";
-                texto += "Para confirmar tu cuenta debes dar click ";
+            usuario.setCorreo(request.getParameter("correo"));
+            usuario.setContrasenia(pass);
+            empleado.setNombreEmpleado(request.getParameter("nombre"));
+            empleado.setApellidoEmpleado(request.getParameter("apellido"));
 
-                String enlace=request.getRequestURL().toString()+
-                        "?operacion=verificar&id="+cadenaAleatoria;
-                texto += "<a target='a_blank' "
-                       + "href='" + enlace + "'>aqui</a>";
-
-                Correo correo = new Correo();
-                correo.setAsunto("Confirmacion de registro");
-                correo.setMensaje(texto);
-                correo.setDestinatario(usuario.getCorreo());
-                correo.enviarCorreo();
-                response.sendRedirect(request.getContextPath() + "/empleados.do?operacion=listar");
-            }else{
-                listaErrores.add("Este correo ya esta registrado");
+            if (Validaciones.isEmpty(empleado.getNombreEmpleado())) {
+                listaErrores.add("El nombre es obligatorio");
+            }
+            if (Validaciones.isEmpty(empleado.getApellidoEmpleado())) {
+                listaErrores.add("El apellido es obligatorio");
+            }
+            if (Validaciones.isEmpty(usuario.getCorreo())) {
+                listaErrores.add("El correo es obligatorio");
+            } else if (!Validaciones.esCorreo(usuario.getCorreo())) {
+                listaErrores.add("El correo electronico no tiene el formato correcto");
+            }
+            if (listaErrores.size() > 0) {
                 request.setAttribute("listaErrores", listaErrores);
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("empleado", empleado);
-                request.getRequestDispatcher("/empleados.do?operacion=listar").forward(request, response);
+                request.getRequestDispatcher("/empleados.do?operacion=nuevo").forward(request, response);
+            } else {
+                String cadenaAleatoria = UUID.randomUUID().toString();
+                if (UM.insertarUsuarioEmpleado(usuario, empleado, (String) request.getSession().getAttribute("correo"), cadenaAleatoria) > 0) {
+                    request.getSession().setAttribute("exito", "Empleado registrado "
+                            + "existosamente.");
+
+                    String texto = "Has sido registrado exitosamente a la cuponera.<br>";
+                    texto += "Anota tu contraseña: " + pass + " (puedes cambiarla cuando quieras)<br> ";
+                    texto += "Para confirmar tu cuenta debes dar click ";
+
+                    String enlace = request.getRequestURL().toString()
+                            + "?operacion=verificar&id=" + cadenaAleatoria;
+                    texto += "<a target='a_blank' "
+                            + "href='" + enlace + "'>aqui</a>";
+
+                    Correo correo = new Correo();
+                    correo.setAsunto("Confirmacion de registro");
+                    correo.setMensaje(texto);
+                    correo.setDestinatario(usuario.getCorreo());
+                    correo.enviarCorreo();
+                    response.sendRedirect(request.getContextPath() + "/empleados.do?operacion=listar");
+                } else {
+                    listaErrores.add("Este correo ya esta registrado");
+                    request.setAttribute("listaErrores", listaErrores);
+                    request.setAttribute("usuario", usuario);
+                    request.setAttribute("empleado", empleado);
+                    request.getRequestDispatcher("/empleados.do?operacion=listar").forward(request, response);
+                }
             }
-        }
-        }catch(ServletException | IOException ex){
-            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE,null,ex);
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     private void confirmar(HttpServletRequest request, HttpServletResponse response) {
-        try{
+
+    private void confirmar(HttpServletRequest request, HttpServletResponse response) {
+        try {
             UM.confirmarCuenta(request.getParameter("id"));
             request.getSession().setAttribute("exito", "Cuenta verificada exitosamente, "
                     + "ya puedes iniciar sesion");
             response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
-        }catch(SQLException | IOException ex){
-            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void ingresar(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        try{
-           Usuario usuario = new Usuario();
-           usuario.setCorreo(request.getParameter("correo"));
-           usuario.setContrasenia(request.getParameter("password"));
-           request.getSession().setAttribute("correo", request.getParameter("correo"));
-           int estado = UM.verificarSesion(usuario);
-           request.getSession().setAttribute("estadoUsuario", estado);
-           switch(estado){
-               case -1:
-                   request.getSession().setAttribute("fracaso","Usuario y/o contraseña incorrecta");
-                   break;
-               case 0:
-                   request.getSession().setAttribute("fracaso","Cuenta no verificada");                   
-                   break;
-               case 1:
-                   //Administrador
-                   //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
-                   break;
-               case 2:
-                   //Empresa
-                   //Este atributo me servira para reconocer quien es la empresa que accede                   
-                   request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
-                   //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
-                   break;
-               case 3:
-                   //Empleado
-                   //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
-                   break;
-               case 4:
-                   //Cliente
-                   response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
-                   break;
-           }
-           
-       }catch(SQLException | IOException ex){
-           Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE,null,ex);
-       }
+        try {
+            Usuario usuario = new Usuario();
+            usuario.setCorreo(request.getParameter("correo"));
+            usuario.setContrasenia(request.getParameter("password"));
+            request.getSession().setAttribute("correo", request.getParameter("correo"));
+            int estado = UM.verificarSesion(usuario);
+            request.getSession().setAttribute("estadoUsuario", estado);
+            switch (estado) {
+                case -1:
+                    request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
+                    break;
+                case 0:
+                    request.getSession().setAttribute("fracaso", "Cuenta no verificada");
+                    break;
+                case 1:
+                    //Administrador
+                    //request.getSession().setAttribute("exito", "CREDENCIALES CORRECTAS.");
+                    break;
+                case 2:
+                    //Empresa
+                    //Este atributo me servira para reconocer quien es la empresa que accede                   
+                    request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
+                    //request.getRequestDispatcher("/empresas/Home.jsp").forward(request, response);
+                    break;
+                case 3:
+                    //Empleado
+                    //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                    break;
+                case 4:
+                    //Cliente
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
+                    break;
+            }
+
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cambiarContra(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String contrasenaActual = request.getParameter("contrasenaActual");
+            String confirmContra = request.getParameter("confirmarContrasena");
+            String nuevaContrasena = request.getParameter("nuevaContrasena");
+            Usuario contrasenabdd = UM.obtenerContrasena(16);
+
+            System.out.println(contrasenaActual);
+            System.out.println(confirmContra);
+            System.out.println(nuevaContrasena);
+            System.out.println("BDD"+contrasenabdd.getContrasenia());
+
+            if (contrasenaActual.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+            }
+
+            if (confirmContra.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+            }
+
+            if (nuevaContrasena.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+            }
+            
+            if(!contrasenabdd.getContrasenia().equals(contrasenaActual)){
+                request.setAttribute("Fracaso", "Contraseña incorrecta");
+                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+            }            
+            
+            if (!contrasenaActual.equals(confirmContra)) {
+                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+            } else {
+                if (UM.cambiarContrasena(16, nuevaContrasena) > 0) {
+                    request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

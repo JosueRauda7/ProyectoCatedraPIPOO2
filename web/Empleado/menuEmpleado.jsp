@@ -14,12 +14,14 @@
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li class="scroll active"><a href="#home">Home</a></li>  
-                    <li class="scroll"><a href="#services">Services</a></li>
-                    <li class="scroll"><a href="#about">About</a></li> 
-                    <li class="scroll"><a href="#team">Experts</a></li> 
-                    <li class="scroll"><a href="#portfolio">Gallery</a></li>
-                    <li class="scroll"><a href="#pricing">Package</a></li>
-                    <li class="scroll"><a href="#contact-us">Contact</a></li>                        
+                    <li class="scroll"><a href="#pricing">Canjear cupón</a></li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Usuario</a>
+                        <ul class="dropdown-menu">
+                            <li><a>Cambiar contraseña</a></li>
+                            <li><a>Cerrar sesión</a></li>
+                        </ul>
+                    </li>                        
                 </ul>
             </div>
         </div>

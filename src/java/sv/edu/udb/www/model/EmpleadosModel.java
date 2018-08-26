@@ -155,7 +155,5 @@ public class EmpleadosModel extends Conexion {
             this.desconectar();
             return 0;
         }
-    }
-    
-     
+    }    
 }
