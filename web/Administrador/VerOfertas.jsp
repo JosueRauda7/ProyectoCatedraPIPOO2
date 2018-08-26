@@ -28,6 +28,52 @@
                             <p class="text-center">$${ofertas.precioOferta}</p>
                         </div>
                     </div>
+                    <div id="contenfech">
+                        <div>
+                            <h5>Fecha inicio:</h5>
+                            <p class="text-center">${ofertas.fechaInicio}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha fin:</h5>
+                            <p class="text-center">${ofertas.fechaFin}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha limite:</h5>
+                            <p class="text-center">${ofertas.fechaLimite}</p>
+                        </div>
+                    </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Descripción oferta:</h5>
+                            <p class="text-justify">${ofertas.descripcionOferta}</p>
+                        </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Otros detalles:</h5>
+                            <p class="text-justify">${ofertas.otrosDetalles}</p>
+                        </div>
+                            <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertas.idOferta}">
+  Ver mas de la oferta
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal${ofertas.idOferta}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
                 </div>
             </c:forEach>
         </section>
