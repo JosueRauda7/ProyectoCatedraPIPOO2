@@ -70,9 +70,6 @@ public class ClientesController extends HttpServlet {
                 case "ver":
                     ver(request,response);
                     break;
-                case "cerrar":
-                    cerrarSesion(request,response);
-                    break;
                 case "detalles":
                     detalles(request,response);
                     break;
@@ -221,16 +218,6 @@ public class ClientesController extends HttpServlet {
             request.getSession().setAttribute("ofertas", ofertas);
             response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=ver");
         } catch (IOException ex) {
-            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.getSession().setAttribute("correo",null);
-            request.getSession().setAttribute("estadoUsuario",null);
-            request.getRequestDispatcher("/Login.jsp").forward(request, response);
-        } catch (IOException | ServletException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

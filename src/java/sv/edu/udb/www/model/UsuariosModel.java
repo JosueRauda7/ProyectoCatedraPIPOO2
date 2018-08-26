@@ -55,21 +55,21 @@ public class UsuariosModel extends Conexion {
             return 0;
         }
     }
-    
-    public int insertarUsuarioEmpleado(Usuario usuario, Empleado empleado, String correo, String idConfirmacion) throws SQLException{
+
+    public int insertarUsuarioEmpleado(Usuario usuario, Empleado empleado, String correo, String idConfirmacion) throws SQLException {
         try {
             EmpleadosModel em = new EmpleadosModel();
-            int idUsuario=0;
-            int filasAfectadas=0;
+            int idUsuario = 0;
+            int filasAfectadas = 0;
             String sql = "Insert into usuarios Values(NULL,?,SHA2(?,256),?,?,?)";
             this.conectar();
-            st=conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1,usuario.getCorreo());
-            st.setString(2,usuario.getContrasenia());
+            st = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, usuario.getCorreo());
+            st.setString(2, usuario.getContrasenia());
             st.setBoolean(3, false);
             st.setString(4, idConfirmacion);
             st.setInt(5, 3);
-            
+
             filasAfectadas = st.executeUpdate();
 
             //Para obtener el ID del autonumerico ingresado...
@@ -77,8 +77,8 @@ public class UsuariosModel extends Conexion {
             rs.next();
             idUsuario = rs.getInt(1);
             this.desconectar();
-            
-            em.insertarEmpleado(empleado,correo,idUsuario);
+
+            em.insertarEmpleado(empleado, correo, idUsuario);
 
             return filasAfectadas;
         } catch (SQLException ex) {
@@ -176,9 +176,10 @@ public class UsuariosModel extends Conexion {
             return -1;
         }
     }
-    public int eliminarUsuarioEmpresa(int id) throws SQLException{
+
+    public int eliminarUsuarioEmpresa(int id) throws SQLException {
         try {
-            int filasAfectadas=0;
+            int filasAfectadas = 0;
             sql = "DELETE FROM usuarios WHERE IdUsuario = ?";
             this.conectar();
             st = conexion.prepareStatement(sql);
@@ -190,8 +191,54 @@ public class UsuariosModel extends Conexion {
             Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return 0;
-        }finally{
-         this.desconectar();
+        } finally {
+            this.desconectar();
+        }
+    }
+
+    public int cambiarContrasena(int idUsuario, String nuevaContra) throws SQLException {
+        try {
+            int filasAfectadas = 0;
+            String sql = "UPDATE usuarios SET Contrasena = SHA2(?,256) WHERE IdUsuario=?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, nuevaContra);
+            st.setInt(2, idUsuario);
+
+            filasAfectadas = st.executeUpdate();
+            this.desconectar();
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
+
+    public Usuario obtenerContrasena(int idUsuario) throws SQLException {
+
+        try {
+            String sql = "SELECT Contrasena FROM usuarios WHERE IdUsuario = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, idUsuario);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                Usuario usuario = new Usuario();
+
+                usuario.setContrasenia(rs.getString("Contrasena"));
+
+                this.desconectar();
+                return usuario;
+            }
+
+            this.desconectar();
+            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
         }
     }
 }
