@@ -25,7 +25,7 @@
                     </ul>
                 </li>
 		        
-                        <li class="scroll"><a href="${pageContext.request.contextPath}/administrador.do?operacion=listar">Ver Rubros</a></li>
+                        <li class="scroll"><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Ver Rubros</a></li>
                         
                         <li class="scroll"><a href="#pricing">Ver clientes</a></li>
                             
@@ -34,8 +34,8 @@
                         Administrador<b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=nuevo">Cambiar contraseña</a></li>
-                        <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listar">Cerrar session</a></li>
+                        <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cambiar contraseña</a></li>
+                        <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cerrar session</a></li>
                     </ul>
                 </li>                      
                     </ul>

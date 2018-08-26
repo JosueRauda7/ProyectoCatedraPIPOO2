@@ -37,9 +37,9 @@
                         <td><button class="btn btn-info" id="btnmostrar${rubro.idRubro}"  ><span class="glyphicon glyphicon-edit"></span> Modificar</button>
                             <section id="conten${rubro.idRubro}" style="display:none;" class="conten">
                                 <div style="display:flex;">
-                                <form action="${pageContext.request.contextPath}/rubros.do" method="get"> 
+                                <form action="${pageContext.request.contextPath}/administrador.do" method="get"> 
                                     <button value="${rubro.idRubro}" id="btnprueba${rubro.idRubro}" name="id" class="btn btn-success">Aceptar</button>
-                                    <input type="hidden" value="modificar" name="operacion">
+                                    <input type="hidden" value="modificarRubro" name="operacion">
                                     <input type="hidden" name="rubro" id="txtprueba${rubro.idRubro}">
                                 </form>
                                 <br>
@@ -75,7 +75,7 @@
         </section>
         
         
-        <form class="contenform" action="${pageContext.request.contextPath}/rubros.do" method="post"> 
+        <form class="contenform" action="${pageContext.request.contextPath}/administrador.do" method="post"> 
             <h1>Registro rubros</h1>
             <c:if test="${not empty listaErrores}">
                     <div class="alert alert-danger">
@@ -86,7 +86,7 @@
                         </ul>
                     </div>
                     </c:if>
-            <input type="hidden" value="agregar" name="operacion">
+            <input type="hidden" value="agregarRubro" name="operacion">
             <div class="well well-sm" style="color:#C2185B;"><strong><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
             <div class="form-group">            
                 <label for="codigo">Nombre del rubro:</label>
@@ -133,7 +133,7 @@
          function eliminar(id){
            alertify.confirm("¿Realmente decea eliminar este genero?", function(e){
               if(e){
-                  location.href="rubros.do?operacion=eliminar&id="+ id;
+                  location.href="administrador.do?operacion=eliminarRubro&id="+ id;
               } 
            });
   }

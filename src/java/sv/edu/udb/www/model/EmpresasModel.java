@@ -117,8 +117,6 @@ public class EmpresasModel extends Conexion{
             Logger.getLogger(EmpresasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return 0;
-        }finally{
-        this.desconectar();
         }
     }
     public int eliminarEmpresas(String codigo) throws SQLException{
@@ -135,8 +133,6 @@ public class EmpresasModel extends Conexion{
             Logger.getLogger(EmpresasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return 0;
-        }finally{
-           this.desconectar();
         }
     }
     public Empresa obtenerEmpresa(String codigo) throws SQLException{
@@ -164,8 +160,6 @@ public class EmpresasModel extends Conexion{
             Logger.getLogger(EmpresasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return null;
-        }finally{
-          this.desconectar();
         }
     }
     

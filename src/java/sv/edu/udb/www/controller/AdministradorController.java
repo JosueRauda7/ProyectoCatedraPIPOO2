@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Empresa;
+import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.OfertasModel;
@@ -65,6 +66,18 @@ public class AdministradorController extends HttpServlet {
                     editarEmpresa(request, response);
                 case "ofertasEmpresa":
                     ofertasEmpresa(request, response);
+                case "listarRubro":
+                    listarRubro(request, response);
+                    break;
+                case "agregarRubro":
+                    agregarRubro(request, response);
+                    break;
+                case "eliminarRubro":
+                    eliminarRubro(request, response);
+                    break;
+                case "modificarRubro":
+                    modificarRubro(request, response);
+                    break;
             }
         }
     }
@@ -211,10 +224,10 @@ public class AdministradorController extends HttpServlet {
                     correo.enviarCorreo();
                     empresa.setIdUsuario(modelo2.ultimoUsuarioEmpresa());
                     modelo.agregarEmpresa(empresa);
-                    request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                    request.getRequestDispatcher("administrador.do?operacion=listarEmpresa").forward(request, response);
                 } else {
                     request.setAttribute("fracaso", "La empresa no se ha ingresado");
-                    request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                    request.getRequestDispatcher("administrador.do?operacion=listarEmpresa").forward(request, response);
                 }
             }
         } catch (ServletException | IOException | SQLException ex) {
@@ -240,7 +253,7 @@ public class AdministradorController extends HttpServlet {
 
             if (modelo.eliminarEmpresas(codigo) > 0 && modelo2.eliminarUsuarioEmpresa(iduser) > 0) {
                 request.setAttribute("exito", "La empresa ha sido eliminada exitosamente");
-                request.getRequestDispatcher("empresas.do?operacion=listarEmpresa").forward(request, response);
+                request.getRequestDispatcher("administrador.do?operacion=listarEmpresa").forward(request, response);
             }
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -265,7 +278,7 @@ public class AdministradorController extends HttpServlet {
             empresa.setNombreContacto(request.getParameter("nombreContacto"));
             empresa.setDireccion(request.getParameter("direccion"));
             empresa.setTelefono(request.getParameter("telefono"));
-            empresa.setIdRubro(Integer.parseInt(request.getParameter("IdRubro")));
+            empresa.setIdRubro(Integer.parseInt(request.getParameter("rubro")));
             empresa.setComision(request.getParameter("comision"));
             empresa.setCodigoEmpresa(request.getParameter("codigoEmpresa"));
 
@@ -292,10 +305,10 @@ public class AdministradorController extends HttpServlet {
             } else {
                 if (modelo.modificarEmpresa(empresa) > 0) {
                     request.setAttribute("exito", "La empresa se ha modificado exitosamente");
-                    request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                    request.getRequestDispatcher("administrador.do?operacion=listarEmpresa").forward(request, response);
                 } else {
                     request.setAttribute("fracaso", "error al modificar");
-                    request.getRequestDispatcher("empresas.do?operacion=listar").forward(request, response);
+                    request.getRequestDispatcher("administrador.do?operacion=listarEmpresa").forward(request, response);
                 }
             }
         } catch (SQLException | ServletException | IOException ex) {
@@ -310,6 +323,88 @@ public class AdministradorController extends HttpServlet {
             request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void listarRubro(HttpServletRequest request, HttpServletResponse response) {
+     try {
+            request.setAttribute("listaRubros", rubro.obtenerRubro());
+            request.getRequestDispatcher("/Administrador/ListaRubros.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
+        }}
+
+    private void agregarRubro(HttpServletRequest request, HttpServletResponse response) {
+          try{
+       listaErrores.clear();
+       Rubro rub = new Rubro();
+       rub.setRubro(request.getParameter("rubro"));
+       if(Validaciones.isEmpty(rub.getRubro())){
+          listaErrores.add("El campo nombre del rubro es obligatorio");
+       }
+       if(rubro.validarRubro(rub)>0){
+           listaErrores.add("Este rubro ya existe");
+       }
+       if(listaErrores.size() >0){
+          request.setAttribute("listaErrores", listaErrores);
+          request.setAttribute("rubro", rubro);
+          request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
+       }else{
+           if(rubro.insertarRubro(rub)>0){
+               request.setAttribute("exito", "El rubro ha sido insertado correctamente");
+               request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
+           }else{
+               request.setAttribute("fracaso", "El rubro no se ha podido insertar");
+               request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);           
+           }           
+       }
+       
+    }   catch (ServletException | IOException | SQLException ex) {
+            Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void eliminarRubro(HttpServletRequest request, HttpServletResponse response) {
+     try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            if(rubro.eliminarRubro(id)>0){
+                request.setAttribute("exito", "El rubro se ha eliminado correctamente");
+            }else{
+                request.setAttribute("exito", "Este rubro no puede eliminarse");
+            }
+            request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
+        }}
+
+    private void modificarRubro(HttpServletRequest request, HttpServletResponse response) {
+     try{
+       listaErrores.clear();
+       Rubro rub = new Rubro();
+       rub.setRubro(request.getParameter("rubro"));
+       rub.setIdRubro(Integer.parseInt(request.getParameter("id")));
+       if(Validaciones.isEmpty(rub.getRubro())){
+          listaErrores.add("El campo nombre del rubro es obligatorio");
+       }
+       if(rubro.validarRubro(rub)>0){
+           listaErrores.add("Este rubro ya existe");
+       }
+       if(listaErrores.size() >0){
+          
+          request.setAttribute("fracaso", "Este rubro ya existe o esta vacio");
+          request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+       }else{
+           if(rubro.modificarRubro(rub)>0){
+               request.setAttribute("exito", "El rubro ha sido modificado correctamente");
+               request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+           }else{
+               request.setAttribute("fracaso", "El rubro no se ha podido modificar");
+               request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);           
+           }           
+       }
+       
+    }   catch (ServletException | IOException | SQLException ex) {
+            Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
