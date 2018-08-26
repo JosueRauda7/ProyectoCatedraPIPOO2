@@ -43,3 +43,17 @@
 .btnmostar{
     margin-left: 24%;
 }
+.imagenoferta{
+    width: 200px;
+    border: solid black;
+    height: 200px;
+    margin-bottom: 1%;
+}
+.contencontable{
+    margin-left: 38%;
+    margin-top: -34%;
+    position: absolute;
+
+    width: 50%;
+    text-align: center;
+}
