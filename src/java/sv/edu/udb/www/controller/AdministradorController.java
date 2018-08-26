@@ -113,7 +113,7 @@ public class AdministradorController extends HttpServlet {
             request.setAttribute("empresas", modelo.listarEmpresas());
             request.getRequestDispatcher("/Administrador/ListarEmpresas.jsp").forward(request, response);
         } catch (ServletException | IOException | SQLException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -122,7 +122,7 @@ public class AdministradorController extends HttpServlet {
             request.setAttribute("listaRubros", rubro.obtenerRubro());
             request.getRequestDispatcher("/Administrador/AgregarEmpresas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -218,7 +218,7 @@ public class AdministradorController extends HttpServlet {
                 }
             }
         } catch (ServletException | IOException | SQLException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -229,7 +229,7 @@ public class AdministradorController extends HttpServlet {
                     + "ya puedes iniciar sesion");
             response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
         } catch (SQLException | IOException ex) {
-            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -243,7 +243,7 @@ public class AdministradorController extends HttpServlet {
                 request.getRequestDispatcher("empresas.do?operacion=listarEmpresa").forward(request, response);
             }
         } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -254,7 +254,7 @@ public class AdministradorController extends HttpServlet {
             request.setAttribute("listaRubros", rubro.obtenerRubro());
             request.getRequestDispatcher("/Administrador/ModificarEmpresas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -265,7 +265,7 @@ public class AdministradorController extends HttpServlet {
             empresa.setNombreContacto(request.getParameter("nombreContacto"));
             empresa.setDireccion(request.getParameter("direccion"));
             empresa.setTelefono(request.getParameter("telefono"));
-            empresa.setIdRubro(Integer.parseInt(request.getParameter("rubro")));
+            empresa.setIdRubro(Integer.parseInt(request.getParameter("IdRubro")));
             empresa.setComision(request.getParameter("comision"));
             empresa.setCodigoEmpresa(request.getParameter("codigoEmpresa"));
 
@@ -299,7 +299,7 @@ public class AdministradorController extends HttpServlet {
                 }
             }
         } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -309,7 +309,7 @@ public class AdministradorController extends HttpServlet {
             request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
             request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
