@@ -179,7 +179,7 @@ public class UsuariosModel extends Conexion {
 
     public Usuario verificar(Usuario usuario) throws SQLException {
         try {
-            String sql = "SELECT IdUsuario, Confirmado, IdTipoUsuario FROM usuarios WHERE Correo=? AND Contrasena=?";
+            String sql = "SELECT IdUsuario, Confirmado, IdTipoUsuario FROM usuarios WHERE Correo=? AND Contrasena=SHA2(?,256)";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setString(1, usuario.getCorreo());

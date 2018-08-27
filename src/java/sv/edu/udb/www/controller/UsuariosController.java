@@ -307,16 +307,25 @@ public class UsuariosController extends HttpServlet {
 
     private void ingresar(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
+            int estado=0;
+            int idUsuario=0;
             Usuario usuario = new Usuario();
             usuario.setCorreo(request.getParameter("correo"));
             usuario.setContrasenia(request.getParameter("password"));
             request.getSession().setAttribute("correo", request.getParameter("correo"));
             
             //int estado = UM.verificar(usuario);
-            Usuario usu = UM.verificar(usuario);
-            int estado = usu.getIdTipoUsuario();
-            System.out.println("Estado: " + estado);
-            int idUsuario = usu.getIdUsuario();
+            Usuario usu = new Usuario();
+            
+            if(UM.verificar(usuario)==null){
+                estado=0;
+            }else{
+                 usu= UM.verificar(usuario);
+                estado = usu.getIdTipoUsuario();
+                idUsuario = usu.getIdUsuario();
+            }
+            
+            
             
             request.getSession().setAttribute("idUsuario", idUsuario);
             request.getSession().setAttribute("estadoUsuario", estado);
