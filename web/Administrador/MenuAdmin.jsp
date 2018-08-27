@@ -1,4 +1,4 @@
-<jsp:include page="../head.jsp" />
+
     <header id="header">
         <nav id="main-nav" class="navbar navbar-default navbar-fixed-top" role="banner">
             <div class="container">

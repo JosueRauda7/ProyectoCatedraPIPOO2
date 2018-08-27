@@ -150,7 +150,42 @@ public class OfertasModel extends Conexion {
             this.desconectar();
         }
     }
-
+public List<Oferta> ListarOfertasFutura(String codigo) throws SQLException {
+        try {
+            String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=2 and o.CodigoEmpresa=? GROUP by o.IdOferta";
+            List<Oferta> lista = new ArrayList<>();
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, codigo);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Oferta oferta = new Oferta();
+                oferta.setIdOferta(rs.getInt("o.IdOferta"));
+                oferta.setTituloOferta(rs.getString("TituloOferta"));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
+                oferta.setFechaFin(rs.getString("FechaFin"));
+                oferta.setFechaLimite(rs.getString("FechaLimite"));
+                oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
+                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
+                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
+                oferta.setJustificacion(rs.getString("Justificacion"));
+                oferta.setUrl_foto(rs.getString("Url_foto"));
+                oferta.setIngresos(rs.getString("valor"));
+                oferta.setComision(rs.getString("valor2"));
+                lista.add(oferta);
+            }
+            this.desconectar();
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        } finally {
+            this.desconectar();
+        }
+    }
     public int insertarOferta(Oferta oferta, String correo) throws SQLException {
         String codigoEmpresa = "";
         int filasAfectadas = 0;
