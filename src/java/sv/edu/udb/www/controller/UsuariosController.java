@@ -339,7 +339,7 @@ public class UsuariosController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
                     break;
                 case 0:
-                    request.getSession().setAttribute("fracaso", "Cuenta no verificada");
+                    request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
                     break;
 
