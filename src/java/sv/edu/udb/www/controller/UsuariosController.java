@@ -257,7 +257,7 @@ public class UsuariosController extends HttpServlet {
                 request.setAttribute("listaErrores", listaErrores);
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("empleado", empleado);
-                request.getRequestDispatcher("/empleados.do?operacion=nuevo").forward(request, response);
+                request.getRequestDispatcher("/empresas.do?operacion=nuevoEmpleado").forward(request, response);
             } else {
                 String cadenaAleatoria = UUID.randomUUID().toString();
                 if (UM.insertarUsuarioEmpleado(usuario, empleado, (String) request.getSession().getAttribute("correo"), cadenaAleatoria) > 0) {
@@ -278,13 +278,13 @@ public class UsuariosController extends HttpServlet {
                     correo.setMensaje(texto);
                     correo.setDestinatario(usuario.getCorreo());
                     correo.enviarCorreo();
-                    response.sendRedirect(request.getContextPath() + "/empleados.do?operacion=listar");
+                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=listarEmpleado");
                 } else {
                     listaErrores.add("Este correo ya esta registrado");
                     request.setAttribute("listaErrores", listaErrores);
                     request.setAttribute("usuario", usuario);
                     request.setAttribute("empleado", empleado);
-                    request.getRequestDispatcher("/empleados.do?operacion=listar").forward(request, response);
+                    request.getRequestDispatcher("/empresas.do?operacion=listarEmpleado").forward(request, response);
                 }
             }
         } catch (ServletException | IOException ex) {
