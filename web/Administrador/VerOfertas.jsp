@@ -50,6 +50,7 @@
                             <h5 class="text-center">Otros detalles:</h5>
                             <p class="text-justify">${ofertas.otrosDetalles}</p>
                         </div>
+                       
                             <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertas.idOferta}">
   Ver mas de la oferta
 </button>
@@ -70,6 +71,11 @@
           <section class="contencontable">
               <h3>Cupones disponibles:</h3>
               <h4>${ofertas.cantidadLimite} cupones</h4>
+              <h3>Ingresos totales:</h3>
+              <h4>$${ofertas.ingresos}</h4>
+              <h3>Cargo por servicio:</h3>
+              <h4>$${ofertas.comision}</h4>
+          
           </section>
       </div>
       <div class="modal-footer">

@@ -62,7 +62,7 @@ public class OfertasModel extends Conexion{
     }
       public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException{
         try {
-            String sql = "SELECT * FROM ofertas WHERE CodigoEmpresa = ? and IdEstado = 1";
+            String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=1 and o.CodigoEmpresa=? GROUP by o.IdOferta";
             List<Oferta> lista = new ArrayList<>();
             this.conectar();
             st = conexion.prepareStatement(sql);
@@ -70,7 +70,7 @@ public class OfertasModel extends Conexion{
             rs = st.executeQuery();
             while(rs.next()){
                 Oferta oferta = new Oferta();
-                oferta.setIdOferta(rs.getInt("IdOferta"));
+                oferta.setIdOferta(rs.getInt("o.IdOferta"));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
                 oferta.setPrecioRegular(rs.getString("PrecioRegular"));
                 oferta .setPrecioOferta(rs.getString("PrecioOferta"));
@@ -82,6 +82,8 @@ public class OfertasModel extends Conexion{
                 oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
                 oferta.setJustificacion(rs.getString("Justificacion"));
                 oferta.setUrl_foto(rs.getString("Url_foto"));
+                oferta.setIngresos(rs.getString("valor"));
+                oferta.setComision(rs.getString("valor2"));
                 lista.add(oferta);
             }
             this.desconectar();

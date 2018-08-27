@@ -30,6 +30,8 @@ public class Oferta {
     private Empresa empresa;
     private String url_foto;
     private String NombreEmpresa;
+    private String ingresos;
+    private String comision;
     
     public Oferta(){
         this.idOferta=0;
@@ -45,7 +47,27 @@ public class Oferta {
         this.estadoOferta=null;
         this.justificacion="";
         this.empresa=null;
+        this.ingresos ="";
+        this.comision="";
     }
+
+    public String getComision() {
+        return comision;
+    }
+
+    public void setComision(String comision) {
+        this.comision = comision;
+    }
+
+    public String getIngresos() {
+        return ingresos;
+    }
+
+    public void setIngresos(String ingresos) {
+        this.ingresos = ingresos;
+    }
+
+   
     
     public Oferta(String tituloOferta){
         this.tituloOferta = tituloOferta;
