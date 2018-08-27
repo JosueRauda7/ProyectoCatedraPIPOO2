@@ -108,7 +108,7 @@
                             <div class="form-group">
                                 <label for="imagen" style="color:black;">Imagen de la oferta:</label>
                                 <input data-language="es" type="file" name="archivo" id="imagen" class="form-control file file-loading" data-allowed-file-extensions='["jpg", "png"]'
-                                       value="${base}/${oferta.url_foto}"/>
+                                       value="${base}/images/ofertas/${ofertas.url_foto}"/>
                             </div>
                             <button type="submit" class="btn" style="background-color: #c2185b">Registrar</button>
                             <button type="reset" class="btn btn-info">Limpiar</button>
