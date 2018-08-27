@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.udb.www.controller;
 
 import java.io.IOException;
@@ -69,7 +64,6 @@ public class UsuariosController extends HttpServlet {
         }*/
         String operacion = request.getParameter("operacion");
         switch (operacion) {
-
             case "registro":
                 request.getRequestDispatcher("/Registro.jsp").forward(request, response);
                 break;
@@ -87,6 +81,18 @@ public class UsuariosController extends HttpServlet {
                 break;
             case "ingresar":
                 ingresar(request, response);
+                break;
+            case "upCe":
+                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+                break;
+            case "upCa":
+                request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                break;
+            case "uCe":
+                request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                break;
+            case "upCc":
+                request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
                 break;
             case "cambiarC":
                 cambiarContra(request, response);
@@ -305,9 +311,20 @@ public class UsuariosController extends HttpServlet {
             usuario.setCorreo(request.getParameter("correo"));
             usuario.setContrasenia(request.getParameter("password"));
             request.getSession().setAttribute("correo", request.getParameter("correo"));
-            int estado = UM.verificarSesion(usuario);
+            
+            //int estado = UM.verificar(usuario);
+            Usuario usu = UM.verificar(usuario);
+            int estado = usu.getIdTipoUsuario();
+            System.out.println("Estado: " + estado);
+            int idUsuario = usu.getIdUsuario();
+            
+            request.getSession().setAttribute("idUsuario", idUsuario);
             request.getSession().setAttribute("estadoUsuario", estado);
+            
+            System.out.println("Variable sesión: " + idUsuario);
+            
             switch (estado) {
+
                 case -1:
                     request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
@@ -316,6 +333,7 @@ public class UsuariosController extends HttpServlet {
                     request.getSession().setAttribute("fracaso", "Cuenta no verificada");
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
                     break;
+
                 case 1:
                     //Administrador
                     request.getRequestDispatcher("/Administrador/Home.jsp").forward(request, response);
@@ -328,11 +346,17 @@ public class UsuariosController extends HttpServlet {
                 case 3:
                     //Empleado
                     //response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=home");
+                    request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
                     break;
                 case 4:
                     //Cliente
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
                     break;
+
+                default:
+                    request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
+                    break;
+
                     
             }
 
@@ -343,47 +367,166 @@ public class UsuariosController extends HttpServlet {
 
     private void cambiarContra(HttpServletRequest request, HttpServletResponse response) {
         try {
+            
+            //Se recogen los datos del formulario
             String contrasenaActual = request.getParameter("contrasenaActual");
             String confirmContra = request.getParameter("confirmarContrasena");
             String nuevaContrasena = request.getParameter("nuevaContrasena");
-            Usuario contrasenabdd = UM.obtenerContrasena(16);
-
+            
+            //Se obtiene la variable de sesión, idUsuario
+            int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+            System.out.println("Variable sesión: " + idUsuario);
+            
+            //Se manda a llamar el método para obtener la contraseña
+            Usuario contrasenabdd = UM.obtenerContrasena(idUsuario);                       
+            
+            //Tipo de usuario que se recoge del formulario
+            String tipoUsuario = request.getParameter("tipo");
+            
+            System.out.println(tipoUsuario);
             System.out.println(contrasenaActual);
             System.out.println(confirmContra);
             System.out.println(nuevaContrasena);
-            System.out.println("BDD"+contrasenabdd.getContrasenia());
+            System.out.println("BDD" + contrasenabdd.getContrasenia());
 
-            if (contrasenaActual.equals("")) {
-                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
-                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+            switch (tipoUsuario) {
+                case "1":
+                    if (contrasenaActual.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (confirmContra.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (nuevaContrasena.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                        request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                        request.setAttribute("Fracaso", "Contraseña incorrecta");
+                        request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (!contrasenaActual.equals(confirmContra)) {
+                        request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                        request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                    } else {
+                        if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                            request.getRequestDispatcher("Página principal").forward(request, response);
+                        }
+                    }
+                    break;
+                case "2":
+                    if (contrasenaActual.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (confirmContra.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (nuevaContrasena.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                        request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                        request.setAttribute("Fracaso", "Contraseña incorrecta");
+                        request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (!contrasenaActual.equals(confirmContra)) {
+                        request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                        request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                    } else {
+                        if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                            request.getRequestDispatcher("Página principal").forward(request, response);
+                        }
+                    }
+                    break;
+                case "3":
+                    if (contrasenaActual.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/usuarios.do?operacion=upCe").forward(request, response);
+                    }
+
+                    if (confirmContra.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/usuarios.do?operacion=upCe").forward(request, response);
+                    }
+
+                    if (nuevaContrasena.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                        request.getRequestDispatcher("/usuarios.do?operacion=upCe").forward(request, response);
+                    }
+
+                    if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                        request.setAttribute("Fracaso", "Contraseña incorrecta");
+                        request.getRequestDispatcher("/usuarios.do?operacion=upCe").forward(request, response);
+                    }
+
+                    if (!contrasenaActual.equals(confirmContra)) {
+                        request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                        request.getRequestDispatcher("/usuarios.do?operacion=upCe").forward(request, response);
+                    } else {
+                        if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                            request.getRequestDispatcher("Página principal").forward(request, response);
+                        }
+                    }
+                    break;
+                case "4":
+                    if (contrasenaActual.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (confirmContra.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                        request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (nuevaContrasena.equals("")) {
+                        request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                        request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                        request.setAttribute("Fracaso", "Contraseña incorrecta");
+                        request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
+                    }
+
+                    if (!contrasenaActual.equals(confirmContra)) {
+                        request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                        request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
+                    } else {
+                        if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                            request.getRequestDispatcher("Página principal").forward(request, response);
+                        }
+                    }
+                    break;
             }
 
-            if (confirmContra.equals("")) {
-                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
-                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
-            }
-
-            if (nuevaContrasena.equals("")) {
-                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
-                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
-            }
-            
-            if(!contrasenabdd.getContrasenia().equals(contrasenaActual)){
-                request.setAttribute("Fracaso", "Contraseña incorrecta");
-                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
-            }            
-            
-            if (!contrasenaActual.equals(confirmContra)) {
-                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
-                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
-            } else {
-                if (UM.cambiarContrasena(16, nuevaContrasena) > 0) {
-                    request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
-                }
-            }
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /*private void updateC(HttpServletRequest request, HttpServletResponse response) {
+        try {
+
+            String tipoUsuario = request.getParameter("tip");
+
+            request.setAttribute("tipoUsuario", tipoUsuario);
+            request.getRequestDispatcher("/cambiarContrasena.jsp").forward(request, response);
+
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 }

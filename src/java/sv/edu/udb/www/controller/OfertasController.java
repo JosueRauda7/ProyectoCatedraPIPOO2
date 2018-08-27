@@ -39,7 +39,9 @@ public class OfertasController extends HttpServlet {
 
     OfertasModel modeloOfertas = new OfertasModel();
     EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
+
     ArrayList listaErrores = new ArrayList();
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -62,11 +64,17 @@ public class OfertasController extends HttpServlet {
                 break;
             case "listar":
                 listar(request, response);
+
                 break;
             case "nuevo":
                 nuevo(request, response);
                 break;
-                
+
+            case "ingresar":
+                ingresar(request, response);
+                break;
+
+
         }
     }
 
@@ -123,9 +131,15 @@ public class OfertasController extends HttpServlet {
     }// </editor-fold>
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
+
         /*try {
             
             request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo")));
+
+        try {
+            String correo = (String) request.getSession().getAttribute("correo");
+            request.setAttribute("listaOfertas", modeloOfertas.listarOferta(correo));
+
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
@@ -146,6 +160,7 @@ public class OfertasController extends HttpServlet {
             Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 
     private void insertar(MultipartRequest multi, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         listaErrores.clear();
@@ -214,6 +229,7 @@ public class OfertasController extends HttpServlet {
                 listaErrores.add("La fecha limite de la oferta es obligatoria");
             }
 
+
             if (Validaciones.isEmpty(oferta.getDescripcionOferta())) {
                 listaErrores.add("Agrega una descripción a la oferta");
             }
@@ -258,6 +274,10 @@ public class OfertasController extends HttpServlet {
         } catch (IOException | ServletException | SQLException ex) {
             Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void ingresar(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

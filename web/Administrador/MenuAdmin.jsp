@@ -1,4 +1,4 @@
-
+<jsp:include page="../head.jsp" />
     <header id="header">
         <nav id="main-nav" class="navbar navbar-default navbar-fixed-top" role="banner">
             <div class="container">
@@ -17,7 +17,7 @@
                        
                         <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        Empresas<b class="caret"></b>
+                        Empresas <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=nuevaEmpresa">Agregar empresas</a></li>
@@ -31,11 +31,16 @@
                             
                         <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        Administrador<b class="caret"></b>
+                        Administrador <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
+
                         <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cambiar contraseña</a></li>
                         <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cerrar session</a></li>
+
+                        <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=upCa">Cambiar contraseña</a></li>
+                        <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=listar">Cerrar session</a></li>
+
                     </ul>
                 </li>                      
                     </ul>

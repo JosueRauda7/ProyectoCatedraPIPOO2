@@ -153,6 +153,5 @@ public class EmpleadosController extends HttpServlet {
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
+    }    
 }

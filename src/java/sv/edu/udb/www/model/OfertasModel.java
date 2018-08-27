@@ -19,23 +19,34 @@ import static sv.edu.udb.www.model.Conexion.conexion;
  *
  * @author ivanm
  */
-public class OfertasModel extends Conexion{
-    public List<Oferta> listarOferta(String correo, int tipo) throws SQLException{
+public class OfertasModel extends Conexion {
+
+    public List<Oferta> listarOferta(String correo, int tipo) throws SQLException {
         try {
-            List<Oferta> lista=new ArrayList<>();
-            
-            String sql="Select * from ofertas o inner join estadooferta eo on o.idEstado=eo.idEstadoOferta "
-                    + "inner join empresas e on o.CodigoEmpresa=e.CodigoEmpresa inner join usuarios u ON e.IdUsuario = u.IdUsuario "
-                    + "WHERE u.correo = ?";
-            
-            sql="";
-            
-            this.conectar();
-            st=conexion.prepareStatement(sql);
-            st.setString(1, correo);
-            rs=st.executeQuery();
-            while(rs.next()){
-                Oferta oferta=new Oferta();
+            List<Oferta> lista = new ArrayList<>();
+
+            String sql = "";
+
+            if (tipo != 0) {
+                sql = "Select * from ofertas o inner join estadooferta eo on o.idEstado=eo.idEstadoOferta "
+                        + "inner join empresas e on o.CodigoEmpresa=e.CodigoEmpresa inner join usuarios u ON e.IdUsuario = u.IdUsuario "
+                        + "WHERE u.correo = ? AND o.IdEstado=?";
+                this.conectar();
+                st = conexion.prepareStatement(sql);
+                st.setString(1, correo);
+                st.setInt(2,tipo);
+            } else {
+                sql = "Select * from ofertas o inner join estadooferta eo on o.idEstado=eo.idEstadoOferta "
+                        + "inner join empresas e on o.CodigoEmpresa=e.CodigoEmpresa inner join usuarios u ON e.IdUsuario = u.IdUsuario "
+                        + "WHERE u.correo = ?";
+                this.conectar();
+                st = conexion.prepareStatement(sql);
+                st.setString(1, correo);
+            }
+
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Oferta oferta = new Oferta();
                 oferta.setIdOferta(rs.getInt("IdOferta"));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
                 oferta.setPrecioRegular(rs.getString("PrecioRegular"));
@@ -60,23 +71,24 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
-    public Oferta detalleOferta(int codigo) throws SQLException{
+
+    public Oferta detalleOferta(int codigo) throws SQLException {
         try {
-            int cantidadCupones=0;
-            String sql="Select Count(*) as cantidad FROM cupones where IdOferta=? ";
+            int cantidadCupones = 0;
+            String sql = "Select Count(*) as cantidad FROM cupones where IdOferta=? ";
             this.conectar();
-            st=conexion.prepareStatement(sql);
+            st = conexion.prepareStatement(sql);
             st.setInt(1, codigo);
-            rs=st.executeQuery();
+            rs = st.executeQuery();
             rs.next();
-            cantidadCupones=rs.getInt("cantidad");
-            
-            sql="Select * from ofertas where IdOferta=?";
-            st=conexion.prepareStatement(sql);
-            st.setInt(1,codigo);
-            rs=st.executeQuery();
-            if(rs.next()){
-                Oferta oferta=new Oferta();
+            cantidadCupones = rs.getInt("cantidad");
+
+            sql = "Select * from ofertas where IdOferta=?";
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, codigo);
+            rs = st.executeQuery();
+            if (rs.next()) {
+                Oferta oferta = new Oferta();
                 oferta.setIdOferta(rs.getInt("IdOferta"));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
                 oferta.setPrecioRegular(rs.getString("PrecioRegular"));
@@ -88,7 +100,7 @@ public class OfertasModel extends Conexion{
                 oferta.setCantidadLimite(Integer.parseInt(rs.getString("CantidadLimite")));
                 oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
                 oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
-                oferta.setJustificacion(rs.getString("Justificacion"));                
+                oferta.setJustificacion(rs.getString("Justificacion"));
                 oferta.setUrl_foto(rs.getString("Url_foto"));
                 this.desconectar();
                 return oferta;
@@ -101,7 +113,8 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
-      public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException{
+
+    public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException {
         try {
             String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=1 and o.CodigoEmpresa=? GROUP by o.IdOferta";
             List<Oferta> lista = new ArrayList<>();
@@ -109,12 +122,12 @@ public class OfertasModel extends Conexion{
             st = conexion.prepareStatement(sql);
             st.setString(1, codigo);
             rs = st.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Oferta oferta = new Oferta();
                 oferta.setIdOferta(rs.getInt("o.IdOferta"));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
                 oferta.setPrecioRegular(rs.getString("PrecioRegular"));
-                oferta .setPrecioOferta(rs.getString("PrecioOferta"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
                 oferta.setFechaInicio(rs.getString("FechaInicio"));
                 oferta.setFechaFin(rs.getString("FechaFin"));
                 oferta.setFechaLimite(rs.getString("FechaLimite"));
@@ -133,62 +146,62 @@ public class OfertasModel extends Conexion{
             Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return null;
-        }finally{
-          this.desconectar();
+        } finally {
+            this.desconectar();
         }
-      }
-    public int insertarOferta(Oferta oferta, String correo) throws SQLException{
-            String codigoEmpresa="";
-            int filasAfectadas=0;
+    }
+
+    public int insertarOferta(Oferta oferta, String correo) throws SQLException {
+        String codigoEmpresa = "";
+        int filasAfectadas = 0;
         try {
-            String sql="SELECT DISTINCT e.CodigoEmpresa FROM empresas e inner join ofertas o on "
+            String sql = "SELECT DISTINCT e.CodigoEmpresa FROM empresas e inner join ofertas o on "
                     + "e.CodigoEmpresa=o.CodigoEmpresa inner join usuarios u on "
                     + "e.IdUsuario=u.IdUsuario where u.correo=?";
-            
+
             this.conectar();
-            st=conexion.prepareStatement(sql);
+            st = conexion.prepareStatement(sql);
             st.setString(1, correo);
-            rs=st.executeQuery();
-            
+            rs = st.executeQuery();
+
             rs.next();
-                codigoEmpresa=rs.getString("codigoEmpresa");
-            
-            
+            codigoEmpresa = rs.getString("codigoEmpresa");
+
             //Diferente insert segun hay limite de disponibilidad o no
-            if(oferta.getCantidadLimite()==0){
-                sql="INSERT into ofertas VALUES(NULL,?,?,?,?,?,?,?,NULL,?,?,?,?,?)";
-                st=conexion.prepareStatement(sql);
-                st.setString(1,oferta.getTituloOferta());
-                st.setString(2,oferta.getPrecioRegular());
-                st.setString(3,oferta.getPrecioOferta());
-                st.setString(4,oferta.getFechaInicio());               
-                st.setString(5,oferta.getFechaFin());
-                st.setString(6,oferta.getFechaLimite());
-                st.setString(7,oferta.getDescripcionOferta());
-                st.setString(8,oferta.getOtrosDetalles());
-                st.setInt(9,1);
-                st.setString(10," ");
-                st.setString(11,codigoEmpresa);
-                st.setString(12,oferta.getUrl_foto());
-            }else{
-                sql="INSERT into ofertas VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)";               
-                st=conexion.prepareStatement(sql);
-                st.setString(1,oferta.getTituloOferta());
-                st.setDouble(2,Double.parseDouble(oferta.getPrecioRegular()));
-                st.setDouble(3,Double.parseDouble(oferta.getPrecioOferta()));
-                st.setString(4,oferta.getFechaInicio());               
-                st.setString(5,oferta.getFechaFin());
-                st.setString(6,oferta.getFechaLimite());
-                st.setInt(7,oferta.getCantidadLimite());
-                st.setString(8,oferta.getDescripcionOferta());
-                st.setString(9,oferta.getOtrosDetalles());
-                st.setInt(10,1);
-                st.setString(11," ");
-                st.setString(12,codigoEmpresa);
-                st.setString(13,oferta.getUrl_foto());                
+            if (oferta.getCantidadLimite() == 0) {
+                sql = "INSERT into ofertas VALUES(NULL,?,?,?,?,?,?,?,NULL,?,?,?,?,?)";
+                st = conexion.prepareStatement(sql);
+                st.setString(1, oferta.getTituloOferta());
+                st.setString(2, oferta.getPrecioRegular());
+                st.setString(3, oferta.getPrecioOferta());
+                st.setString(4, oferta.getFechaInicio());
+                st.setString(5, oferta.getFechaFin());
+                st.setString(6, oferta.getFechaLimite());
+                st.setString(7, oferta.getDescripcionOferta());
+                st.setString(8, oferta.getOtrosDetalles());
+                st.setInt(9, 1);
+                st.setString(10, " ");
+                st.setString(11, codigoEmpresa);
+                st.setString(12, oferta.getUrl_foto());
+            } else {
+                sql = "INSERT into ofertas VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                st = conexion.prepareStatement(sql);
+                st.setString(1, oferta.getTituloOferta());
+                st.setDouble(2, Double.parseDouble(oferta.getPrecioRegular()));
+                st.setDouble(3, Double.parseDouble(oferta.getPrecioOferta()));
+                st.setString(4, oferta.getFechaInicio());
+                st.setString(5, oferta.getFechaFin());
+                st.setString(6, oferta.getFechaLimite());
+                st.setInt(7, oferta.getCantidadLimite());
+                st.setString(8, oferta.getDescripcionOferta());
+                st.setString(9, oferta.getOtrosDetalles());
+                st.setInt(10, 1);
+                st.setString(11, " ");
+                st.setString(12, codigoEmpresa);
+                st.setString(13, oferta.getUrl_foto());
             }
-            
-            filasAfectadas=st.executeUpdate();
+
+            filasAfectadas = st.executeUpdate();
 
             this.desconectar();
             return filasAfectadas;

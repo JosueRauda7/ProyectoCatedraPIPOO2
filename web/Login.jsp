@@ -1,8 +1,3 @@
-<%-- 
-    Document   : Login
-    Created on : Aug 17, 2018, 11:05:57 AM
-    Author     : ivanm
---%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="base" value="${pageContext.request.contextPath}"/> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

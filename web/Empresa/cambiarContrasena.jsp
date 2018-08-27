@@ -5,10 +5,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Cambiar contraseña</title>
-        <jsp:include page="../head.jsp" />
+        <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
     </head>
     <body>
-        <jsp:include page="/Empleado/menuEmpleado.jsp" /> <!-- Cambien este include con el menú de su modulo -->
+            <jsp:include page="/Empresa/MenuEmpresa.jsp" />
+
         <div id="formularioCambiarContra">
             <div class="container-fluid">
                 <div class="row">
@@ -19,7 +20,7 @@
                         <form role="form" action="${pageContext.request.contextPath}/usuarios.do" method="POST">
                             <div class="form-group">
                                 <div>
-                                    <input type="hidden" name="tipo" value="3" />
+                                    <input type="hidden" name="tipo" value="2" />
                                     <input type="hidden" name="operacion" value="cambiarC" />
                                     <input type="password" class="form-control contra" name="contrasenaActual" placeholder="Ingrese su contraseña actual"><br>
                                     <input type="password" class="form-control contra" name="confirmarContrasena" placeholder="Vuelva a ingresar su contraseña actual"><br>

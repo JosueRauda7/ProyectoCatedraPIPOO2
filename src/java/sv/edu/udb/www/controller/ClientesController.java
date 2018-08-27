@@ -266,5 +266,4 @@ public class ClientesController extends HttpServlet {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }
