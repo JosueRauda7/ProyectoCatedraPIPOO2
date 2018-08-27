@@ -9,17 +9,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="webthemez">
+        
         <title>Cuponera - Nueva oferta  ${sessionScope.correo}</title>
-        <!-- core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/animate.min.css" rel="stylesheet"> 
-        <link href="css/prettyPhoto.css" rel="stylesheet">
-        <link href="css/styles.css" rel="stylesheet"> 
+        <jsp:include page="/Empresa/head.jsp"></jsp:include> 
     </head>
     <body>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>

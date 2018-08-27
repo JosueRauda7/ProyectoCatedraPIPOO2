@@ -123,8 +123,8 @@ public class OfertasController extends HttpServlet {
     }// </editor-fold>
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            ;
+        /*try {
+            
             request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo")));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
@@ -133,7 +133,7 @@ public class OfertasController extends HttpServlet {
             }
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
 
     private void nuevo(HttpServletRequest request, HttpServletResponse response) {

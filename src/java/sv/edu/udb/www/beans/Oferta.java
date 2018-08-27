@@ -21,6 +21,7 @@ public class Oferta {
     private String fechaFin;
     private String fechaLimite;
     private int cantidadLimite;
+    private int cantidadVendida;
     private String descripcionOferta;
     private String otrosDetalles;
     private int idEstado;
@@ -49,6 +50,14 @@ public class Oferta {
         this.empresa=null;
         this.ingresos ="";
         this.comision="";
+    }
+
+    public int getCantidadVendida() {
+        return cantidadVendida;
+    }
+
+    public void setCantidadVendida(int cantidadVendida) {
+        this.cantidadVendida = cantidadVendida;
     }
 
     public String getComision() {

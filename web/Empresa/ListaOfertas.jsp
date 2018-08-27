@@ -21,15 +21,16 @@
         <link href="css/prettyPhoto.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet"> 
         <script src="js/jquery.js" type="text/javascript"></script>
-       
+
         <script src="js/jquery-1.12.0.min.js" type="text/javascript"></script>
-         <script src="js/bootstrap.min.js"></script>
-         <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>     
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>     
         <link href="css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="js/dataTables.bootstrap.min.js" type="text/javascript"></script>
         <link href="css/alertify.core.css" rel="stylesheet" type="text/css"/>
         <link href="css/alertify.default.css" rel="stylesheet" type="text/css"/>
         <script src="js/alertify.js" type="text/javascript"></script>
+        
     </head>
     <body>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
@@ -38,24 +39,27 @@
                 <div class="container" style="background-color: white; color: black;">
                     <div class="row ">
                         <h3 style="color:#c2185b; text-align: center;">Lista de ofertas de ${sessionScope.correo}</h3>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-14" style="padding: 1%;">
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=nuevo"> Nueva Oferta</a><br><br>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=0">Ver todas las ofertas</a>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=1">Ofertas en espera</a>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=2">Ofertas aprovadas</a>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=3">Ofertas activas</a>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=4">Ofertas finalizadas</a>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=5">Ofertas rechazadas</a>
-                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta?tipoOferta=6">Ofertas descartadas</a>
+                </div>
+                <div class="row">
+                    <div class="col-md-14" style="padding: 1%;">
+                        <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=nuevaOferta"> Nueva Oferta</a><br><br>                            
+                        <div >
+                            <h4 style="color:#c2185b;">Filtrar ofertas</h4>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=0">Todas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=1">En espera</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=2">Aprovadas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=3">Activas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=4">Finalizadas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=5">Rechazadas</a>
+                            <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta&tipoOferta=6">Descartadas</a>
+                        </div>
                         <br><br>
                         <table class="table table-striped table-bordered table-hover table-responsive table-condensed " id="tabla">
                             <thead>
                                 <tr style="background-color: black; color: white;">
                                     <th>Id Oferta</th>
                                     <th>Titulo</th>
-                                    <th>Precio regular</th>
+                                    <th>Existencias</th>
                                     <th>Precio de oferta</th>
                                     <th>Fecha de publicación</th>
                                     <th>Fecha de vigencia</th>
@@ -70,38 +74,89 @@
                                     <tr style="color:#c2185b;">
                                         <td>${ofertas.idOferta}</td>
                                         <td>${ofertas.tituloOferta}</td>
-                                        <td>${ofertas.precioRegular}</td>
-                                        <td>${ofertas.precioOferta}</td>
+                                        <c:choose>
+                                            <c:when test="${ofertas.cantidadLimite!=-1}">
+                                                <td>${ofertas.cantidadLimite}</td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td>Ilimitada</td>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        
+                                        <td>$${ofertas.precioOferta}</td>
                                         <td>${ofertas.fechaInicio}</td>
                                         <td>${ofertas.fechaLimite}</td>
                                         <td>${ofertas.estadoOferta.estado}</td>
                                         <td><img height="100px" src="${base}/images/ofertas/${ofertas.url_foto}"/></td>
                                         <td>
-                                            <a class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?op=obtener&id=${empleado.idEmpleado}"><span class="glyphicon glyphicon-edit"></span>Editar</a>
-                                            <a class="btn btn-danger" href="#"><span class="glyphicon glyphicon-trash"></span>Eliminar</a>
+                                            <a title="Detalles" class="btn btn-default" href="javascript:detalles('${ofertas.idOferta}')"><span class="glyphicon glyphicon-search"></span></a>
+                                            <a title="Editar" class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?op=obtener&id=${empleado.idEmpleado}"><span class="glyphicon glyphicon-edit"></span></a>
+                                            <a title="Eliminar  " class="btn btn-danger" href="#"><span class="glyphicon glyphicon-trash"></span></a>
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
                     </div>
+                    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><b>Cupones vendidos: </b><span id="CuponesVendidos"></span></li>   
+                                        <li class="list-group-item"><b>Cupones disponibles: </b><span id="CuponesDisponibles"></span></li>
+                                        <li class="list-group-item"><b>Ingresos totales:</b>$<span id="IngresosTotales"></span></li>   
+                                        <li class="list-group-item"><b>Cargo por servicios: </b>$<span id="Cargoporservicios"></span></li>   
+                                        <li class="list-group-item"><b>Descripción: </b><span id="Descripcion"></span></li>   
+                                        <li class="list-group-item"><b>Detalles: </b><span id="Detalles"></span></li>   
+                                          
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>                          
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
 
                 </div>
-                        <script>
-                            $(document).ready(function (){
-                                $('#tabla').DataTable();
-                            });
-                            <c:if test="${not empty exito}">
-                            alertify.success('${exito}');
-                            <c:set var="exito" value="" scope="session"/>
-                            </c:if>
-                            <c:if test="${not empty fracaso}">
-                                alertify.error('${fracaso}');
-                                <c:set var="fracaso" value="" scope="session"/>
-                            </c:if>
-                        </script>
+                <script>
+                    $(document).ready(function () {
+                        $('#tabla').DataTable();
+                    });
+                    <c:if test="${not empty exito}">
+                    alertify.success('${exito}');
+                        <c:set var="exito" value="" scope="session"/>
+                    </c:if>
+                    <c:if test="${not empty fracaso}">
+                    alertify.error('${fracaso}');
+                        <c:set var="fracaso" value="" scope="session"/>
+                    </c:if>
+
+                    function detalles(id) {
+                        $.ajax({
+                            url: "${pageContext.request.contextPath}/empresas.do?operacion=detalleOferta&id=" + id,
+                            type: "GET",
+                            dataType: "JSON",
+                            success: function (data) {
+                                $('#CuponesVendidos').text(data.CuponesVendidos);
+                                $('#CuponesDisponibles').text(data.CuponesDisponibles);
+                                $('#IngresosTotales').text(data.IngresosTotales);
+                                $('#Cargoporservicios').text(data.Cargoporservicios);
+                                $('#Descripcion').text(data.Descripcion);
+                                $('#Detalles').text(data.Detalles);                                
+                                $('.modal-title').text(data.Titulo);
+                                $('#modal').modal('show');
+                            }
+                        });
+                    }
+                </script>
             </div>
         </section>
-                        
+
     </body>
 </html>

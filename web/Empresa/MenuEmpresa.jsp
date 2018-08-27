@@ -19,8 +19,8 @@
                             Ofertas<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="${pageContext.request.contextPath}/ofertas.do?operacion=nuevaOferta">Nueva oferta</a></li>
-                            <li><a href="${pageContext.request.contextPath}/ofertas.do?operacion=listarOferta">Ver ofertas</a></li>
+                            <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=nuevaOferta">Nueva oferta</a></li>
+                            <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=listarOferta">Ver ofertas</a></li>
                         </ul>
                     </li>
                     
@@ -29,8 +29,8 @@
                             Empleados<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="${pageContext.request.contextPath}/ofertas.do?operacion=nuevoEmpleado">Nuevo empleado</a></li>
-                            <li><a href="${pageContext.request.contextPath}/ofertas.do?operacion=listarEmpleado">Ver empleados</a></li>
+                            <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=nuevoEmpleado">Nuevo empleado</a></li>
+                            <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=listarEmpleado">Ver empleados</a></li>
                         </ul>
                     </li>
 
@@ -39,7 +39,7 @@
                             Empresa<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=nuevo">Cambiar contraseña</a></li>
+                            <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=nuevo">Cambiar contraseña</a></li>
                             <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=cerrar">Cerrar Sesión</a></li>
                         </ul>
                     </li>                      

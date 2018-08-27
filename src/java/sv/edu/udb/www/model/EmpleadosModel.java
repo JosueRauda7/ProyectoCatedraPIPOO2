@@ -155,5 +155,46 @@ public class EmpleadosModel extends Conexion {
             this.desconectar();
             return 0;
         }
-    }    
+    }
+
+    public int eliminarEmpleado(int idEmpleado) throws SQLException{
+            int IdUsuario=0;
+            int filasAfectadas=0;
+        try {
+            String sql = "SELECT * from empleado where IdEmpleado=?";
+            
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setInt(1,idEmpleado);
+            rs=st.executeQuery();
+            
+            if(rs.next()){
+                IdUsuario=rs.getInt("IdUsuario");
+            }else{
+                this.desconectar();
+                return 0;
+            }
+            
+            sql="Delete FROM empleado WHERE IdEmpleado=?";
+            st=conexion.prepareStatement(sql);
+            st.setInt(1, idEmpleado);
+            filasAfectadas=st.executeUpdate();
+            if(filasAfectadas==0){
+                this.desconectar();
+                return 0;
+            }
+            
+            sql="Delete From usuarios where IdUsuario=?";
+            st=conexion.prepareStatement(sql);
+            st.setInt(1, IdUsuario);
+            filasAfectadas=st.executeUpdate();
+            
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+        
+    }
 }

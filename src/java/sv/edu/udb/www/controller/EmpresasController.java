@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Usuario;
@@ -42,12 +43,13 @@ public class EmpresasController extends HttpServlet {
     OfertasModel modeloOfertas = new OfertasModel();
     EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
     EmpleadosModel modeloEmpleado = new EmpleadosModel();
+    EmpresasModel modeloEmpresa = new EmpresasModel();
     ArrayList listaErrores = new ArrayList();
-
-    RubrosModel rubro = new RubrosModel();
-    EmpresasModel modelo = new EmpresasModel();
+    
+    
+    /*RubrosModel rubro = new RubrosModel();
     UsuariosModel modelo2 = new UsuariosModel();
-    OfertasModel modelo3 = new OfertasModel();    
+    OfertasModel modelo3 = new OfertasModel();*/
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -70,11 +72,17 @@ public class EmpresasController extends HttpServlet {
                 case "nuevaOferta":
                     nuevaOferta(request, response);
                     break;
+                case "detalleOferta":
+                    detalleOferta(request, response);
+                    break;
                 case "listarEmpleado":
                     listarEmpleado(request, response);
                     break;
                 case "nuevoEmpleado":
                     request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
+                    break;
+                case "eliminarEmpleado":
+                    eliminarEmpleado(request,response);
                     break;
             }
         }
@@ -112,9 +120,9 @@ public class EmpresasController extends HttpServlet {
         String directorio = getServletContext().getRealPath("/images/ofertas");
         MultipartRequest multi = new MultipartRequest(request, directorio, 1 * 1024 * 1024, new DefaultFileRenamePolicy());
         String operacion = multi.getParameter("operacion");
-        if (operacion.equals("insertar")) {
+        if (operacion.equals("insertarOferta")) {
             try {
-                insertar(multi, request, response);
+                insertarOferta(multi, request, response);
             } catch (ParseException ex) {
                 Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -134,10 +142,12 @@ public class EmpresasController extends HttpServlet {
 
     private void listarOferta(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int tipoOferta=0;
-            tipoOferta = Integer.parseInt(request.getParameter("tipoOferta"));
-            
-            request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo"),tipoOferta));
+            int tipoOferta = 0;
+            if (request.getParameter("tipoOferta") != null) {
+                tipoOferta = Integer.parseInt(request.getParameter("tipoOferta"));
+            }
+
+            request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo"), tipoOferta));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
@@ -159,7 +169,7 @@ public class EmpresasController extends HttpServlet {
         }
     }
 
-    private void insertar(MultipartRequest multi, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+    private void insertarOferta(MultipartRequest multi, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         listaErrores.clear();
         //Si la cantidad es ilimitada o no 
         DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
@@ -285,6 +295,44 @@ public class EmpresasController extends HttpServlet {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+        private void detalleOferta(HttpServletRequest request, HttpServletResponse response) {
+        PrintWriter out=null;
+        try {
+            out = response.getWriter();
+            int codigo=Integer.parseInt(request.getParameter("id"));
+            Oferta oferta= modeloOfertas.detalleOferta(codigo);            
+            Empresa empresa = modeloEmpresa.detalleEmpresa((String) request.getSession().getAttribute("correo"));
+            JSONObject json=new JSONObject();
+            json.put("CuponesVendidos", oferta.getCantidadVendida());
+            json.put("CuponesDisponibles",oferta.getCantidadLimite());
+            json.put("IngresosTotales",(oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
+            json.put("Cargoporservicios",(Double.parseDouble(empresa.getComision()))*(oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())) );
+            json.put("Descripcion",oferta.getDescripcionOferta());
+            json.put("Detalles",oferta.getOtrosDetalles());
+            json.put("Titulo", oferta.getTituloOferta());
+            out.print(json);
+        } catch (IOException | SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            out.close();
+        }
+        
+    }
 
-   
+    private void eliminarEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int codigo=Integer.parseInt(request.getParameter("id"));
+            if(modeloEmpleado.eliminarEmpleado(codigo)>0){
+                request.setAttribute("exito", "Empleado eliminado exitosamente");
+                            
+            }else{
+                request.setAttribute("fracaso", "No se puede eliminar este empleado");
+            }
+            request.getRequestDispatcher("/empresas.do?operacion=listarEmpleado").forward(request,response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

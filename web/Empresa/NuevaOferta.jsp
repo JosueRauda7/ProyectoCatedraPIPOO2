@@ -9,22 +9,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="author" content="webthemez">
+        
         <title>Cuponera - Nueva oferta  ${sessionScope.correo}</title>
-        <!-- core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/animate.min.css" rel="stylesheet"> 
-        <link href="css/prettyPhoto.css" rel="stylesheet">
-        <link href="css/styles.css" rel="stylesheet"> 
-        <link href="css/fileinput.min.css" rel="stylesheet" type="text/css"/>
-        <script src="js/jquery-1.12.0.min.js" type="text/javascript"></script>
-        <script src="js/fileinput.min.js" type="text/javascript"></script>
-        <script src="js/es.js" type="text/javascript"></script>
-        <script src="js/jquery.js" type="text/javascript"></script>
+        <jsp:include page="/Empresa/head.jsp"></jsp:include>
     </head>
     <body>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
@@ -43,8 +30,8 @@
                             </ul>
                         </div>
                     </c:if>
-                    <form action="${base}/ofertas.do" method="POST" enctype="multipart/form-data" style="padding: 5%;">
-                        <input type="hidden" name="operacion" value="insertar"/>
+                    <form action="${base}/empresas.do" method="POST" enctype="multipart/form-data" style="padding: 5%;">
+                        <input type="hidden" name="operacion" value="insertarOferta"/>
                         <div class="col-md-12" style="padding-bottom: 3%;">
                             <div class="well well-sm"><strong style="color:purple;"><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
                             <div class="form-group">

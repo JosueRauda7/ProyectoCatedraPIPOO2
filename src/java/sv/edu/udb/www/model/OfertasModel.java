@@ -60,6 +60,47 @@ public class OfertasModel extends Conexion{
             return null;
         }
     }
+    public Oferta detalleOferta(int codigo) throws SQLException{
+        try {
+            int cantidadCupones=0;
+            String sql="Select Count(*) as cantidad FROM cupones where IdOferta=? ";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setInt(1, codigo);
+            rs=st.executeQuery();
+            rs.next();
+            cantidadCupones=rs.getInt("cantidad");
+            
+            sql="Select * from ofertas where IdOferta=?";
+            st=conexion.prepareStatement(sql);
+            st.setInt(1,codigo);
+            rs=st.executeQuery();
+            if(rs.next()){
+                Oferta oferta=new Oferta();
+                oferta.setIdOferta(rs.getInt("IdOferta"));
+                oferta.setTituloOferta(rs.getString("TituloOferta"));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
+                oferta.setFechaFin(rs.getString("FechaFin"));
+                oferta.setFechaLimite(rs.getString("FechaLimite"));
+                oferta.setCantidadVendida(cantidadCupones);
+                oferta.setCantidadLimite(Integer.parseInt(rs.getString("CantidadLimite")));
+                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
+                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
+                oferta.setJustificacion(rs.getString("Justificacion"));                
+                oferta.setUrl_foto(rs.getString("Url_foto"));
+                this.desconectar();
+                return oferta;
+            }
+            this.desconectar();
+            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
+    }
       public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException{
         try {
             String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=1 and o.CodigoEmpresa=? GROUP by o.IdOferta";
