@@ -24,9 +24,10 @@ import sv.edu.udb.www.model.OfertasModel;
  */
 @WebServlet(name = "OfertasController", urlPatterns = {"/ofertas.do"})
 public class OfertasController extends HttpServlet {
+
     OfertasModel modeloOfertas = new OfertasModel();
     EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,22 +41,22 @@ public class OfertasController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String operacion = request.getParameter("operacion");
-        
-        switch(operacion){
+
+        switch (operacion) {
 
             case "home":
                 request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
                 break;
-            case "listar":                
-                listar(request,response);
-                break;            
+            case "listar":
+                listar(request, response);
+                break;
             case "nuevo":
-                nuevo(request,response);
+                nuevo(request, response);
                 break;
             case "ingresar":
-                ingresar(request,response);
+                ingresar(request, response);
                 break;
-            
+
         }
     }
 
@@ -97,11 +98,11 @@ public class OfertasController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
             String correo = (String) request.getSession().getAttribute("correo");
-            request.setAttribute("listaOfertas",modeloOfertas.listarOferta(correo));
+            request.setAttribute("listaOfertas", modeloOfertas.listarOferta(correo));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
@@ -112,17 +113,16 @@ public class OfertasController extends HttpServlet {
         }
     }
 
- 
-        private void nuevo(HttpServletRequest request, HttpServletResponse response) {
-         try {
-            request.setAttribute("listaEstados",modeloEstado.listarEstadoOferta());
+    private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setAttribute("listaEstados", modeloEstado.listarEstadoOferta());
             request.getRequestDispatcher("/Empresa/NuevaOferta.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServletException | IOException ex) {
             Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
 
     private void ingresar(HttpServletRequest request, HttpServletResponse response) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -145,7 +145,7 @@ public class UsuariosModel extends Conexion {
         this.desconectar();
     }
 
-    public int verificarSesion(Usuario usuario) throws SQLException {
+    /*public int verificarSesion(Usuario usuario) throws SQLException {
         try {
             int tipousuario = 0;
             sql = "SELECT Confirmado, IdTipoUsuario FROM usuarios WHERE Correo=? AND Contrasena=SHA2(?,256)";
@@ -174,6 +174,38 @@ public class UsuariosModel extends Conexion {
             Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return -1;
+        }
+    }*/
+
+    public Usuario verificar(Usuario usuario) throws SQLException {
+        try {
+            String sql = "SELECT IdUsuario, Confirmado, IdTipoUsuario FROM usuarios WHERE Correo=? AND Contrasena=?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, usuario.getCorreo());
+            st.setString(2, usuario.getContrasenia());
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                if (rs.getBoolean("Confirmado")) {
+                    Usuario miUsuario = new Usuario();
+                    miUsuario.setIdTipoUsuario(rs.getInt("IdTipoUsuario"));
+                    miUsuario.setIdUsuario(rs.getInt("IdUsuario"));
+                    
+                    this.desconectar();
+                    return miUsuario;
+                } else {
+                    this.desconectar();
+                    return null;
+                }
+            } else {
+                this.desconectar();
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
         }
     }
 

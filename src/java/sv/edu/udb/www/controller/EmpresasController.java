@@ -314,5 +314,4 @@ public class EmpresasController extends HttpServlet {
     private void ofertas(HttpServletRequest request, HttpServletResponse response) {
         
     }
-
 }

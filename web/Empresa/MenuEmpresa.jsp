@@ -1,3 +1,4 @@
+<jsp:include page="../head.jsp" />
 <header id="header">
     <nav id="main-nav" class="navbar navbar-default navbar-fixed-top" role="banner">
         <div class="container">
@@ -16,8 +17,13 @@
                 <ul class="nav navbar-nav dropdown">
                     <li class="scroll active"><a href="#home">Ofertas</a></li>  
                     <li class="scroll"><a href="#services">Empleados</a></li>
-                    <li class="scroll"><a href="#pricing">Contraseña</a></li>
-                    <li class="scroll"><a href="#contact-us">Cerrar session</a></li>                        
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=uCe">Cambiar contraseña</a></li>
+                            <li><a>Cerrar sesión</a></li>
+                        </ul>
+                    </li>                       
                 </ul>
             </div>
         </div>
