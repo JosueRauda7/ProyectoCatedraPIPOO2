@@ -323,8 +323,7 @@ public class UsuariosController extends HttpServlet {
                  usu= UM.verificar(usuario);
                 estado = usu.getIdTipoUsuario();
                 idUsuario = usu.getIdUsuario();
-            }
-            
+            }           
             
             
             request.getSession().setAttribute("idUsuario", idUsuario);
