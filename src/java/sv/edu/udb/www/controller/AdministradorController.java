@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.udb.www.controller;
 
 import java.io.IOException;
@@ -35,6 +30,7 @@ import sv.edu.udb.www.utils.Validaciones;
 @WebServlet(name = "AdministradorController", urlPatterns = {"/administrador.do"})
 public class AdministradorController extends HttpServlet {
 
+    UsuariosModel UM = new UsuariosModel();
     RubrosModel rubro = new RubrosModel();
     EmpresasModel modelo = new EmpresasModel();
     UsuariosModel modelo2 = new UsuariosModel();
@@ -77,6 +73,12 @@ public class AdministradorController extends HttpServlet {
                     break;
                 case "modificarRubro":
                     modificarRubro(request, response);
+                    break;
+                case "updateC":
+                    request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
+                    break;
+                case "cambiarC":
+                    cambiarContrasena(request, response);
                     break;
             }
         }
@@ -317,7 +319,7 @@ public class AdministradorController extends HttpServlet {
     }
 
     private void ofertasEmpresa(HttpServletRequest request, HttpServletResponse response) {
-       try {
+        try {
             String codigo = request.getParameter("codigo");
             request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
             request.setAttribute("ofertasFuturas", modelo3.ListarOfertasFutura(codigo));
@@ -328,84 +330,141 @@ public class AdministradorController extends HttpServlet {
     }
 
     private void listarRubro(HttpServletRequest request, HttpServletResponse response) {
-     try {
+        try {
             request.setAttribute("listaRubros", rubro.obtenerRubro());
             request.getRequestDispatcher("/Administrador/ListaRubros.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
-        }}
+        }
+    }
 
     private void agregarRubro(HttpServletRequest request, HttpServletResponse response) {
-          try{
-       listaErrores.clear();
-       Rubro rub = new Rubro();
-       rub.setRubro(request.getParameter("rubro"));
-       if(Validaciones.isEmpty(rub.getRubro())){
-          listaErrores.add("El campo nombre del rubro es obligatorio");
-       }
-       if(rubro.validarRubro(rub)>0){
-           listaErrores.add("Este rubro ya existe");
-       }
-       if(listaErrores.size() >0){
-          request.setAttribute("listaErrores", listaErrores);
-          request.setAttribute("rubro", rubro);
-          request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
-       }else{
-           if(rubro.insertarRubro(rub)>0){
-               request.setAttribute("exito", "El rubro ha sido insertado correctamente");
-               request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
-           }else{
-               request.setAttribute("fracaso", "El rubro no se ha podido insertar");
-               request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);           
-           }           
-       }
-       
-    }   catch (ServletException | IOException | SQLException ex) {
+        try {
+            listaErrores.clear();
+            Rubro rub = new Rubro();
+            rub.setRubro(request.getParameter("rubro"));
+            if (Validaciones.isEmpty(rub.getRubro())) {
+                listaErrores.add("El campo nombre del rubro es obligatorio");
+            }
+            if (rubro.validarRubro(rub) > 0) {
+                listaErrores.add("Este rubro ya existe");
+            }
+            if (listaErrores.size() > 0) {
+                request.setAttribute("listaErrores", listaErrores);
+                request.setAttribute("rubro", rubro);
+                request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
+            } else {
+                if (rubro.insertarRubro(rub) > 0) {
+                    request.setAttribute("exito", "El rubro ha sido insertado correctamente");
+                    request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
+                } else {
+                    request.setAttribute("fracaso", "El rubro no se ha podido insertar");
+                    request.getRequestDispatcher("administrador.do?operacion=listarRubro").forward(request, response);
+                }
+            }
+
+        } catch (ServletException | IOException | SQLException ex) {
             Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void eliminarRubro(HttpServletRequest request, HttpServletResponse response) {
-     try {
+        try {
             int id = Integer.parseInt(request.getParameter("id"));
-            if(rubro.eliminarRubro(id)>0){
+            if (rubro.eliminarRubro(id) > 0) {
                 request.setAttribute("exito", "El rubro se ha eliminado correctamente");
-            }else{
+            } else {
                 request.setAttribute("exito", "Este rubro no puede eliminarse");
             }
             request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
-        }}
+        }
+    }
 
     private void modificarRubro(HttpServletRequest request, HttpServletResponse response) {
-     try{
-       listaErrores.clear();
-       Rubro rub = new Rubro();
-       rub.setRubro(request.getParameter("rubro"));
-       rub.setIdRubro(Integer.parseInt(request.getParameter("id")));
-       if(Validaciones.isEmpty(rub.getRubro())){
-          listaErrores.add("El campo nombre del rubro es obligatorio");
-       }
-       if(rubro.validarRubro(rub)>0){
-           listaErrores.add("Este rubro ya existe");
-       }
-       if(listaErrores.size() >0){
-          
-          request.setAttribute("fracaso", "Este rubro ya existe o esta vacio");
-          request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
-       }else{
-           if(rubro.modificarRubro(rub)>0){
-               request.setAttribute("exito", "El rubro ha sido modificado correctamente");
-               request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
-           }else{
-               request.setAttribute("fracaso", "El rubro no se ha podido modificar");
-               request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);           
-           }           
-       }
-       
-    }   catch (ServletException | IOException | SQLException ex) {
+        try {
+            listaErrores.clear();
+            Rubro rub = new Rubro();
+            rub.setRubro(request.getParameter("rubro"));
+            rub.setIdRubro(Integer.parseInt(request.getParameter("id")));
+            if (Validaciones.isEmpty(rub.getRubro())) {
+                listaErrores.add("El campo nombre del rubro es obligatorio");
+            }
+            if (rubro.validarRubro(rub) > 0) {
+                listaErrores.add("Este rubro ya existe");
+            }
+            if (listaErrores.size() > 0) {
+
+                request.setAttribute("fracaso", "Este rubro ya existe o esta vacio");
+                request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+            } else {
+                if (rubro.modificarRubro(rub) > 0) {
+                    request.setAttribute("exito", "El rubro ha sido modificado correctamente");
+                    request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+                } else {
+                    request.setAttribute("fracaso", "El rubro no se ha podido modificar");
+                    request.getRequestDispatcher("rubros.do?operacion=listar").forward(request, response);
+                }
+            }
+
+        } catch (ServletException | IOException | SQLException ex) {
             Logger.getLogger(RubrosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cambiarContrasena(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String contrasenaActual = request.getParameter("contrasenaActual");
+            String confirmContra = request.getParameter("confirmarContrasena");
+            String nuevaContrasena = request.getParameter("nuevaContrasena");
+
+            //Se obtiene la variable de sesión, idUsuario
+            int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+            System.out.println("Variable sesión: " + idUsuario);
+
+            //Se manda a llamar el método para obtener la contraseña
+            Usuario contrasenabdd = UM.obtenerContrasena(idUsuario);
+
+            //Tipo de usuario que se recoge del formulario
+            String tipoUsuario = request.getParameter("tipo");
+
+            System.out.println(tipoUsuario);
+            System.out.println(contrasenaActual);
+            System.out.println(confirmContra);
+            System.out.println(nuevaContrasena);
+            System.out.println("BDD" + contrasenabdd.getContrasenia());
+
+            if (contrasenaActual.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/administrador.do?operacion=updateC").forward(request, response);
+            }
+
+            if (confirmContra.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/administrador.do?operacion=updateC").forward(request, response);
+            }
+
+            if (nuevaContrasena.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                request.getRequestDispatcher("/administrador.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                request.setAttribute("Fracaso", "Contraseña incorrecta");
+                request.getRequestDispatcher("/administrador.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenaActual.equals(confirmContra)) {
+                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                request.getRequestDispatcher("/administrador.do?operacion=updateC").forward(request, response);
+            } else {
+                if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                    request.getRequestDispatcher("/Administrador/Home.jsp").forward(request, response);
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

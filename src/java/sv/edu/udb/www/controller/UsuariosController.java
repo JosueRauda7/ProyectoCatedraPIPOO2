@@ -82,21 +82,6 @@ public class UsuariosController extends HttpServlet {
             case "ingresar":
                 ingresar(request, response);
                 break;
-            case "upCe":
-                request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
-                break;
-            case "upCa":
-                request.getRequestDispatcher("/Administrador/cambiarContrasena.jsp").forward(request, response);
-                break;
-            case "uCe":
-                request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
-                break;
-            case "upCc":
-                request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
-                break;
-            case "cambiarC":
-                cambiarContra(request, response);
-                break;
         }
     }
 
@@ -372,7 +357,7 @@ public class UsuariosController extends HttpServlet {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /*
     private void cambiarContra(HttpServletRequest request, HttpServletResponse response) {
         try {
             
@@ -521,19 +506,6 @@ public class UsuariosController extends HttpServlet {
             }
 
         } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /*private void updateC(HttpServletRequest request, HttpServletResponse response) {
-        try {
-
-            String tipoUsuario = request.getParameter("tip");
-
-            request.setAttribute("tipoUsuario", tipoUsuario);
-            request.getRequestDispatcher("/cambiarContrasena.jsp").forward(request, response);
-
-        } catch (ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }*/

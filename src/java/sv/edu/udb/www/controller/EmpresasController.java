@@ -40,17 +40,16 @@ import sv.edu.udb.www.utils.Validaciones;
 @WebServlet(name = "EmpresasController", urlPatterns = {"/empresas.do"})
 public class EmpresasController extends HttpServlet {
 
+    UsuariosModel UM = new UsuariosModel();
     OfertasModel modeloOfertas = new OfertasModel();
     EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
     EmpleadosModel modeloEmpleado = new EmpleadosModel();
     EmpresasModel modeloEmpresa = new EmpresasModel();
     ArrayList listaErrores = new ArrayList();
-    
-    
+
     /*RubrosModel rubro = new RubrosModel();
     UsuariosModel modelo2 = new UsuariosModel();
     OfertasModel modelo3 = new OfertasModel();*/
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -82,7 +81,13 @@ public class EmpresasController extends HttpServlet {
                     request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
                     break;
                 case "eliminarEmpleado":
-                    eliminarEmpleado(request,response);
+                    eliminarEmpleado(request, response);
+                    break;
+                case "updateC":
+                    request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
+                    break;
+                case "cambiarC":
+                    cambiarContrasena(request, response);
                     break;
             }
         }
@@ -295,21 +300,21 @@ public class EmpresasController extends HttpServlet {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-        private void detalleOferta(HttpServletRequest request, HttpServletResponse response) {
-        PrintWriter out=null;
+
+    private void detalleOferta(HttpServletRequest request, HttpServletResponse response) {
+        PrintWriter out = null;
         try {
             out = response.getWriter();
-            int codigo=Integer.parseInt(request.getParameter("id"));
-            Oferta oferta= modeloOfertas.detalleOferta(codigo);            
+            int codigo = Integer.parseInt(request.getParameter("id"));
+            Oferta oferta = modeloOfertas.detalleOferta(codigo);
             Empresa empresa = modeloEmpresa.detalleEmpresa((String) request.getSession().getAttribute("correo"));
-            JSONObject json=new JSONObject();
+            JSONObject json = new JSONObject();
             json.put("CuponesVendidos", oferta.getCantidadVendida());
-            json.put("CuponesDisponibles",oferta.getCantidadLimite());
-            json.put("IngresosTotales",(oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
-            json.put("Cargoporservicios",(Double.parseDouble(empresa.getComision()))*(oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())) );
-            json.put("Descripcion",oferta.getDescripcionOferta());
-            json.put("Detalles",oferta.getOtrosDetalles());
+            json.put("CuponesDisponibles", oferta.getCantidadLimite());
+            json.put("IngresosTotales", (oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
+            json.put("Cargoporservicios", (Double.parseDouble(empresa.getComision())) * (oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
+            json.put("Descripcion", oferta.getDescripcionOferta());
+            json.put("Detalles", oferta.getOtrosDetalles());
             json.put("Titulo", oferta.getTituloOferta());
             out.print(json);
         } catch (IOException | SQLException ex) {
@@ -317,24 +322,77 @@ public class EmpresasController extends HttpServlet {
         } finally {
             out.close();
         }
-        
+
     }
 
     private void eliminarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int codigo=Integer.parseInt(request.getParameter("id"));
-            if(modeloEmpleado.eliminarEmpleado(codigo)>0){
+            int codigo = Integer.parseInt(request.getParameter("id"));
+            if (modeloEmpleado.eliminarEmpleado(codigo) > 0) {
                 request.setAttribute("exito", "Empleado eliminado exitosamente");
-                            
-            }else{
+
+            } else {
                 request.setAttribute("fracaso", "No se puede eliminar este empleado");
             }
-            request.getRequestDispatcher("/empresas.do?operacion=listarEmpleado").forward(request,response);
+            request.getRequestDispatcher("/empresas.do?operacion=listarEmpleado").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    private void cambiarContrasena(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String contrasenaActual = request.getParameter("contrasenaActual");
+            String confirmContra = request.getParameter("confirmarContrasena");
+            String nuevaContrasena = request.getParameter("nuevaContrasena");
 
+            //Se obtiene la variable de sesión, idUsuario
+            int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+            System.out.println("Variable sesión: " + idUsuario);
+
+            //Se manda a llamar el método para obtener la contraseña
+            Usuario contrasenabdd = UM.obtenerContrasena(idUsuario);
+
+            //Tipo de usuario que se recoge del formulario
+            String tipoUsuario = request.getParameter("tipo");
+
+            System.out.println(tipoUsuario);
+            System.out.println(contrasenaActual);
+            System.out.println(confirmContra);
+            System.out.println(nuevaContrasena);
+            System.out.println("BDD" + contrasenabdd.getContrasenia());
+
+            if (contrasenaActual.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (confirmContra.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (nuevaContrasena.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                request.setAttribute("Fracaso", "Contraseña incorrecta");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenaActual.equals(confirmContra)) {
+                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            } else {
+                if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                    request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

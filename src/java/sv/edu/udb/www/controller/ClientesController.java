@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sv.edu.udb.www.controller;
 
 import java.io.IOException;
@@ -21,7 +16,9 @@ import org.json.simple.JSONObject;
 import sv.edu.udb.www.beans.EstadoCupon;
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Rubro;
+import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.ClientesModel;
+import sv.edu.udb.www.model.UsuariosModel;
 
 /**
  *
@@ -30,6 +27,7 @@ import sv.edu.udb.www.model.ClientesModel;
 @WebServlet(name = "ClientesController", urlPatterns = {"/clientes.do"})
 public class ClientesController extends HttpServlet {
 
+    UsuariosModel UM = new UsuariosModel();
     ClientesModel model = new ClientesModel();
     ArrayList<String> listaErrores = new ArrayList<String>();
     List<Oferta> ofertas = new ArrayList();
@@ -39,7 +37,7 @@ public class ClientesController extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            if(request.getSession().getAttribute("correo")==null||!request.getSession().getAttribute("estadoUsuario").toString().equals("4")){
+            if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("4")) {
                 response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
             }
@@ -68,13 +66,19 @@ public class ClientesController extends HttpServlet {
                     agregar(request, response);
                     break;
                 case "ver":
-                    ver(request,response);
+                    ver(request, response);
+                    break;
+                case "updateC":
+                    request.getRequestDispatcher("/Cliente/cambiarContrasena.jsp").forward(request, response);
+                    break;
+                case "cambiarC":
+                    cambiarContrasena(request, response);
                     break;
                 case "detalles":
-                    detalles(request,response);
+                    detalles(request, response);
                     break;
                 case "cancelar":
-                    cancelar(request,response);
+                    cancelar(request, response);
                     break;
             }
         }
@@ -216,7 +220,7 @@ public class ClientesController extends HttpServlet {
             int idOferta = Integer.parseInt(request.getParameter("id"));
             ofertas.add(model.obtenerOferta(idOferta));
             request.getSession().setAttribute("ofertas", ofertas);
-            response.sendRedirect(request.getContextPath()+"/clientes.do?operacion=ver");
+            response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=ver");
         } catch (IOException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -245,19 +249,19 @@ public class ClientesController extends HttpServlet {
         try {
             PrintWriter out = null;
             out = response.getWriter();
-            String codigo=request.getParameter("id");
+            String codigo = request.getParameter("id");
             Oferta oferta = model.obtenerCupones(codigo);
             JSONObject json = new JSONObject();
-            json.put("codigo",oferta.getIdOferta());
-            json.put("titulo",oferta.getTituloOferta());
-            json.put("precioR",oferta.getPrecioRegular());
-            json.put("precioO",oferta.getPrecioOferta());
-            json.put("fechaI",oferta.getFechaInicio());
-            json.put("fechaF",oferta.getFechaFin());
-            json.put("fechaL",oferta.getFechaLimite());
-            json.put("cantidad",oferta.getCantidadLimite());
+            json.put("codigo", oferta.getIdOferta());
+            json.put("titulo", oferta.getTituloOferta());
+            json.put("precioR", oferta.getPrecioRegular());
+            json.put("precioO", oferta.getPrecioOferta());
+            json.put("fechaI", oferta.getFechaInicio());
+            json.put("fechaF", oferta.getFechaFin());
+            json.put("fechaL", oferta.getFechaLimite());
+            json.put("cantidad", oferta.getCantidadLimite());
             json.put("descripcion", oferta.getDescripcionOferta());
-            json.put("otros",oferta.getOtrosDetalles());
+            json.put("otros", oferta.getOtrosDetalles());
             json.put("empresa", oferta.getNombreEmpresa());
             out.print(json);
         } catch (SQLException ex) {
@@ -266,4 +270,57 @@ public class ClientesController extends HttpServlet {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    private void cambiarContrasena(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            //Se recogen los datos del formulario
+            String contrasenaActual = request.getParameter("contrasenaActual");
+            String confirmContra = request.getParameter("confirmarContrasena");
+            String nuevaContrasena = request.getParameter("nuevaContrasena");
+
+            //Se obtiene la variable de sesión, idUsuario
+            int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+            System.out.println("Variable sesión: " + idUsuario);
+
+            //Se manda a llamar el método para obtener la contraseña
+            Usuario contrasenabdd = UM.obtenerContrasena(idUsuario);
+
+            System.out.println(contrasenaActual);
+            System.out.println(confirmContra);
+            System.out.println(nuevaContrasena);
+            System.out.println("BDD" + contrasenabdd.getContrasenia());
+
+            if (contrasenaActual.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/clientes.do?operacion=updateC").forward(request, response);
+            }
+
+            if (confirmContra.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/clientes.do?operacion=updateC").forward(request, response);
+            }
+
+            if (nuevaContrasena.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                request.getRequestDispatcher("/clientes.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                request.setAttribute("Fracaso", "Contraseña incorrecta");
+                request.getRequestDispatcher("/clientes.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenaActual.equals(confirmContra)) {
+                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                request.getRequestDispatcher("/clientes.do?operacion=updateC").forward(request, response);
+            } else {
+                if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                    request.getRequestDispatcher("/Cliente/InicioCliente.jsp").forward(request, response);
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
+

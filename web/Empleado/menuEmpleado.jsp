@@ -20,7 +20,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=upCe">Cambiar contraseña</a></li>
+                            <li><a href="${pageContext.request.contextPath}/empleados.do?operacion=updateC">Cambiar contraseña</a></li>
                             <li><a>Cerrar sesión</a></li>
                         </ul>
                     </li>                    

@@ -16,10 +16,9 @@
                 </div><br><br>
                 <div class="row">
                     <div class="col-md-7">
-                        <form role="form" action="${pageContext.request.contextPath}/usuarios.do" method="POST">
+                        <form role="form" action="${pageContext.request.contextPath}/clientes.do" method="POST">
                             <div class="form-group">
                                 <div>
-                                    <input type="hidden" name="tipo" value="4" />
                                     <input type="hidden" name="operacion" value="cambiarC" />
                                     <input type="password" class="form-control contra" name="contrasenaActual" placeholder="Ingrese su contraseña actual"><br>
                                     <input type="password" class="form-control contra" name="confirmarContrasena" placeholder="Vuelva a ingresar su contraseña actual"><br>

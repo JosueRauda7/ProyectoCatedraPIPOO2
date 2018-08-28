@@ -24,6 +24,7 @@ import sv.edu.udb.www.utils.Validaciones;
 @WebServlet(name = "EmpleadosController", urlPatterns = {"/empleados.do"})
 public class EmpleadosController extends HttpServlet {
 
+    UsuariosModel UM = new UsuariosModel();
     ArrayList listaErrores = new ArrayList();
     EmpleadosModel modelo = new EmpleadosModel();
     UsuariosModel modeloUsuario = new UsuariosModel();
@@ -32,11 +33,11 @@ public class EmpleadosController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("4")) {
+            if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("3")) {
                 response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
             }
-            
+
             if (request.getParameter("operacion") == null) {
                 //Redireccionar a la página principal del empleado
                 return;
@@ -55,6 +56,12 @@ public class EmpleadosController extends HttpServlet {
                     break;
                 case "nuevo":
                     request.getRequestDispatcher("/Empresa/NuevoEmpleado.jsp").forward(request, response);
+                    break;
+                case "updateC":
+                    request.getRequestDispatcher("/Empleado/cambiarContrasena.jsp").forward(request, response);
+                    break;
+                case "cambiarC":
+                    cambiarContrasena(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -153,5 +160,61 @@ public class EmpleadosController extends HttpServlet {
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
+
+    private void cambiarContrasena(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String contrasenaActual = request.getParameter("contrasenaActual");
+            String confirmContra = request.getParameter("confirmarContrasena");
+            String nuevaContrasena = request.getParameter("nuevaContrasena");
+
+            //Se obtiene la variable de sesión, idUsuario
+            int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+            System.out.println("Variable sesión: " + idUsuario);
+
+            //Se manda a llamar el método para obtener la contraseña
+            Usuario contrasenabdd = UM.obtenerContrasena(idUsuario);
+
+            //Tipo de usuario que se recoge del formulario
+            String tipoUsuario = request.getParameter("tipo");
+
+            System.out.println(tipoUsuario);
+            System.out.println(contrasenaActual);
+            System.out.println(confirmContra);
+            System.out.println(nuevaContrasena);
+            System.out.println("BDD" + contrasenabdd.getContrasenia());
+
+            if (contrasenaActual.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/empleados.do?operacion=updateC").forward(request, response);
+            }
+
+            if (confirmContra.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/empleados.do?operacion=updateC").forward(request, response);
+            }
+
+            if (nuevaContrasena.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                request.getRequestDispatcher("/empleados.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                request.setAttribute("Fracaso", "Contraseña incorrecta");
+                request.getRequestDispatcher("/empleados.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenaActual.equals(confirmContra)) {
+                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                request.getRequestDispatcher("/empleados.do?operacion=updateC").forward(request, response);
+            } else {
+                if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                    request.getRequestDispatcher("/Empleado/Home.jsp").forward(request, response); //Se deberá de llamar al método cerrar sesión
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
+

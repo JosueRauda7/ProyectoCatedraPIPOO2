@@ -35,7 +35,7 @@
                     </a>
                     <ul class="dropdown-menu">
 
-                        <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cambiar contraseña</a></li>
+                        <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=updateC">Cambiar contraseña</a></li>
                         <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cerrar session</a></li>
 
                         <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=upCa">Cambiar contraseña</a></li>
