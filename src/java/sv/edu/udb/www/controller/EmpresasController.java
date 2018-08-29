@@ -52,8 +52,11 @@ public class EmpresasController extends HttpServlet {
     OfertasModel modelo3 = new OfertasModel();*/
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
+        
         try (PrintWriter out = response.getWriter()) {
+            modeloOfertas.actualizarEstados();
             if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("2")) {
                 response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
@@ -90,6 +93,8 @@ public class EmpresasController extends HttpServlet {
                     cambiarContrasena(request, response);
                     break;
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -122,6 +127,7 @@ public class EmpresasController extends HttpServlet {
         listaErrores.clear();
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
         String directorio = getServletContext().getRealPath("/images/ofertas");
         MultipartRequest multi = new MultipartRequest(request, directorio, 1 * 1024 * 1024, new DefaultFileRenamePolicy());
         String operacion = multi.getParameter("operacion");
@@ -151,7 +157,7 @@ public class EmpresasController extends HttpServlet {
             if (request.getParameter("tipoOferta") != null) {
                 tipoOferta = Integer.parseInt(request.getParameter("tipoOferta"));
             }
-
+                                                
             request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo"), tipoOferta));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);

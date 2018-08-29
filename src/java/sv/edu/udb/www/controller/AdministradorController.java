@@ -41,6 +41,7 @@ public class AdministradorController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            modelo3.actualizarEstados();
             String operacion = request.getParameter("operacion");
             switch (operacion) {
                 case "listarEmpresa":
@@ -81,6 +82,8 @@ public class AdministradorController extends HttpServlet {
                     cambiarContrasena(request, response);
                     break;
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

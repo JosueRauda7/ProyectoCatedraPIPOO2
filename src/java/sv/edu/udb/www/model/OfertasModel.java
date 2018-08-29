@@ -6,7 +6,11 @@
 package sv.edu.udb.www.model;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,6 +116,96 @@ public class OfertasModel extends Conexion {
             this.desconectar();
             return null;
         }
+    }
+    
+    public void actualizarEstados() throws SQLException{
+            Oferta oferta = new Oferta();
+            int estado=0;
+            //Capturare todos los idofertas existentes aqui
+            ArrayList<Integer> idoferta = new ArrayList();
+            //Capturare las fechas de las ofertas y la fecha actual del sistema
+            Date fechaInicio,fechaFin, fechaActual;
+            
+        try {
+            
+            //Busco todas las ofertas
+            String sql="Select * from ofertas";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            rs=st.executeQuery();
+            
+            //Guardando el idOferta de cada oferta
+            while(rs.next()){
+                idoferta.add(rs.getInt("IdOferta"));
+            }
+            
+            //Si el array tiene datos (tamaño distinto a 0), el proceso puede continuar
+            if(idoferta.size()!=0){
+                
+                //CURDATE() me da la fechaactual en formato año-mes-dia
+                sql="Select CURDATE() as fechaActual";
+                rs=st.executeQuery(sql);
+                rs.next();
+                fechaActual=rs.getDate("fechaActual");
+                
+                //Recorriendo todos los idOfertas disponibles
+                for (int i = 0; i < idoferta.size(); i++) {
+                    System.out.println(idoferta.get(i)); //verificando por consola que ha capturado todos los idOfertas
+                    
+                    //Usando el idOferta actual en (i) capturo las fechas de esta oferta 
+                    sql="Select * from ofertas where IdOferta=?";
+                    st=conexion.prepareStatement(sql);
+                    st.setInt(1, idoferta.get(i));
+                    rs=st.executeQuery();
+                    rs.next();
+                    
+                    estado=rs.getInt("IdEstado");
+                    fechaInicio=rs.getDate("FechaInicio");
+                    fechaFin=rs.getDate("FechaFin");                   
+                    
+                    //fecha.before() y fecha.after() solo compara si la fecha se encuentra "antes" o "despues" respectivamente de 
+                    //la fechaActual, NO calcula la diferencia entre fechas!
+                    
+                    //Si la oferta tiene estado En espera y se cumple la condicion de fecha
+                    if(estado==1){                        
+                        if(fechaFin.before(fechaActual)){
+                            sql="Update ofertas SET IdEstado=4 where IdOferta=?";
+                            st=conexion.prepareStatement(sql);
+                            st.setInt(i, idoferta.get(i));
+                            st.executeUpdate();
+                        }
+                    }
+                    
+                    //Si la oferta tiene estado Aprovado y la fechaActual se encuentra entre las fechaInicio y fechaFin 
+                    if(estado==2){
+                        if(fechaInicio.before(fechaActual) && fechaFin.after(fechaActual)){
+                            sql="Update ofertas SET IdEstado=3 where IdOferta=?";
+                            st=conexion.prepareStatement(sql);
+                            st.setInt(i, idoferta.get(i));
+                            st.executeUpdate();
+                        }
+                    }
+                    //Si la oferta tiene estado Activo y la fechaFin es inferior a la fechaActual
+                    if(estado==3){
+                        if(fechaFin.before(fechaActual)){
+                            sql="Update ofertas SET IdEstado=4 where IdOferta=?";
+                            st=conexion.prepareStatement(sql);
+                            st.setInt(i, idoferta.get(i));
+                            st.executeUpdate();
+                        }
+                    }
+
+                }            
+            }
+            this.desconectar();
+           
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();           
+        }
+        
+        
     }
 
     public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException {

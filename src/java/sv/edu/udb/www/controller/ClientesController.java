@@ -18,6 +18,7 @@ import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.ClientesModel;
+import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.UsuariosModel;
 
 /**
@@ -29,6 +30,7 @@ public class ClientesController extends HttpServlet {
 
     UsuariosModel UM = new UsuariosModel();
     ClientesModel model = new ClientesModel();
+    OfertasModel modeloOfertas = new OfertasModel();
     ArrayList<String> listaErrores = new ArrayList<String>();
     List<Oferta> ofertas = new ArrayList();
 
@@ -37,6 +39,7 @@ public class ClientesController extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            modeloOfertas.actualizarEstados();
             if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("4")) {
                 response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
@@ -81,6 +84,8 @@ public class ClientesController extends HttpServlet {
                     cancelar(request, response);
                     break;
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

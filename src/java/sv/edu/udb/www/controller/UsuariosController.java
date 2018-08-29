@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Usuario;
+import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.utils.Correo;
 import sv.edu.udb.www.model.UsuariosModel;
 import sv.edu.udb.www.utils.Validaciones;
@@ -28,6 +29,7 @@ import sv.edu.udb.www.utils.Validaciones;
 public class UsuariosController extends HttpServlet {
 
     UsuariosModel UM = new UsuariosModel();
+    OfertasModel modeloOfertas = new OfertasModel();
     ArrayList listaErrores = new ArrayList();
 
     /**
@@ -315,6 +317,8 @@ public class UsuariosController extends HttpServlet {
             request.getSession().setAttribute("estadoUsuario", estado);
             
             System.out.println("Variable sesión: " + idUsuario);
+            
+            modeloOfertas.actualizarEstados();
             
             switch (estado) {
 
