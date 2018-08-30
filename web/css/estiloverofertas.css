@@ -42,8 +42,9 @@
     height: 100px;
 }
 .btnmostar{
-    margin-left: 24%;
+    margin-left: 23%;
 }
+
 .imagenoferta{
     width: 200px;
     border: solid black;
@@ -62,12 +63,14 @@
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    width: 57.4%;
+    width: 53.02%;
     background-color: #C2185B;
     margin-left: 5%;
     
     color: white;
 }
+
+
 
 /* Style the buttons inside the tab */
 .tab button {

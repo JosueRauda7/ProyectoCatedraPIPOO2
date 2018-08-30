@@ -17,7 +17,7 @@
           <div class="tab">
 
   <button class="tablinks" onclick="openCity(event, 'Espera')">En espera</button>
-  <button class="tablinks" onclick="openCity(event, 'Futuras')">Aprobadadas futuras</button>
+  <button class="tablinks" onclick="openCity(event, 'Futuras')">Aprobadadas</button>
   <button class="tablinks" onclick="openCity(event, 'Activas')">Activas</button>
   <button class="tablinks" onclick="openCity(event, 'Finalizadas')">Finalizadas</button>
   <button class="tablinks" onclick="openCity(event, 'Rechazadas')">Rechasadas</button>
@@ -60,7 +60,8 @@
                             <h5 class="text-center">Otros detalles:</h5>
                             <p class="text-justify">${ofertasEspera.otrosDetalles}</p>
                         </div>
-                       
+                        
+                        
                             <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertasEspera.idOferta}">
   Ver mas de la oferta
 </button>
@@ -90,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-success">Aprobar oferta</button>
       </div>
     </div>
   </div>
