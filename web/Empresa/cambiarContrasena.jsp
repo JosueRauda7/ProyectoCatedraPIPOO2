@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Cambiar contraseña</title>
-        <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+        <jsp:include page="/Empresa//head.jsp" />
     </head>
     <body>
             <jsp:include page="/Empresa/MenuEmpresa.jsp" />

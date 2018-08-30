@@ -16,6 +16,9 @@
         <meta name="description" content="">
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
+        <script type="text/javascript">
+            history.forward();
+        </script>
         <!-- core CSS -->
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">

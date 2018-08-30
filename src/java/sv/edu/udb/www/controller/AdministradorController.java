@@ -41,6 +41,7 @@ public class AdministradorController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            modelo3.actualizarEstados();
             String operacion = request.getParameter("operacion");
             switch (operacion) {
                 case "listarEmpresa":
@@ -81,6 +82,8 @@ public class AdministradorController extends HttpServlet {
                     cambiarContrasena(request, response);
                     break;
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -323,6 +326,10 @@ public class AdministradorController extends HttpServlet {
             String codigo = request.getParameter("codigo");
             request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
             request.setAttribute("ofertasFuturas", modelo3.ListarOfertasFutura(codigo));
+            request.setAttribute("ofertasActivas", modelo3.ListarOfertasActiva(codigo));
+            request.setAttribute("ofertasFinalizadas", modelo3.ListarOfertasFinalizada(codigo));
+            request.setAttribute("ofertasRechazadas", modelo3.ListarOfertasRechazada(codigo));
+            request.setAttribute("ofertasDesartadas", modelo3.ListarOfertasDescartada(codigo));
             request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);

@@ -16,9 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Usuario;
+import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.utils.Correo;
 import sv.edu.udb.www.model.UsuariosModel;
 import sv.edu.udb.www.utils.Validaciones;
+
 
 /**
  *
@@ -29,6 +31,7 @@ public class UsuariosController extends HttpServlet {
 
     UsuariosModel UM = new UsuariosModel();
     UsuariosModel uM = new UsuariosModel();
+    OfertasModel modeloOfertas = new OfertasModel();
     ArrayList listaErrores = new ArrayList();
 
     /**
@@ -41,9 +44,12 @@ public class UsuariosController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {        
         response.setContentType("text/html;charset=UTF-8");
-        /* if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
+        
+        String operacion = request.getParameter("operacion");
+        
+        if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
             switch (request.getSession().getAttribute("estadoUsuario").toString()) {
                 case "1":
                     //Administrador
@@ -59,11 +65,68 @@ public class UsuariosController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
                     return;
                 default:
-                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
+                    response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                     return;
             }
-        }*/
-        String operacion = request.getParameter("operacion");
+        }
+        
+        switch (operacion) {
+            case "registro":
+                request.getRequestDispatcher("/Registro.jsp").forward(request, response);
+                break;
+            case "insertar":
+                insertar(request, response);
+                break;
+            case "insertarE":
+                insertarUsuarioEmpleado(request, response);
+                break;
+            case "login":
+                request.getRequestDispatcher("/Login.jsp").forward(request, response);
+                break;
+            case "verificar":
+                confirmar(request, response);
+                break;
+            case "ingresar":
+                ingresar(request, response);
+                break;
+            case "recuContra":
+                request.getRequestDispatcher("/recuperarContrasena.jsp").forward(request, response);
+                break;
+            case "recuperarC":
+                recuperarContrasena(request, response);
+                break;
+        }
+
+    }
+
+    /* if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
+=======
+        if(request.getParameter("operacion").equals("cerrar")){
+            cerrarSesion(request,response);
+            return;
+        }
+        if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
+>>>>>>> 31595a4fee8d2255f01e307101c2016c01297bbb
+            switch (request.getSession().getAttribute("estadoUsuario").toString()) {
+                case "1":
+                    //Administrador
+                    return;
+                case "2":
+                    //Empresa
+                    return;
+                case "3":
+                    //Empleado
+                    return;
+                case "4":
+                    //Cliente
+                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
+                    return;
+                default:
+                    response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
+                    return;
+            }
+        }
+        
         switch (operacion) {
             case "registro":
                 request.getRequestDispatcher("/Registro.jsp").forward(request, response);
@@ -322,15 +385,19 @@ public class UsuariosController extends HttpServlet {
 
             System.out.println("Variable sesión: " + idUsuario);
 
+            System.out.println("Variable sesión: " + idUsuario);
+
+            modeloOfertas.actualizarEstados();
+
             switch (estado) {
 
                 case -1:
                     request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
-                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
+                    cerrarSesion(request, response);
                     break;
                 case 0:
                     request.getSession().setAttribute("fracaso", "Usuario y/o contraseña incorrecta");
-                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=login");
+                    cerrarSesion(request, response);
                     break;
 
                 case 1:
@@ -349,7 +416,7 @@ public class UsuariosController extends HttpServlet {
                     break;
                 case 4:
                     //Cliente
-                    response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=inicio");
+                    request.getRequestDispatcher("/clientes.do?operacion=inicio").forward(request, response);
                     break;
 
                 default:
@@ -365,19 +432,19 @@ public class UsuariosController extends HttpServlet {
 
     private void recuperarContrasena(HttpServletRequest request, HttpServletResponse response) {
         try {
-            
+
             int IdUsuario = 0;
-            
+
             String correoElectronico = request.getParameter("correoElectronico");
-            
+
             System.out.println(correoElectronico);
 
             Usuario usu = new Usuario();
-            
+
             usu = UM.obtenerId(correoElectronico);
-            
+
             IdUsuario = usu.getIdUsuario();
-            
+
             System.out.println(IdUsuario);
 
             // Nueva contraseña
@@ -389,9 +456,9 @@ public class UsuariosController extends HttpServlet {
             }
 
             int nuevaContrasena = uM.recuperarContrasena(IdUsuario, pass);
-            
+
             System.out.println(nuevaContrasena);
-            
+
             String cadenaAleatoria = UUID.randomUUID().toString();
 
             String texto = "Tu contraseña ha sido renovada";
@@ -418,5 +485,15 @@ public class UsuariosController extends HttpServlet {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getSession().setAttribute("correo", null);
+            request.getSession().setAttribute("estadoUsuario", null);
+            response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
+        } catch (IOException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

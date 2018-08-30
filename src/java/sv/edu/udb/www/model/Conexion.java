@@ -23,6 +23,8 @@ public class Conexion {
     protected static Connection conexion=null;
     protected PreparedStatement st;
     protected ResultSet rs;
+    protected PreparedStatement st2;
+    protected ResultSet rs2;
     protected String sql;
     
     public Conexion() {

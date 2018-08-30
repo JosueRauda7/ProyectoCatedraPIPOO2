@@ -17,6 +17,7 @@ import sv.edu.udb.www.beans.Cupon;
 import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.EmpleadosModel;
+import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.UsuariosModel;
 import sv.edu.udb.www.utils.Correo;
 import sv.edu.udb.www.utils.Validaciones;
@@ -28,11 +29,13 @@ public class EmpleadosController extends HttpServlet {
     ArrayList listaErrores = new ArrayList();
     EmpleadosModel modelo = new EmpleadosModel();
     UsuariosModel modeloUsuario = new UsuariosModel();
+    OfertasModel modeloOfertas = new OfertasModel();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            modeloOfertas.actualizarEstados();
             if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("3")) {
                 response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
