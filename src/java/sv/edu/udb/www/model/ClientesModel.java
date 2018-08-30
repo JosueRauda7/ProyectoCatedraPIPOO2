@@ -71,7 +71,7 @@ public class ClientesModel extends Conexion {
         try {
             List<Oferta> ofertas = new ArrayList();
             this.conectar();
-            String sql = "SELECT * FROM ofertas";
+            String sql = "SELECT * FROM ofertas WHERE IdEstado=3";
             st = conexion.prepareStatement(sql);
             rs = st.executeQuery();
             while (rs.next()) {
@@ -106,7 +106,7 @@ public class ClientesModel extends Conexion {
                     + "       ofertas.CantidadLimite,ofertas.DescripcionOferta,ofertas.OtrosDetalles,ofertas.IdEstado,\n"
                     + "       ofertas.Justificacion,ofertas.CodigoEmpresa,ofertas.Url_foto,empresas.IdRubro\n"
                     + "FROM ofertas inner join empresas\n"
-                    + "on (empresas.CodigoEmpresa=ofertas.CodigoEmpresa)  WHERE empresas.IdRubro=?";
+                    + "on (empresas.CodigoEmpresa=ofertas.CodigoEmpresa)  WHERE empresas.IdRubro=? AND ofertas.IdEstado=3";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setInt(1, Integer.parseInt(idRubro));
