@@ -22,6 +22,7 @@ import sv.edu.udb.www.beans.EstadoCupon;
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.model.ClientesModel;
+import sv.edu.udb.www.model.CuponModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.utils.Validaciones;
 
@@ -32,6 +33,7 @@ import sv.edu.udb.www.utils.Validaciones;
 @WebServlet(name = "ClientesController", urlPatterns = {"/clientes.do"})
 public class ClientesController extends HttpServlet {
     OfertasModel modeloOfertas = new OfertasModel();
+    CuponModel modeloCupon = new CuponModel();
     ClientesModel model = new ClientesModel();
     ArrayList<String> listaErrores = new ArrayList<String>();
     List<Oferta> ofertas = new ArrayList();
@@ -42,6 +44,7 @@ public class ClientesController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             modeloOfertas.actualizarEstados();
+            modeloCupon.analizarCupones();
             if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("4")) {
                 response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
                 return;
@@ -87,6 +90,9 @@ public class ClientesController extends HttpServlet {
                     break;
                 case "comprarO":
                     realizarCompra(request, response);
+                    break;
+                default:
+                    inicio(request,response);
                     break;
             }
         } catch (SQLException ex) {

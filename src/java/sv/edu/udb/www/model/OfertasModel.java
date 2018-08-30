@@ -137,7 +137,7 @@ public class OfertasModel extends Conexion {
             }
 
             //Si el array tiene datos (tamaño distinto a 0), el proceso puede continuar
-            if (idoferta.size() != 0) {
+            if (idoferta.size()!= 0) {
 
                 //CURDATE() me da la fechaactual en formato año-mes-dia
                 sql = "Select CURDATE() as fechaActual";
@@ -147,7 +147,6 @@ public class OfertasModel extends Conexion {
 
                 //Recorriendo todos los idOfertas disponibles
                 for (int i = 0; i < idoferta.size(); i++) {
-                    System.out.println(idoferta.get(i)); //verificando por consola que ha capturado todos los idOfertas
 
                     //Usando el idOferta actual en (i) capturo las fechas de esta oferta 
                     sql = "Select * from ofertas where IdOferta=?";
@@ -167,7 +166,7 @@ public class OfertasModel extends Conexion {
                         if (fechaFin.before(fechaActual)) {
                             sql = "Update ofertas SET IdEstado=4 where IdOferta=?";
                             st = conexion.prepareStatement(sql);
-                            st.setInt(i, idoferta.get(i));
+                            st.setInt(1, idoferta.get(i));
                             st.executeUpdate();
                         }
                     }
@@ -177,7 +176,7 @@ public class OfertasModel extends Conexion {
                         if (fechaInicio.before(fechaActual) && fechaFin.after(fechaActual)) {
                             sql = "Update ofertas SET IdEstado=3 where IdOferta=?";
                             st = conexion.prepareStatement(sql);
-                            st.setInt(i, idoferta.get(i));
+                            st.setInt(1, idoferta.get(i));
                             st.executeUpdate();
                         }
                     }
@@ -186,7 +185,7 @@ public class OfertasModel extends Conexion {
                         if (fechaFin.before(fechaActual)) {
                             sql = "Update ofertas SET IdEstado=4 where IdOferta=?";
                             st = conexion.prepareStatement(sql);
-                            st.setInt(i, idoferta.get(i));
+                            st.setInt(1, idoferta.get(i));
                             st.executeUpdate();
                         }
                     }

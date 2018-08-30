@@ -52,8 +52,8 @@
                                 </c:forEach>
                             </div><br>
 
-                            <input type="submit" class="btn btn-info" value="Canjear" name="Canjear">
-                            <a class="btn btn-danger" href="#">Cancelar</a>
+                            <input type="submit" class="btn btn-success" value="Canjear" name="Canjear">
+                            <a class="btn btn-danger" href="${pageContext.request.contextPath}/empleados.do?operacion=canje">Cancelar</a>
                         </form>
                     </div>
                 </div> 

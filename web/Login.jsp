@@ -23,6 +23,7 @@
         <link href="css/animate.min.css" rel="stylesheet"> 
         <link href="css/prettyPhoto.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet"> 
+        <link href="${base}css/estilo.css" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="/MenuLogin.jsp"/>
@@ -57,14 +58,17 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-lg btn-primary btn-block">Iniciar sesion</button>
-                                <small><a href="${base}/usuarios.do?operacion=registro">No tienes cuenta? registrate aqui!</a></small> 
+                                <small><a href="${base}/usuarios.do?operacion=registro">¿No tienes cuenta? Registrate aquí!</a></small><br> 
+                                <small><a href="${base}/usuarios.do?operacion=recuperarC">Recupera tu contraseña</a></small>
                             </div>
                         </form>
-
                     </div>
-
                 </div>
             </div>
         </section>
+        <c:if test="${not empty Exito}">
+            alertify.success('${Exito}');
+            <c:set var="Exito" value="" scope="session"></c:set>
+        </c:if>
     </body>
 </html>
