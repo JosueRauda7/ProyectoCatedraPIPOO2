@@ -91,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <a class="btn btn-success" href="${pageContext.request.contextPath}/administrador.do?operacion=aprovarOferta&idoferta=${ofertasEspera.idOferta}" >Aprobar oferta</a>
+        <a class="btn btn-success" href="${pageContext.request.contextPath}/administrador.do?operacion=aprovarOferta&idoferta=${ofertasEspera.idOferta}&codigo=${ofertasEspera.codigoEmpresa}" >Aprobar oferta</a>
       </div>
     </div>
   </div>
@@ -515,6 +515,16 @@
     
     evt.currentTarget.className += " active";
 }
+
+   <c:if test="${not empty exito}">
+                           alertify.success('${exito}');
+                          <c:set var="exito" value="" scope="session" />
+                       </c:if>
+                           <c:if test="${not empty fracaso}">
+                           alertify.error('${fracaso}');
+                           <c:set var="fracaso" value="" scope="session" />
+                       </c:if>
+                           
         </script>
     </body>
 </html>

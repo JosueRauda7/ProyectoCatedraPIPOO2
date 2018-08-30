@@ -479,7 +479,20 @@ public class AdministradorController extends HttpServlet {
     }
 
     private void aprovarOferta(HttpServletRequest request, HttpServletResponse response) {
-     
+        try {
+            int idoferta = Integer.parseInt(request.getParameter("idoferta"));
+            
+            if(modelo3.aprobarOferta(idoferta)>0){
+                request.setAttribute("exito", "La oferta ha sido aprobada exitosamente");
+                request.getRequestDispatcher("/administrador.do?operacion=ofertasEmpresa").forward(request, response);
+            }else{
+                request.setAttribute("fracaso", "Lo sentimos algo a salido mal");
+                request.getRequestDispatcher("/administrador.do?operacion=ofertasEmpresa").forward(request, response);
+            } 
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
     }
 
 }
