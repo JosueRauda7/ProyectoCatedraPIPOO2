@@ -326,6 +326,7 @@ public class AdministradorController extends HttpServlet {
             String codigo = request.getParameter("codigo");
             request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
             request.setAttribute("ofertasFuturas", modelo3.ListarOfertasFutura(codigo));
+            
             request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
