@@ -14,6 +14,9 @@
         <meta name="description" content="">
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
+        <script type="text/javascript">
+            history.forward();
+        </script>
         <!-- core CSS -->
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
@@ -63,6 +66,16 @@
                 </div>
             </div>
         </section>
+        <script>
+            <c:if test="${not empty Exito}">
+            alertify.success('${Exito}');
+                <c:set var="Exito" value="" scope="session"></c:set>
+            </c:if>
+            <c:if test="${not empty Fracaso}">
+            alertify.error('${Fracaso}');
+                <c:set var="Fracaso" value="" scope="session"></c:set>
+            </c:if>
+        </script>  
         <jsp:include page="footerCliente.jsp"/>
     </body>
 </html>

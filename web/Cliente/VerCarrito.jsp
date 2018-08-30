@@ -17,6 +17,9 @@
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
         <!-- core CSS -->
+        <script type="text/javascript">
+            history.forward();
+        </script>
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
         <link href="${base}/css/animate.min.css" rel="stylesheet"> 
@@ -39,45 +42,34 @@
                 <div class="row" >
                     <div class="thumbnail">
                         <h2 style="color:black;">Artículos Seleccionados</h2>
-                        <c:if test="${not empty sessionScope.exito}">
-                            <div class="alert alert-success">
-                                <p>${sessionScope.exito}</p>
-                                <c:set var="exito" value="" scope="session"/>
-                            </div>
-                        </c:if>
-                        <c:if test="${not empty sessionScope.fracaso}">
-                            <div class="alert alert-danger">
-                                <p>${sessionScope.fracaso}</p>
-                                <c:set var="fracaso" value="" scope="session"/>
-                            </div>
-                        </c:if>
                     </div>
                     <div class="col-lg-8 col-sm-offset-2">                    
-                        <form action="${base}/usuarios.do" method="POST">
+                        <form action="${base}/clientes.do" method="POST">
+                            <input type="hidden" name="operacion" value="comprarC"/>
                             <div class="form-group">
                                 <table style="color:black; width: 100%;" id="tabla" class="table-striped table-bordered table-condensed">
                                     <thead>
                                         <tr>
-                                            <th>Cupón</th>
-                                            <th>Precio ($)</th>
-                                            <th>Cantidad</th>
-                                            <th>Cancelar</th>
+                                            <th style="text-align: center;">#</th>
+                                            <th style="text-align: center;">Cupón</th>
+                                            <th style="text-align: center;">Precio</th>
+                                            <th style="text-align: center;">Cantidad</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="oferta" items="${ofertas}" varStatus="loop">
                                         <tr>
+                                            <td>${loop.index+1}</td>
                                             <td>${oferta.getTituloOferta()}</td>
-                                            <td>${oferta.getPrecioOferta()}</td>
-                                            <td><input name="cantidad" min="0" type="number" value="1"/></td>
-                                            <td><a class="btn btn-primary" href="javascript:cancelar('${loop.index}')">Cancelar</a></td>
+                                            <td style="text-align: center;">$ ${oferta.getPrecioOferta()}</td>
+                                            <td style="text-align: center;"><a class="btn btn-primary" href="javascript:cancelar('${loop.index}')">Cancelar</a></td>
                                         </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="form-group col-lg-8 col-sm-offset-2">
-                                <button type="submit" class="btn btn-lg btn-primary btn-block">Finalizar Compra</button>
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">Realizar Compra</button>
                                 <small><a style="text-align: center;" href="${base}/clientes.do?operacion=listar">Regresar</a></small> 
                             </div>
                         </form>
