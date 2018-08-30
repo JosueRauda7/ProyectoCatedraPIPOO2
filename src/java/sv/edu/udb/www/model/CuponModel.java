@@ -9,27 +9,26 @@ import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Cupon;
 
 public class CuponModel extends Conexion {
+    
     public void analizarCupones() throws SQLException{
         try {
             Cupon cupon = new Cupon();
-            List<Cupon> listaCupon = new ArrayList();
+            ArrayList<Cupon> listaCupon = new ArrayList();
             //Capturare las fechas de los cupones y la fecha actual del sistema
-            Date fechaLimite, fechaActual;
+            Date fechaLimite, fechaActual = null;
             this.conectar();
-            String sql="SELECT cupones.CodigoCupo,cupones.FechaCompra,,cupones.FechaCanje,cupones.IdCliente,\n" +
-                    "       cupones.IdOferta,cupones.IdEstadoCupon,ofertas.FechaLimite,ofertas.IdOferta,estadocupon.IdEstadoCupon,\n" +
-                    "       estadocupon.Estado FROM (bddpoo.cupones cupones\n" +
+            String sql="SELECT cupones.CodigoCupo,cupones.FechaCompra,cupones.FechaCanje,cupones.IdCliente,\n" +
+                    "       cupones.IdOferta,cupones.IdEstadoCupon,ofertas.FechaLimite,ofertas.IdOferta FROM (bddpoo.cupones cupones\n" +
                     "      INNER JOIN bddpoo.ofertas ofertas\n" +
-                    "         ON (cupones.IdOferta = ofertas.IdOferta))\n" +
-                    "     INNER JOIN bddpoo.estadocupon estadocupon\n" +
-                    "        ON (cupones.IdEstadoCupon = estadocupon.IdEstadoCupon)";
-            String sqlV = "UPDATE ofertas SET IdEstadoCupon=3 WHERE CodigoCupo=?";
+                    "         ON (cupones.IdOferta = ofertas.IdOferta))";
+            String sqlV = "UPDATE cupones SET IdEstadoCupon=3 WHERE CodigoCupo=?";
             //CURDATE() me da la fechaactual en formato año-mes-dia
-                String sqlF = "Select CURDATE() as fechaActual";
-                rs = st.executeQuery(sqlF);
-                rs.next();
-                fechaActual = rs.getDate("fechaActual");
-                
+                String sqlF = "SELECT CURRENT_DATE AS fechaActual";
+                st=conexion.prepareStatement(sqlF);
+                rs = st.executeQuery();
+                while(rs.next()){
+                    fechaActual = rs.getDate("fechaActual");
+                }
             //Obtencion de consulta sql    
             st=conexion.prepareStatement(sql);
             rs=st.executeQuery();
@@ -37,14 +36,12 @@ public class CuponModel extends Conexion {
                 cupon.setCodigoCupo(rs.getString("CodigoCupo"));
                 cupon.setIdEstadoCupon(rs.getInt("IdEstadoCupon"));
                 cupon.setFechaL(rs.getDate("FechaLimite"));
-                listaCupon.add(cupon);
-            }
-            for(Cupon cuponsito:listaCupon){
-                if(cuponsito.getIdEstadoCupon()==1&&cuponsito.getFechaL().before(fechaActual)){
-                    st=conexion.prepareStatement(sqlV);
-                    st.setString(1, cuponsito.getCodigoCupo());
-                    int estado = st.executeUpdate();
+                if(cupon.getIdEstadoCupon()==1&&cupon.getFechaL().before(fechaActual)){
+                    st2=conexion.prepareStatement(sqlV);
+                    st2.setString(1, cupon.getCodigoCupo());
+                    st2.executeUpdate();
                 }
+                listaCupon.add(cupon);
             }
             this.desconectar();
             
