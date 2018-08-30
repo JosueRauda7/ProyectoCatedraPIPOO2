@@ -242,4 +242,7 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
+    /*public int insertarCupon(String idOferta,String idCliente){
+        
+    }*/
 }
