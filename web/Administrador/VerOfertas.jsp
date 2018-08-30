@@ -91,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Aprobar oferta</button>
+        <a class="btn btn-success" href="${pageContext.request.contextPath}/administrador.do?operacion=aprovarOferta&idoferta=${ofertasEspera.idOferta}" >Aprobar oferta</a>
       </div>
     </div>
   </div>

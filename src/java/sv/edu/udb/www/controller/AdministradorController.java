@@ -81,6 +81,9 @@ public class AdministradorController extends HttpServlet {
                 case "cambiarC":
                     cambiarContrasena(request, response);
                     break;
+                case "aprovarOferta":
+                    aprovarOferta(request, response);
+                    break;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -473,6 +476,10 @@ public class AdministradorController extends HttpServlet {
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void aprovarOferta(HttpServletRequest request, HttpServletResponse response) {
+     
     }
 
 }

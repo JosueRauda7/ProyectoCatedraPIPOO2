@@ -548,5 +548,12 @@ public class OfertasModel extends Conexion {
             return 0;
         }
     }
+    
+    public int aprobarOferta(int idoferta, int idestado){
+      String sql ="UPDATE FROM ofertas SET IdEstado = ? WHERE IdOferta = ?";
+      this.conectar();
+      st = conexion.prepareStatement(sql);
+      st.setInt(1, idoferta);
+    }
 
 }
