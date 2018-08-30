@@ -18,6 +18,7 @@ public class Cupon {
     private Cliente cliente;
     private Oferta oferta;
     private EstadoCupon estadoCupon;
+    private int idEstadoCupon;
 
     //datos de ofertas que se utilizaran en una vista
     private String tituloOferta;
@@ -26,6 +27,8 @@ public class Cupon {
     private String descripcionOferta;
     private double precioRegular;
     private double precioOferta;
+    
+    private Date fechaL;
     
     public Cupon(){
         this.codigoCupo="";
@@ -135,8 +138,21 @@ public class Cupon {
     public void setPrecioOferta(double precioOferta) {
         this.precioOferta = precioOferta;
     }
-    
-    
-    
+
+    public int getIdEstadoCupon() {
+        return idEstadoCupon;
+    }
+
+    public void setIdEstadoCupon(int idEstadoCupon) {
+        this.idEstadoCupon = idEstadoCupon;
+    }
+
+    public Date getFechaL() {
+        return fechaL;
+    }
+
+    public void setFechaL(Date fechaL) {
+        this.fechaL = fechaL;
+    }
     
 }
