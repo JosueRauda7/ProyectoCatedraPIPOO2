@@ -76,6 +76,7 @@
                                         <td>${ofertas.tituloOferta}</td>
                                         <c:choose>
                                             <c:when test="${ofertas.cantidadLimite!=-1}">
+                                                
                                                 <td>${ofertas.cantidadLimite}</td>
                                             </c:when>
                                             <c:otherwise>
@@ -90,8 +91,11 @@
                                         <td><img height="100px" src="${base}/images/ofertas/${ofertas.url_foto}"/></td>
                                         <td>
                                             <a title="Detalles" class="btn btn-default" href="javascript:detalles('${ofertas.idOferta}')"><span class="glyphicon glyphicon-search"></span></a>
-                                            <a title="Editar" class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?op=obtener&id=${empleado.idEmpleado}"><span class="glyphicon glyphicon-edit"></span></a>
-                                            <a title="Eliminar  " class="btn btn-danger" href="#"><span class="glyphicon glyphicon-trash"></span></a>
+                                            
+                                            <c:if test="${ofertas.estadoOferta.estado eq 'Rechazada' }">
+                                                <a title="Editar" class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?operacion=obtenerOferta&id=${ofertas.idOferta}"><span class="glyphicon glyphicon-edit"></span></a>                                            
+                                            </c:if>
+                                            
                                         </td>
                                     </tr>
                                 </c:forEach>

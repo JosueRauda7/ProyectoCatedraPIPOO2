@@ -77,6 +77,9 @@ public class EmpresasController extends HttpServlet {
                 case "detalleOferta":
                     detalleOferta(request, response);
                     break;
+                case "obtenerOferta":
+                    obtener(request,response);
+                    break;
                 case "listarEmpleado":
                     listarEmpleado(request, response);
                     break;
@@ -316,7 +319,12 @@ public class EmpresasController extends HttpServlet {
             Empresa empresa = modeloEmpresa.detalleEmpresa((String) request.getSession().getAttribute("correo"));
             JSONObject json = new JSONObject();
             json.put("CuponesVendidos", oferta.getCantidadVendida());
-            json.put("CuponesDisponibles", oferta.getCantidadLimite());
+            
+            if(oferta.getCantidadLimite()==-1){
+                json.put("CuponesDisponibles", "Ilimitado");
+            }else{
+                json.put("CuponesDisponibles", oferta.getCantidadLimite());
+            }            
             json.put("IngresosTotales", (oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
             json.put("Cargoporservicios", (Double.parseDouble(empresa.getComision())) * (oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
             json.put("Descripcion", oferta.getDescripcionOferta());
@@ -399,6 +407,10 @@ public class EmpresasController extends HttpServlet {
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void obtener(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
