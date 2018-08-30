@@ -42,14 +42,21 @@ public class EmpleadosController extends HttpServlet {
                 //Redireccionar a la página principal del empleado
                 return;
             }
+            
             String operacion = request.getParameter("operacion");
 
             switch (operacion) {
+                case "home":
+                    request.getRequestDispatcher("/Empleado/Home.jsp").forward(request, response);
+                    break;
                 case "obtener":
                     obtenerCupon(request, response);
                     break;
                 case "canjear":
                     canjearCupon(request, response);
+                    break;
+                case "canje":
+                    request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
                     break;
                 case "listar":
                     listar(request, response);
@@ -146,15 +153,15 @@ public class EmpleadosController extends HttpServlet {
             if (!"Disponible".equals(estadoCupon)) {
                 request.setAttribute("Fracaso", "El cupón no esta disponible");
                 request.setAttribute("listaCupones", modelo.obtenerCupon(codigoCupon));
-                request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
+                request.getRequestDispatcher("/empleados.do?operacion=canje").forward(request, response);
             } else if (!duiComprador.equals(duiCanjeador)) {
                 request.setAttribute("Fracaso", "El DUI no coincide");
                 request.setAttribute("listaCupones", modelo.obtenerCupon(codigoCupon));
-                request.getRequestDispatcher("/Empleado/canjearCupon.jsp").forward(request, response);
+                request.getRequestDispatcher("/empleados.do?operacion=canje").forward(request, response);
             } else {
                 if (modelo.canjearCupon(codigoCupon) > 0) {
                     request.setAttribute("Exito", "El cupón ha sido canjeado, exitosamente");
-                    response.sendRedirect("/Empleado/canjearCupon.jsp");
+                    response.sendRedirect("/empleados.do?operacion=canje");
                 }
             }
         } catch (SQLException | ServletException | IOException ex) {

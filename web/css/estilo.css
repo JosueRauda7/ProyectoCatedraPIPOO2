@@ -4,7 +4,7 @@
     width: 42%;
     margin-left: 30%;
     padding: 2%;
-    margin-top: 1.5%;
+    margin-top: 0.8%;
 }
 
 #formularioCambiarContra{
@@ -40,7 +40,7 @@
 }
 
 #codigoCupon{
-    background-color: red;
+    background-color: #616161;
     margin-right: -52%;
     margin-left: 23%;
     padding: 2%;
@@ -48,11 +48,11 @@
     padding-right: 5%;
     padding-left: 5%;
     padding-top: 6%;
-    padding-bottom: 3%;
+    padding-bottom: 5%;
 }
 
 #verificar{
-    margin-top: 2%;
+    margin-top: 4%;
     margin-left: 40%;
 }
 
@@ -79,4 +79,21 @@
 
 #codigo{
     width: 100%;
+}
+
+#formularioRecuperarContra{
+    background-color: white;
+    color: black;
+    width: 42%;
+    margin-left: 30%;
+    padding: 2%;
+    margin-top: 5%;
+}
+
+#recuperarContrasena{
+    margin-left: 40.5%;
+}
+
+#canjear{
+    height: 259.4px;
 }
