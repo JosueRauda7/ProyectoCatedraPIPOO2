@@ -19,7 +19,7 @@
   <button class="tablinks" onclick="openCity(event, 'Espera')">En espera</button>
   <button class="tablinks" onclick="openCity(event, 'Futuras')">Aprobadadas futuras</button>
   <button class="tablinks" onclick="openCity(event, 'Activas')">Activas</button>
-  <button class="tablinks" onclick="openCity(event, 'Pasadas')">Pasadas</button>
+  <button class="tablinks" onclick="openCity(event, 'Finalizadas')">Finalizadas</button>
   <button class="tablinks" onclick="openCity(event, 'Rechazadas')">Rechasadas</button>
   <button class="tablinks" onclick="openCity(event, 'Descartadas')">Descartadas</button>
 </div>
@@ -160,6 +160,306 @@
               <h4>$${ofertasFuturas.ingresos}</h4>
               <h3>Cargo por servicio:</h3>
               <h4>$${ofertasFuturas.comision}</h4>
+          
+          </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
+            </c:forEach> 
+            </div>
+            
+              <div id="Activas" class="tabcontent">
+               <c:forEach var="ofertasActivas" items="${requestScope.ofertasActivas}">
+                <div class="contenofer">
+                    <h3 class="text-center">${ofertasActivas.tituloOferta}</h3>
+                    <div id="contenpre">
+                        <div>
+                            <h5>Precio regular:</h5>
+                            <p class="text-center">$${ofertasActivas.precioRegular}</p>
+                        </div>
+                        <div>
+                            <h5>Precio oferta:</h5>
+                            <p class="text-center">$${ofertasActivas.precioOferta}</p>
+                        </div>
+                    </div>
+                    <div id="contenfech">
+                        <div>
+                            <h5>Fecha inicio:</h5>
+                            <p class="text-center">${ofertasActivas.fechaInicio}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha fin:</h5>
+                            <p class="text-center">${ofertasActivas.fechaFin}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha limite:</h5>
+                            <p class="text-center">${ofertasActivas.fechaLimite}</p>
+                        </div>
+                    </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Descripción oferta:</h5>
+                            <p class="text-justify">${ofertasActivas.descripcionOferta}</p>
+                        </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Otros detalles:</h5>
+                            <p class="text-justify">${ofertasActivas.otrosDetalles}</p>
+                        </div>
+                       
+                            <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertasActivas.idOferta}">
+  Ver mas de la oferta
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal${ofertasActivas.idOferta}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos oferta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <h1 class="text-center">${ofertasActivas.tituloOferta}</h1>
+          <img class="imagenoferta" src="${pageContext.request.contextPath}/images/${ofertasActivas.url_foto}">
+          <section class="contencontable">
+              <h3>Cupones disponibles:</h3>
+              <h4>${ofertasActivas.cantidadLimite} cupones</h4>
+              <h3>Ingresos totales:</h3>
+              <h4>$${ofertasActivas.ingresos}</h4>
+              <h3>Cargo por servicio:</h3>
+              <h4>$${ofertasActivas.comision}</h4>
+          
+          </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
+            </c:forEach> 
+            </div>
+            
+               <div id="Finalizadas" class="tabcontent">
+               <c:forEach var="ofertasFinalizadas" items="${requestScope.ofertasFinalizadas}">
+                <div class="contenofer">
+                    <h3 class="text-center">${ofertasFinalizadas.tituloOferta}</h3>
+                    <div id="contenpre">
+                        <div>
+                            <h5>Precio regular:</h5>
+                            <p class="text-center">$${ofertasFinalizadas.precioRegular}</p>
+                        </div>
+                        <div>
+                            <h5>Precio oferta:</h5>
+                            <p class="text-center">$${ofertasFinalizadas.precioOferta}</p>
+                        </div>
+                    </div>
+                    <div id="contenfech">
+                        <div>
+                            <h5>Fecha inicio:</h5>
+                            <p class="text-center">${ofertasFinalizadas.fechaInicio}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha fin:</h5>
+                            <p class="text-center">${ofertasFinalizadas.fechaFin}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha limite:</h5>
+                            <p class="text-center">${ofertasFinalizadas.fechaLimite}</p>
+                        </div>
+                    </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Descripción oferta:</h5>
+                            <p class="text-justify">${ofertasFinalizadas.descripcionOferta}</p>
+                        </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Otros detalles:</h5>
+                            <p class="text-justify">${ofertasFinalizadas.otrosDetalles}</p>
+                        </div>
+                       
+                            <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertasFinalizadas.idOferta}">
+  Ver mas de la oferta
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal${ofertasFinalizadas.idOferta}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos oferta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <h1 class="text-center">${ofertasFinalizadas.tituloOferta}</h1>
+          <img class="imagenoferta" src="${pageContext.request.contextPath}/images/${ofertasFinalizadas.url_foto}">
+          <section class="contencontable">
+              <h3>Cupones disponibles:</h3>
+              <h4>${ofertasFinalizadas.cantidadLimite} cupones</h4>
+              <h3>Ingresos totales:</h3>
+              <h4>$${ofertasFinalizadas.ingresos}</h4>
+              <h3>Cargo por servicio:</h3>
+              <h4>$${ofertasFinalizadas.comision}</h4>
+          
+          </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
+            </c:forEach> 
+            </div>
+            
+              <div id="Descartadas" class="tabcontent">
+               <c:forEach var="ofertasDesartadas" items="${requestScope.ofertasDesartadas}">
+                <div class="contenofer">
+                    <h3 class="text-center">${ofertasDesartadas.tituloOferta}</h3>
+                    <div id="contenpre">
+                        <div>
+                            <h5>Precio regular:</h5>
+                            <p class="text-center">$${ofertasDesartadas.precioRegular}</p>
+                        </div>
+                        <div>
+                            <h5>Precio oferta:</h5>
+                            <p class="text-center">$${ofertasDesartadas.precioOferta}</p>
+                        </div>
+                    </div>
+                    <div id="contenfech">
+                        <div>
+                            <h5>Fecha inicio:</h5>
+                            <p class="text-center">${ofertasDesartadas.fechaInicio}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha fin:</h5>
+                            <p class="text-center">${ofertasDesartadas.fechaFin}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha limite:</h5>
+                            <p class="text-center">${ofertasDesartadas.fechaLimite}</p>
+                        </div>
+                    </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Descripción oferta:</h5>
+                            <p class="text-justify">${ofertasDesartadas.descripcionOferta}</p>
+                        </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Otros detalles:</h5>
+                            <p class="text-justify">${ofertasDesartadas.otrosDetalles}</p>
+                        </div>
+                       
+                            <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertasDesartadas.idOferta}">
+  Ver mas de la oferta
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal${ofertasDesartadas.idOferta}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos oferta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <h1 class="text-center">${ofertasDesartadas.tituloOferta}</h1>
+          <img class="imagenoferta" src="${pageContext.request.contextPath}/images/${ofertasDesartadas.url_foto}">
+          <section class="contencontable">
+              <h3>Cupones disponibles:</h3>
+              <h4>${ofertasDesartadas.cantidadLimite} cupones</h4>
+              <h3>Ingresos totales:</h3>
+              <h4>$${ofertasDesartadas.ingresos}</h4>
+              <h3>Cargo por servicio:</h3>
+              <h4>$${ofertasDesartadas.comision}</h4>
+          
+          </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
+            </c:forEach> 
+            </div>
+            
+              <div id="Rechazadas" class="tabcontent">
+               <c:forEach var="ofertasRechazadas" items="${requestScope.ofertasRechazadas}">
+                <div class="contenofer">
+                    <h3 class="text-center">${ofertasRechazadas.tituloOferta}</h3>
+                    <div id="contenpre">
+                        <div>
+                            <h5>Precio regular:</h5>
+                            <p class="text-center">$${ofertasRechazadas.precioRegular}</p>
+                        </div>
+                        <div>
+                            <h5>Precio oferta:</h5>
+                            <p class="text-center">$${ofertasRechazadas.precioOferta}</p>
+                        </div>
+                    </div>
+                    <div id="contenfech">
+                        <div>
+                            <h5>Fecha inicio:</h5>
+                            <p class="text-center">${ofertasRechazadas.fechaInicio}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha fin:</h5>
+                            <p class="text-center">${ofertasRechazadas.fechaFin}</p>
+                        </div>
+                        <div>
+                            <h5>Fecha limite:</h5>
+                            <p class="text-center">${ofertasRechazadas.fechaLimite}</p>
+                        </div>
+                    </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Descripción oferta:</h5>
+                            <p class="text-justify">${ofertasRechazadas.descripcionOferta}</p>
+                        </div>
+                        <div id="contendescrip">
+                            <h5 class="text-center">Otros detalles:</h5>
+                            <p class="text-justify">${ofertasRechazadas.otrosDetalles}</p>
+                        </div>
+                       
+                            <button type="button" class="btn btn-primary btnmostar" data-toggle="modal" data-target="#exampleModal${ofertasRechazadas.idOferta}">
+  Ver mas de la oferta
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal${ofertasRechazadas.idOferta}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos oferta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <h1 class="text-center">${ofertasRechazadas.tituloOferta}</h1>
+          <img class="imagenoferta" src="${pageContext.request.contextPath}/images/${ofertasRechazadas.url_foto}">
+          <section class="contencontable">
+              <h3>Cupones disponibles:</h3>
+              <h4>${ofertasRechazadas.cantidadLimite} cupones</h4>
+              <h3>Ingresos totales:</h3>
+              <h4>$${ofertasRechazadas.ingresos}</h4>
+              <h3>Cargo por servicio:</h3>
+              <h4>$${ofertasRechazadas.comision}</h4>
           
           </section>
       </div>

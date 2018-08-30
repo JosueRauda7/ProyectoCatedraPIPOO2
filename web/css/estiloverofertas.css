@@ -7,7 +7,7 @@
     padding-bottom: 2%;
     height: 450px;
     overflow-y: scroll;
-    
+    margin-bottom: 2%;
 }
 .contenofer{
     width: 30%;
@@ -62,7 +62,7 @@
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    width: 55.85%;
+    width: 57.4%;
     background-color: #C2185B;
     margin-left: 5%;
     
