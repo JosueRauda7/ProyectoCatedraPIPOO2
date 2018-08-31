@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
+import sv.edu.udb.www.model.ClientesModel;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.RubrosModel;
@@ -35,6 +36,7 @@ public class AdministradorController extends HttpServlet {
     EmpresasModel modelo = new EmpresasModel();
     UsuariosModel modelo2 = new UsuariosModel();
     OfertasModel modelo3 = new OfertasModel();
+    ClientesModel modelo4 = new ClientesModel();
     ArrayList listaErrores = new ArrayList<>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -80,6 +82,9 @@ public class AdministradorController extends HttpServlet {
                     break;
                 case "cambiarC":
                     cambiarContrasena(request, response);
+                    break;
+                case "verClientes":
+                    verClientes(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -472,6 +477,15 @@ public class AdministradorController extends HttpServlet {
             }
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void verClientes(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setAttribute("listaClientes",modelo4.listarClientes() );
+            request.getRequestDispatcher("/Administrador/VerClientes.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
