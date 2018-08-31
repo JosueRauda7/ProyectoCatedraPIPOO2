@@ -14,19 +14,49 @@
     <body id="home">
         <jsp:include page="MenuAdmin.jsp" />
         <h1 class="text-center">Ofertas para la empresa</h1>
-          <div class="tab">
+        <div class="tab">
 
-  <button class="tablinks" onclick="openCity(event, 'Disponibles')">Disponibles</button>
-  <button class="tablinks" onclick="openCity(event, 'Canjeados')">Canjeados</button>
-  <button class="tablinks" onclick="openCity(event, 'Vencidos')">Vencidos</button>
-</div>
+            <button class="tablinks" onclick="openCity(event, 'Disponibles')">Disponibles</button>
+            <button class="tablinks" onclick="openCity(event, 'Canjeados')">Canjeados</button>
+            <button class="tablinks" onclick="openCity(event, 'Vencidos')">Vencidos</button>
+        </div>
         <section class="contendatos">
             <div id="Disponibles" class="tabcontent">
                 <c:forEach var="cuponesDisponibles" items="${requestScope.cuponesDisponibles}">
                     <div class="contenofer">
                         <div  class="text-center">
                             <h3>Codigo cupon:</h3>
-                        <h4>${cuponesDisponibles.codigoCupo}</h4>
+                            <h4>${cuponesDisponibles.codigoCupo}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Fecha compra:</h3>
+                            <h4>${cuponesDisponibles.fechaCompra}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Nombre de la oferta:</h3>
+                        <h4>${cuponesDisponibles.oferta.tituloOferta}</h4>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+             <div id="Canjeados" class="tabcontent">
+                <c:forEach var="cuponesCanjeados" items="${requestScope.cuponesCanjeados}">
+                    <div class="contenofer">
+                        <div  class="text-center">
+                            <h3>Codigo cupon:</h3>
+                            <h4>${cuponesCanjeados.codigoCupo}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Fecha compra:</h3>
+                            <h4>${cuponesCanjeados.fechaCompra}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Fecha canje:</h3>
+                            <h4>${cuponesCanjeados.fechaCanje}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Nombre de la oferta:</h3>
+                        <h4>${cuponesCanjeados.oferta.tituloOferta}</h4>
                         </div>
                     </div>
                 </c:forEach>
@@ -53,25 +83,25 @@
             </div>
         </footer><!--/#footer-->
         <script>
-            document.getElementById("Disponibles").style.display="block";
-              function openCity(evt, cityName) {
-     
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "block";
-   
-        document.getElementById("exampleModalLabel").innerHTML= cityName;
-   
-    
-    evt.currentTarget.className += " active";
-}
+            document.getElementById("Disponibles").style.display = "block";
+            function openCity(evt, cityName) {
+
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+
+                document.getElementById("exampleModalLabel").innerHTML = cityName;
+
+
+                evt.currentTarget.className += " active";
+            }
         </script>
     </body>
 </html>

@@ -498,6 +498,7 @@ public class AdministradorController extends HttpServlet {
         try {
             int idcliente = Integer.parseInt(request.getParameter("idcliente"));
             request.setAttribute("cuponesDisponibles", modelo5.obtenerCuponesDisponibles(idcliente));
+            request.setAttribute("cuponesCanjeados", modelo5.obtenerCuponesCanjeados(idcliente));
             request.getRequestDispatcher("/Administrador/VerCupones.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
