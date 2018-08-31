@@ -83,6 +83,7 @@ public class AdministradorController extends HttpServlet {
                 case "cambiarC":
                     cambiarContrasena(request, response);
                     break;
+<<<<<<< HEAD
                 case "aprovarOferta":
                     aprovarOferta(request, response);
                     break;
@@ -92,6 +93,8 @@ public class AdministradorController extends HttpServlet {
                 case "verCupones":
                     verCupones(request, response);
                     break;
+=======
+>>>>>>> f55c14e7d62eed50e167dd79bf93c3b30ac4caf9
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -337,10 +340,6 @@ public class AdministradorController extends HttpServlet {
             String codigo = request.getParameter("codigo");
             request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
             request.setAttribute("ofertasFuturas", modelo3.ListarOfertasFutura(codigo));
-            request.setAttribute("ofertasActivas", modelo3.ListarOfertasActiva(codigo));
-            request.setAttribute("ofertasFinalizadas", modelo3.ListarOfertasFinalizada(codigo));
-            request.setAttribute("ofertasRechazadas", modelo3.ListarOfertasRechazada(codigo));
-            request.setAttribute("ofertasDesartadas", modelo3.ListarOfertasDescartada(codigo));
             request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -486,6 +485,7 @@ public class AdministradorController extends HttpServlet {
         }
     }
 
+<<<<<<< HEAD
     private void aprovarOferta(HttpServletRequest request, HttpServletResponse response) {
         try {
             int idoferta = Integer.parseInt(request.getParameter("idoferta"));
@@ -516,4 +516,6 @@ public class AdministradorController extends HttpServlet {
     
     }
 
+=======
+>>>>>>> f55c14e7d62eed50e167dd79bf93c3b30ac4caf9
 }

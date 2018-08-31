@@ -18,12 +18,15 @@
                     <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=listar">Comprar Cupones</a></li>
                     <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=misCupones">Mis Cupones</a></li>
 
+                    <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=ver">Carrito de Compras</a></li>
+                    <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=cerrar">Cerrar Sesión</a></li>
+
                     <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=ver">Carrito de Compras</a></li>                    
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=upCc">Cambiar contraseña</a></li>
-                            <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=cerrar">Cerrar Sesión</a></li>
+                            <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=updateC">Cambiar contraseña</a></li>
+                            <li><a href="${pageContext.request.contextPath}/clientes.do?operacion=cerrar">Cerrar Sesión</a></li>
                         </ul>
                     </li> 
 

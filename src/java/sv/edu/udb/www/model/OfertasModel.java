@@ -6,7 +6,10 @@
 package sv.edu.udb.www.model;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -114,91 +117,95 @@ public class OfertasModel extends Conexion {
             return null;
         }
     }
-
-    public void actualizarEstados() throws SQLException {
-        Oferta oferta = new Oferta();
-        int estado = 0;
-        //Capturare todos los idofertas existentes aqui
-        ArrayList<Integer> idoferta = new ArrayList();
-        //Capturare las fechas de las ofertas y la fecha actual del sistema
-        Date fechaInicio, fechaFin, fechaActual;
-
+    
+    public void actualizarEstados() throws SQLException{
+            Oferta oferta = new Oferta();
+            int estado=0;
+            //Capturare todos los idofertas existentes aqui
+            ArrayList<Integer> idoferta = new ArrayList();
+            //Capturare las fechas de las ofertas y la fecha actual del sistema
+            Date fechaInicio,fechaFin, fechaActual;
+            
         try {
-
+            
             //Busco todas las ofertas
-            String sql = "Select * from ofertas";
+            String sql="Select * from ofertas";
             this.conectar();
-            st = conexion.prepareStatement(sql);
-            rs = st.executeQuery();
-
+            st=conexion.prepareStatement(sql);
+            rs=st.executeQuery();
+            
             //Guardando el idOferta de cada oferta
-            while (rs.next()) {
+            while(rs.next()){
                 idoferta.add(rs.getInt("IdOferta"));
             }
-
+            
             //Si el array tiene datos (tamaño distinto a 0), el proceso puede continuar
-            if (idoferta.size()!= 0) {
-
+            if(idoferta.size()!=0){
+                
                 //CURDATE() me da la fechaactual en formato año-mes-dia
-                sql = "Select CURDATE() as fechaActual";
-                rs = st.executeQuery(sql);
+                sql="Select CURDATE() as fechaActual";
+                rs=st.executeQuery(sql);
                 rs.next();
-                fechaActual = rs.getDate("fechaActual");
-
+                fechaActual=rs.getDate("fechaActual");
+                
                 //Recorriendo todos los idOfertas disponibles
                 for (int i = 0; i < idoferta.size(); i++) {
-
+                    System.out.println(idoferta.get(i)); //verificando por consola que ha capturado todos los idOfertas
+                    
                     //Usando el idOferta actual en (i) capturo las fechas de esta oferta 
-                    sql = "Select * from ofertas where IdOferta=?";
-                    st = conexion.prepareStatement(sql);
+                    sql="Select * from ofertas where IdOferta=?";
+                    st=conexion.prepareStatement(sql);
                     st.setInt(1, idoferta.get(i));
-                    rs = st.executeQuery();
+                    rs=st.executeQuery();
                     rs.next();
-
-                    estado = rs.getInt("IdEstado");
-                    fechaInicio = rs.getDate("FechaInicio");
-                    fechaFin = rs.getDate("FechaFin");
-
+                    
+                    estado=rs.getInt("IdEstado");
+                    fechaInicio=rs.getDate("FechaInicio");
+                    fechaFin=rs.getDate("FechaFin");                   
+                    
                     //fecha.before() y fecha.after() solo compara si la fecha se encuentra "antes" o "despues" respectivamente de 
                     //la fechaActual, NO calcula la diferencia entre fechas!
+                    
                     //Si la oferta tiene estado En espera y se cumple la condicion de fecha
-                    if (estado == 1) {
-                        if (fechaFin.before(fechaActual)) {
-                            sql = "Update ofertas SET IdEstado=4 where IdOferta=?";
-                            st = conexion.prepareStatement(sql);
-                            st.setInt(1, idoferta.get(i));
+                    if(estado==1){                        
+                        if(fechaFin.before(fechaActual)){
+                            sql="Update ofertas SET IdEstado=4 where IdOferta=?";
+                            st=conexion.prepareStatement(sql);
+                            st.setInt(i, idoferta.get(i));
                             st.executeUpdate();
                         }
                     }
-
+                    
                     //Si la oferta tiene estado Aprovado y la fechaActual se encuentra entre las fechaInicio y fechaFin 
-                    if (estado == 2) {
-                        if (fechaInicio.before(fechaActual) && fechaFin.after(fechaActual)) {
-                            sql = "Update ofertas SET IdEstado=3 where IdOferta=?";
-                            st = conexion.prepareStatement(sql);
-                            st.setInt(1, idoferta.get(i));
+                    if(estado==2){
+                        if(fechaInicio.before(fechaActual) && fechaFin.after(fechaActual)){
+                            sql="Update ofertas SET IdEstado=3 where IdOferta=?";
+                            st=conexion.prepareStatement(sql);
+                            st.setInt(i, idoferta.get(i));
                             st.executeUpdate();
                         }
                     }
                     //Si la oferta tiene estado Activo y la fechaFin es inferior a la fechaActual
-                    if (estado == 3) {
-                        if (fechaFin.before(fechaActual)) {
-                            sql = "Update ofertas SET IdEstado=4 where IdOferta=?";
-                            st = conexion.prepareStatement(sql);
-                            st.setInt(1, idoferta.get(i));
+                    if(estado==3){
+                        if(fechaFin.before(fechaActual)){
+                            sql="Update ofertas SET IdEstado=4 where IdOferta=?";
+                            st=conexion.prepareStatement(sql);
+                            st.setInt(i, idoferta.get(i));
                             st.executeUpdate();
                         }
                     }
 
-                }
+                }            
             }
             this.desconectar();
-
+           
+            
         } catch (SQLException ex) {
             Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
+            this.desconectar();           
         }
-
+        
+        
     }
 
     public List<Oferta> ListarOfertasEspera(String codigo) throws SQLException {
@@ -225,7 +232,6 @@ public class OfertasModel extends Conexion {
                 oferta.setUrl_foto(rs.getString("Url_foto"));
                 oferta.setIngresos(rs.getString("valor"));
                 oferta.setComision(rs.getString("valor2"));
-                oferta.setCodigoEmpresa(rs.getString("CodigoEmpresa"));
                 lista.add(oferta);
             }
             this.desconectar();
@@ -238,155 +244,9 @@ public class OfertasModel extends Conexion {
             this.desconectar();
         }
     }
-
-    public List<Oferta> ListarOfertasFutura(String codigo) throws SQLException {
+public List<Oferta> ListarOfertasFutura(String codigo) throws SQLException {
         try {
             String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=2 and o.CodigoEmpresa=? GROUP by o.IdOferta";
-            List<Oferta> lista = new ArrayList<>();
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, codigo);
-            rs = st.executeQuery();
-            while (rs.next()) {
-                Oferta oferta = new Oferta();
-                oferta.setIdOferta(rs.getInt("o.IdOferta"));
-                oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
-                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio(rs.getString("FechaInicio"));
-                oferta.setFechaFin(rs.getString("FechaFin"));
-                oferta.setFechaLimite(rs.getString("FechaLimite"));
-                oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
-                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
-                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
-                oferta.setJustificacion(rs.getString("Justificacion"));
-                oferta.setUrl_foto(rs.getString("Url_foto"));
-                oferta.setIngresos(rs.getString("valor"));
-                oferta.setComision(rs.getString("valor2"));
-                lista.add(oferta);
-            }
-            this.desconectar();
-            return lista;
-        } catch (SQLException ex) {
-            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return null;
-        } finally {
-            this.desconectar();
-        }
-    }
-
-    public List<Oferta> ListarOfertasActiva(String codigo) throws SQLException {
-        try {
-            String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=3 and o.CodigoEmpresa=? GROUP by o.IdOferta";
-            List<Oferta> lista = new ArrayList<>();
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, codigo);
-            rs = st.executeQuery();
-            while (rs.next()) {
-                Oferta oferta = new Oferta();
-                oferta.setIdOferta(rs.getInt("o.IdOferta"));
-                oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
-                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio(rs.getString("FechaInicio"));
-                oferta.setFechaFin(rs.getString("FechaFin"));
-                oferta.setFechaLimite(rs.getString("FechaLimite"));
-                oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
-                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
-                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
-                oferta.setJustificacion(rs.getString("Justificacion"));
-                oferta.setUrl_foto(rs.getString("Url_foto"));
-                oferta.setIngresos(rs.getString("valor"));
-                oferta.setComision(rs.getString("valor2"));
-                lista.add(oferta);
-            }
-            this.desconectar();
-            return lista;
-        } catch (SQLException ex) {
-            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return null;
-        } finally {
-            this.desconectar();
-        }
-    }
-    public List<Oferta> ListarOfertasFinalizada(String codigo) throws SQLException {
-        try {
-            String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=4 and o.CodigoEmpresa=? GROUP by o.IdOferta";
-            List<Oferta> lista = new ArrayList<>();
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, codigo);
-            rs = st.executeQuery();
-            while (rs.next()) {
-                Oferta oferta = new Oferta();
-                oferta.setIdOferta(rs.getInt("o.IdOferta"));
-                oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
-                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio(rs.getString("FechaInicio"));
-                oferta.setFechaFin(rs.getString("FechaFin"));
-                oferta.setFechaLimite(rs.getString("FechaLimite"));
-                oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
-                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
-                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
-                oferta.setJustificacion(rs.getString("Justificacion"));
-                oferta.setUrl_foto(rs.getString("Url_foto"));
-                oferta.setIngresos(rs.getString("valor"));
-                oferta.setComision(rs.getString("valor2"));
-                lista.add(oferta);
-            }
-            this.desconectar();
-            return lista;
-        } catch (SQLException ex) {
-            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return null;
-        } finally {
-            this.desconectar();
-        }
-    }
-    public List<Oferta> ListarOfertasRechazada(String codigo) throws SQLException {
-        try {
-            String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=5 and o.CodigoEmpresa=? GROUP by o.IdOferta";
-            List<Oferta> lista = new ArrayList<>();
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, codigo);
-            rs = st.executeQuery();
-            while (rs.next()) {
-                Oferta oferta = new Oferta();
-                oferta.setIdOferta(rs.getInt("o.IdOferta"));
-                oferta.setTituloOferta(rs.getString("TituloOferta"));
-                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
-                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
-                oferta.setFechaInicio(rs.getString("FechaInicio"));
-                oferta.setFechaFin(rs.getString("FechaFin"));
-                oferta.setFechaLimite(rs.getString("FechaLimite"));
-                oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
-                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
-                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
-                oferta.setJustificacion(rs.getString("Justificacion"));
-                oferta.setUrl_foto(rs.getString("Url_foto"));
-                oferta.setIngresos(rs.getString("valor"));
-                oferta.setComision(rs.getString("valor2"));
-                lista.add(oferta);
-            }
-            this.desconectar();
-            return lista;
-        } catch (SQLException ex) {
-            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return null;
-        } finally {
-            this.desconectar();
-        }
-    }
-    public List<Oferta> ListarOfertasDescartada(String codigo) throws SQLException {
-        try {
-            String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=6 and o.CodigoEmpresa=? GROUP by o.IdOferta";
             List<Oferta> lista = new ArrayList<>();
             this.conectar();
             st = conexion.prepareStatement(sql);
@@ -539,32 +399,13 @@ public class OfertasModel extends Conexion {
                 st.setString(13, oferta.getUrl_foto());
                 st.setInt(14, IdOferta);
             }
-            filasAfectadas = st.executeUpdate();
+            filasAfectadas=st.executeUpdate();
             this.desconectar();
             return filasAfectadas;
         } catch (SQLException ex) {
             Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
             this.desconectar();
             return 0;
-        }
-    }
-    
-    public int aprobarOferta(int idoferta) throws SQLException{
-        try {
-            int filasAfectadas = 0;
-            String sql ="UPDATE ofertas SET IdEstado = 2 WHERE IdOferta = ?";
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setInt(1, idoferta);
-            filasAfectadas = st.executeUpdate();
-            this.desconectar();
-            return filasAfectadas;
-        } catch (SQLException ex) {
-            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return 0;
-        }finally{
-        this.desconectar();
         }
     }
 

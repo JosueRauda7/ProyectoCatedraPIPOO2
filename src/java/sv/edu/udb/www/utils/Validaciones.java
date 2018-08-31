@@ -11,7 +11,6 @@ public class Validaciones {
     private static int entero;
     private static double decimal;
     private static String cadena;
-    private static Long longnum;
     static SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy");
     
     public static boolean esDui(String cadena){
@@ -33,15 +32,6 @@ public class Validaciones {
         try {
             entero = Integer.parseInt(cadena.trim());
             return entero > 0;
-        } catch (Exception a) {
-            return false;
-        }
-    }
-    
-    public static boolean esLong(String cadena) {
-        try {
-            longnum = Long.parseLong(cadena.trim());
-            return longnum > 0;
         } catch (Exception a) {
             return false;
         }

@@ -269,49 +269,4 @@ public class UsuariosModel extends Conexion {
             return null;
         }
     }
-    
-    public Usuario obtenerId(String correo) throws SQLException{
-        try {
-            String sql = "SELECT IdUsuario FROM usuarios WHERE Correo = ?";
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, correo);
-            rs = st.executeQuery();
-            
-            if(rs.next()){
-                Usuario usuario = new Usuario();
-                
-                usuario.setIdUsuario(rs.getInt("IdUsuario"));
-                
-                this.desconectar();
-                return usuario;
-            }
-            
-            this.desconectar();
-            return null;
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return null;
-        }
-    }
-    
-    public int recuperarContrasena(int IdUsuario, String nuevaContrasena) throws SQLException{
-        try {
-            int filasAfectadas = 0;
-            String sql = "UPDATE usuarios SET Contrasena = SHA2(?,256), Confirmado = 0, Id_Confirmacion='' WHERE IdUsuario = ?";
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            st.setString(1, nuevaContrasena);
-            st.setInt(2, IdUsuario);
-            filasAfectadas = st.executeUpdate();
-            
-            this.desconectar();
-            return filasAfectadas;
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
-            this.desconectar();
-            return 0;
-        }        
-    }
 }

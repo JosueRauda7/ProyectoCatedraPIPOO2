@@ -17,9 +17,6 @@
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
         <!-- core CSS -->
-        <script type="text/javascript">
-            history.forward();
-        </script>
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
         <link href="${base}/css/animate.min.css" rel="stylesheet"> 
@@ -28,7 +25,7 @@
         <link href="${pageContext.request.contextPath}/css/alertify.core.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/css/alertify.default.css" rel="stylesheet" type="text/css"/>
         <script src="${pageContext.request.contextPath}/js/jquery-1.12.0.min.js" type="text/javascript"></script>
-        
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
@@ -37,40 +34,50 @@
     </head>
     <body>
         <jsp:include page="menuCliente.jsp"/>
-        <section id="mainservice">
-            <div class="container">
-            <div class="panel panel-default col-lg-8 col-sm-offset-2" >
+        <section>
+            <div class="panel panel-default col-lg-8 col-sm-offset-2" style="margin-top: 5%;" >
                 <div class="row" >
                     <div class="thumbnail">
                         <h2 style="color:black;">Artículos Seleccionados</h2>
+                        <c:if test="${not empty sessionScope.exito}">
+                            <div class="alert alert-success">
+                                <p>${sessionScope.exito}</p>
+                                <c:set var="exito" value="" scope="session"/>
+                            </div>
+                        </c:if>
+                        <c:if test="${not empty sessionScope.fracaso}">
+                            <div class="alert alert-danger">
+                                <p>${sessionScope.fracaso}</p>
+                                <c:set var="fracaso" value="" scope="session"/>
+                            </div>
+                        </c:if>
                     </div>
                     <div class="col-lg-8 col-sm-offset-2">                    
-                        <form action="${base}/clientes.do" method="POST">
-                            <input type="hidden" name="operacion" value="comprarC"/>
+                        <form action="${base}/usuarios.do" method="POST">
                             <div class="form-group">
                                 <table style="color:black; width: 100%;" id="tabla" class="table-striped table-bordered table-condensed">
                                     <thead>
                                         <tr>
-                                            <th style="text-align: center;">#</th>
-                                            <th style="text-align: center;">Cupón</th>
-                                            <th style="text-align: center;">Precio</th>
-                                            <th style="text-align: center;">Cantidad</th>
+                                            <th>Cupón</th>
+                                            <th>Precio ($)</th>
+                                            <th>Cantidad</th>
+                                            <th>Cancelar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="oferta" items="${ofertas}" varStatus="loop">
                                         <tr>
-                                            <td>${loop.index+1}</td>
                                             <td>${oferta.getTituloOferta()}</td>
-                                            <td style="text-align: center;">$ ${oferta.getPrecioOferta()}</td>
-                                            <td style="text-align: center;"><a class="btn btn-primary" href="javascript:cancelar('${loop.index}')">Cancelar</a></td>
+                                            <td>${oferta.getPrecioOferta()}</td>
+                                            <td><input name="cantidad" min="0" type="number" value="1"/></td>
+                                            <td><a class="btn btn-primary" href="javascript:cancelar('${loop.index}')">Cancelar</a></td>
                                         </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="form-group col-lg-8 col-sm-offset-2">
-                                <button type="submit" class="btn btn-lg btn-primary btn-block">Realizar Compra</button>
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">Finalizar Compra</button>
                                 <small><a style="text-align: center;" href="${base}/clientes.do?operacion=listar">Regresar</a></small> 
                             </div>
                         </form>
@@ -79,7 +86,6 @@
 
                 </div>
             </div>
-        </div>
         </section>
         <script>
             $(document).ready(function () {

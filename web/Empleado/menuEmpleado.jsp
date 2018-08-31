@@ -14,8 +14,8 @@
 
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li class="scroll active"><a href="${pageContext.request.contextPath}/empleados.do?operacion=home">Inicio</a></li>  
-                    <li class="scroll"><a href="${pageContext.request.contextPath}/empleados.do?operacion=canje">Canjear cupón</a></li>
+                    <li class="scroll active"><a href="#home">Home</a></li>  
+                    <li class="scroll"><a href="#pricing">Canjear cupón</a></li>
                     <li></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario <b class="caret"></b></a>
