@@ -44,6 +44,15 @@
                 <div class="row" >
                     <div class="thumbnail">
                         <h2 style="color:black;">Artículos Seleccionados</h2>
+                        <c:if test="${not empty requestScope.listaErrores}">
+                        <div class="alert alert-danger">
+                            <ul>
+                                <c:forEach var="error" items="${requestScope.listaErrores}">
+                                    <li>${error}</li>
+                                    </c:forEach>
+                            </ul>
+                        </div>
+                        </c:if>
                     </div>
                     <div class="col-lg-8 col-sm-offset-2">                    
                         <form action="${base}/clientes.do" method="POST">

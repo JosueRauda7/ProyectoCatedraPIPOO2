@@ -1,9 +1,3 @@
-<%-- 
-    Document   : footer
-    Created on : 08-20-2018, 07:48:48 PM
-    Author     : admi
---%>
-
 <footer id="footer">
         <div class="container">
             <div class="row">
@@ -13,6 +7,3 @@
             </div>
         </div>
     </footer><!--/#footer-->
-
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
