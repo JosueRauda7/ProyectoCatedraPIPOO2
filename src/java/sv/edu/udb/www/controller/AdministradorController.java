@@ -17,6 +17,7 @@ import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.ClientesModel;
+import sv.edu.udb.www.model.CuponModel;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.RubrosModel;
@@ -37,6 +38,7 @@ public class AdministradorController extends HttpServlet {
     UsuariosModel modelo2 = new UsuariosModel();
     OfertasModel modelo3 = new OfertasModel();
     ClientesModel modelo4 = new ClientesModel();
+    CuponModel modelo5 = new CuponModel();
     ArrayList listaErrores = new ArrayList<>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -493,7 +495,13 @@ public class AdministradorController extends HttpServlet {
     }
 
     private void verCupones(HttpServletRequest request, HttpServletResponse response) {
-      int idcliente = Integer.parseInt(request.getParameter("idcliente"));
+        try {
+            int idcliente = Integer.parseInt(request.getParameter("idcliente"));
+            request.setAttribute("cuponesDisponibles", modelo5.obtenerCuponesDisponibles(idcliente));
+            request.getRequestDispatcher("/Administrador/VerCupones.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

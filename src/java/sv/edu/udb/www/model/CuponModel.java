@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sv.edu.udb.www.beans.Cupon;
+import sv.edu.udb.www.beans.Oferta;
 
 public class CuponModel extends Conexion {
 
@@ -61,9 +62,10 @@ public class CuponModel extends Conexion {
             rs = st.executeQuery();
             while (rs.next()) {
                 Cupon cupon = new Cupon();
+                cupon.setCodigoCupo(rs.getString("CodigoCupo"));
                 cupon.setFechaCompra(rs.getString("FechaCompra"));
                 cupon.setFechaCanje(rs.getString("FechaCanje"));
-                cupon.set
+                cupon.setOferta(new Oferta(rs.getString("TituloOferta")));
                 lista.add(cupon);
             }
             this.desconectar();
