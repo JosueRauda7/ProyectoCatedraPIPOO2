@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
-import sv.edu.udb.www.model.ClientesModel;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.RubrosModel;
@@ -34,7 +33,6 @@ public class AdministradorController extends HttpServlet {
     UsuariosModel UM = new UsuariosModel();
     RubrosModel rubro = new RubrosModel();
     EmpresasModel modelo = new EmpresasModel();
-    ClientesModel modelo4 = new ClientesModel();
     UsuariosModel modelo2 = new UsuariosModel();
     OfertasModel modelo3 = new OfertasModel();
     ArrayList listaErrores = new ArrayList<>();
@@ -83,18 +81,6 @@ public class AdministradorController extends HttpServlet {
                 case "cambiarC":
                     cambiarContrasena(request, response);
                     break;
-<<<<<<< HEAD
-                case "aprovarOferta":
-                    aprovarOferta(request, response);
-                    break;
-                case "verClientes":
-                    verClientes(request, response);
-                    break;
-                case "verCupones":
-                    verCupones(request, response);
-                    break;
-=======
->>>>>>> f55c14e7d62eed50e167dd79bf93c3b30ac4caf9
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -340,6 +326,10 @@ public class AdministradorController extends HttpServlet {
             String codigo = request.getParameter("codigo");
             request.setAttribute("ofertasEspera", modelo3.ListarOfertasEspera(codigo));
             request.setAttribute("ofertasFuturas", modelo3.ListarOfertasFutura(codigo));
+            request.setAttribute("ofertasActivas", modelo3.ListarOfertasActiva(codigo));
+            request.setAttribute("ofertasFinalizadas", modelo3.ListarOfertasFinalizada(codigo));
+            request.setAttribute("ofertasRechazadas", modelo3.ListarOfertasRechazada(codigo));
+            request.setAttribute("ofertasDesartadas", modelo3.ListarOfertasDescartada(codigo));
             request.getRequestDispatcher("/Administrador/VerOfertas.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -485,37 +475,4 @@ public class AdministradorController extends HttpServlet {
         }
     }
 
-<<<<<<< HEAD
-    private void aprovarOferta(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            int idoferta = Integer.parseInt(request.getParameter("idoferta"));
-            
-            if(modelo3.aprobarOferta(idoferta)>0){
-                request.setAttribute("exito", "La oferta ha sido aprobada exitosamente");
-                request.getRequestDispatcher("/administrador.do?operacion=ofertasEmpresa").forward(request, response);
-            }else{
-                request.setAttribute("fracaso", "Lo sentimos algo a salido mal");
-                request.getRequestDispatcher("/administrador.do?operacion=ofertasEmpresa").forward(request, response);
-            } 
-        } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      
-    }
-
-    private void verClientes(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setAttribute("listaClientes", modelo4.listarClientes());
-            request.getRequestDispatcher("/Administrador/VerClientes.jsp").forward(request, response);
-        } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void verCupones(HttpServletRequest request, HttpServletResponse response) {
-    
-    }
-
-=======
->>>>>>> f55c14e7d62eed50e167dd79bf93c3b30ac4caf9
 }
