@@ -37,9 +37,9 @@ public class CuponModel extends Conexion {
                 cupon.setIdEstadoCupon(rs.getInt("IdEstadoCupon"));
                 cupon.setFechaL(rs.getDate("FechaLimite"));
                 if (cupon.getIdEstadoCupon() == 1 && cupon.getFechaL().before(fechaActual)) {
-                    st = conexion.prepareStatement(sqlV);
-                    st.setString(1, cupon.getCodigoCupo());
-                    st.executeUpdate();
+                    st2 = conexion.prepareStatement(sqlV);
+                    st2.setString(1, cupon.getCodigoCupo());
+                    st2.executeUpdate();
                 }
                 listaCupon.add(cupon);
             }
