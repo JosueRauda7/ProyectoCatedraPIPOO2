@@ -27,7 +27,7 @@
 		        
                         <li class="scroll"><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Ver Rubros</a></li>
                         
-                        <li class="scroll"><a href="#pricing">Ver clientes</a></li>
+                        <li class="scroll"><a href="${pageContext.request.contextPath}/administrador.do?operacion=verClientes">Ver clientes</a></li>
                             
                         <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -38,8 +38,6 @@
                         <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=updateC">Cambiar contraseña</a></li>
                         <li><a href="${pageContext.request.contextPath}/administrador.do?operacion=listarRubro">Cerrar session</a></li>
 
-                        <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=upCa">Cambiar contraseña</a></li>
-                        <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=listar">Cerrar session</a></li>
 
                     </ul>
                 </li>                      

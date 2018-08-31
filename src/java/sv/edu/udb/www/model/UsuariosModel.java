@@ -17,6 +17,7 @@ import static sv.edu.udb.www.model.Conexion.conexion;
  */
 public class UsuariosModel extends Conexion {
 
+   
     public int insertarUsuario(Usuario usuario, Cliente cliente, String idconfirmacion) throws SQLException {
         int idUsuario = 0;
         ClientesModel c = new ClientesModel();

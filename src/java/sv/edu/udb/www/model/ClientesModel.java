@@ -18,12 +18,40 @@ import sv.edu.udb.www.beans.Cupon;
 import sv.edu.udb.www.beans.EstadoCupon;
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Rubro;
+import sv.edu.udb.www.beans.Usuario;
 
 /**
  *
  * @author ivanm
  */
 public class ClientesModel extends Conexion {
+
+    public List<Cliente> listarClientes() throws SQLException {
+        try {
+            String sql = "SELECT c.*, u.Correo FROM clientes c INNER JOIN usuarios u ON c.IdUsuario = u.IdUsuario";
+            List<Cliente> lista = new ArrayList<>();
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            rs = st.executeQuery();
+            while(rs.next()){
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("IdCliente"));
+                cliente.setNombreClientes(rs.getString("NombreClientes"));
+                cliente.setApellidosClientes(rs.getString("ApellidosClientes"));
+                cliente.setDireccion(rs.getString("Direccion"));
+                cliente.setDui(rs.getString("Dui"));
+                cliente.setUsuario(new Usuario(rs.getString("Correo")));
+                lista.add(cliente);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }finally{
+        this.desconectar();
+        }
+    }
 
     public int insertarCliente(int idUsuario, Cliente cliente) throws SQLException {
         try {
@@ -134,6 +162,7 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
+
     public Oferta obtenerCupones(String idOferta) throws SQLException {
         try {
             Oferta oferta = new Oferta();
@@ -169,19 +198,20 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
-    public ArrayList listarMisCupones(String id) throws SQLException{
-        try{
+
+    public ArrayList listarMisCupones(String id) throws SQLException {
+        try {
             ArrayList cupones = new ArrayList();
-            String sql = "SELECT ofertas.TituloOferta,ofertas.PrecioRegular,ofertas.PrecioOferta,ofertas.DescripcionOferta,ofertas.FechaLimite,\n" +
-"           ofertas.Url_foto,cupones.FechaCompra,cupones.CodigoCupo,cupones.IdEstadoCupon\n" +
-"           FROM bddpoo.cupones cupones INNER JOIN bddpoo.ofertas ofertas ON (cupones.IdOferta = ofertas.IdOferta)"
+            String sql = "SELECT ofertas.TituloOferta,ofertas.PrecioRegular,ofertas.PrecioOferta,ofertas.DescripcionOferta,ofertas.FechaLimite,\n"
+                    + "           ofertas.Url_foto,cupones.FechaCompra,cupones.CodigoCupo,cupones.IdEstadoCupon\n"
+                    + "           FROM bddpoo.cupones cupones INNER JOIN bddpoo.ofertas ofertas ON (cupones.IdOferta = ofertas.IdOferta)"
                     + "WHERE cupones.IdEstadoCupon=?";
             this.conectar();
-            st=conexion.prepareStatement(sql);
+            st = conexion.prepareStatement(sql);
             st.setInt(1, Integer.parseInt(id));
-            rs=st.executeQuery();
-            while(rs.next()){
-                Cupon cupon =new Cupon();
+            rs = st.executeQuery();
+            while (rs.next()) {
+                Cupon cupon = new Cupon();
                 cupon.setTituloOferta(rs.getString("TituloOferta"));
                 cupon.setDescripcionOferta(rs.getString("DescripcionOferta"));
                 cupon.setFechaLimite(rs.getString("FechaLimite"));
@@ -200,15 +230,16 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
-    public List<EstadoCupon> listarEstadosCupon() throws SQLException{
-        try{
+
+    public List<EstadoCupon> listarEstadosCupon() throws SQLException {
+        try {
             List<EstadoCupon> estado = new ArrayList();
             this.conectar();
-            String sql="SELECT * FROM estadocupon";
-            st=conexion.prepareStatement(sql);
-            rs=st.executeQuery();
-            while(rs.next()){
-                EstadoCupon estadito=new EstadoCupon();
+            String sql = "SELECT * FROM estadocupon";
+            st = conexion.prepareStatement(sql);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                EstadoCupon estadito = new EstadoCupon();
                 estadito.setIdEstadoCupon(Integer.parseInt(rs.getString("IdEstadoCupon")));
                 estadito.setEstado(rs.getString("Estado"));
                 estado.add(estadito);
@@ -221,16 +252,17 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
-    public Oferta obtenerOferta(int idOferta){
-        
+
+    public Oferta obtenerOferta(int idOferta) {
+
         try {
             Oferta oferta = new Oferta();
-            String sql="SELECT * FROM ofertas WHERE idOferta=?";
+            String sql = "SELECT * FROM ofertas WHERE idOferta=?";
             this.conectar();
-            st=conexion.prepareStatement(sql);
+            st = conexion.prepareStatement(sql);
             st.setInt(1, idOferta);
-            rs=st.executeQuery();
-            while(rs.next()){
+            rs = st.executeQuery();
+            while (rs.next()) {
                 oferta.setIdOferta(Integer.parseInt(rs.getString("idOferta")));
                 oferta.setTituloOferta(rs.getString("TituloOferta"));
                 oferta.setPrecioOferta(rs.getString("PrecioOferta"));

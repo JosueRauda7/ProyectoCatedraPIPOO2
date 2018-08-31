@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
+import sv.edu.udb.www.model.ClientesModel;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.RubrosModel;
@@ -33,6 +34,7 @@ public class AdministradorController extends HttpServlet {
     UsuariosModel UM = new UsuariosModel();
     RubrosModel rubro = new RubrosModel();
     EmpresasModel modelo = new EmpresasModel();
+    ClientesModel modelo4 = new ClientesModel();
     UsuariosModel modelo2 = new UsuariosModel();
     OfertasModel modelo3 = new OfertasModel();
     ArrayList listaErrores = new ArrayList<>();
@@ -83,6 +85,12 @@ public class AdministradorController extends HttpServlet {
                     break;
                 case "aprovarOferta":
                     aprovarOferta(request, response);
+                    break;
+                case "verClientes":
+                    verClientes(request, response);
+                    break;
+                case "verCupones":
+                    verCupones(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -493,6 +501,19 @@ public class AdministradorController extends HttpServlet {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
       
+    }
+
+    private void verClientes(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setAttribute("listaClientes", modelo4.listarClientes());
+            request.getRequestDispatcher("/Administrador/VerClientes.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void verCupones(HttpServletRequest request, HttpServletResponse response) {
+    
     }
 
 }

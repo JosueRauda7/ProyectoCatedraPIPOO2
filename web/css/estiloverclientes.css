@@ -1,0 +1,7 @@
+.contentabla{
+    width: 90%;
+    margin-left: 5%;
+    height: 400px;
+    overflow-y: scroll;
+    padding: 2%;
+}
