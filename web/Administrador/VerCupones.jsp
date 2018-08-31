@@ -21,12 +21,13 @@
   <button class="tablinks" onclick="openCity(event, 'Vencidos')">Vencidos</button>
 </div>
         <section class="contendatos">
-            <div id="Disponibles" class="tabcontent"
-                 <h1>asdasdasd</h1>
+            <div id="Disponibles" class="tabcontent">
                 <c:forEach var="cuponesDisponibles" items="${requestScope.cuponesDisponibles}">
-                    <div class="contencup">
-                        <h1>sdasdas</h1>
-                        <h1>${cuponesDisponibles.codigoCupo}</h1>
+                    <div class="contenofer">
+                        <div  class="text-center">
+                            <h3>Codigo cupon:</h3>
+                        <h4>${cuponesDisponibles.codigoCupo}</h4>
+                        </div>
                     </div>
                 </c:forEach>
             </div>
