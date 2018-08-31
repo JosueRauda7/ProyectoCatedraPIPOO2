@@ -61,6 +61,24 @@
                     </div>
                 </c:forEach>
             </div>
+            <div id="Vencidos" class="tabcontent">
+                <c:forEach var="cuponesVencidos" items="${requestScope.cuponesVencidos}">
+                    <div class="contenofer">
+                        <div  class="text-center">
+                            <h3>Codigo cupon:</h3>
+                            <h4>${cuponesVencidos.codigoCupo}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Fecha compra:</h3>
+                            <h4>${cuponesVencidos.fechaCompra}</h4>
+                        </div>
+                        <div  class="text-center">
+                            <h3>Nombre de la oferta:</h3>
+                        <h4>${cuponesVencidos.oferta.tituloOferta}</h4>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
         </section>
 
         <footer id="footer">
