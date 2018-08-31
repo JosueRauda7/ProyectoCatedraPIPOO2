@@ -51,14 +51,20 @@
                                     </div>                               
                                 </c:forEach>
                             </div><br>
-
-                            <input type="submit" class="btn btn-info" value="Canjear" name="Canjear">
-                            <a class="btn btn-danger" href="#">Cancelar</a>
+                            
+                            <div id="botones">
+                            <input type="submit" class="btn btn-success canje" value="Canjear" name="Canjear">
+                            <a class="btn btn-danger cancelar" href="${pageContext.request.contextPath}/empleados.do?operacion=canje">Cancelar</a>
+                            </div>
                         </form>
                     </div>
                 </div> 
             </div>
             <script>
+                <c:if test="${not empty Obtenido}">
+                    document.getElementById('botones').style.display = "block";
+                    document.getElementById('formularioCanje').style = "margin-top: 0.8%; height: 626px;";
+                </c:if>
                 <c:if test="${not empty Exito}">
                 alertify.success('${Exito}');
                     <c:set var="Exito" value="" scope="session"></c:set>

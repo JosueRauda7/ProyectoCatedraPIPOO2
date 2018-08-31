@@ -63,7 +63,7 @@ public class CuponModel extends Conexion {
                 Cupon cupon = new Cupon();
                 cupon.setFechaCompra(rs.getString("FechaCompra"));
                 cupon.setFechaCanje(rs.getString("FechaCanje"));
-                cupon.set
+                cupon.set();
                 lista.add(cupon);
             }
             this.desconectar();
