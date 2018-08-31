@@ -41,7 +41,7 @@
                         <td>${clientes.direccion}</td>
                         <td>${clientes.dui}</td>
                         <td>${clientes.usuario.correo}</td>
-                        <td><button class="btn btn-primary">Ver cupones</button></td>
+                        <td><a class="btn btn-primary" href="${pageContext.request.contextPath}/administrador.do?operacion=verCupones&idcliente=${clientes.idCliente}">Ver cupones</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>

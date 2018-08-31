@@ -53,13 +53,17 @@ public class CuponModel extends Conexion {
 
     public List<Cupon> obtenerCuponesDisponibles(int idusuario) throws SQLException {
         try {
-            String sql = "";
+            String sql = "SELECT * FROM cupones c INNER JOIN ofertas o ON c.IdOferta = o.IdOferta WHERE IdCliente = ? AND c.IdEstadoCupon = 1 ";
             List<Cupon> lista = new ArrayList<>();
             this.conectar();
             st = conexion.prepareStatement(sql);
+            st.setInt(1, idusuario);
             rs = st.executeQuery();
             while (rs.next()) {
                 Cupon cupon = new Cupon();
+                cupon.setFechaCompra(rs.getString("FechaCompra"));
+                cupon.setFechaCanje(rs.getString("FechaCanje"));
+                cupon.set
                 lista.add(cupon);
             }
             this.desconectar();

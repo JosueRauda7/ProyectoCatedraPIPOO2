@@ -86,6 +86,9 @@ public class AdministradorController extends HttpServlet {
                 case "verClientes":
                     verClientes(request, response);
                     break;
+                case "verCupones":
+                    verCupones(request, response);
+                    break;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -487,6 +490,10 @@ public class AdministradorController extends HttpServlet {
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void verCupones(HttpServletRequest request, HttpServletResponse response) {
+      int idcliente = Integer.parseInt(request.getParameter("idcliente"));
     }
 
 }
