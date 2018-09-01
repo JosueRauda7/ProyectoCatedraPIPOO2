@@ -50,7 +50,10 @@ public class UsuariosController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         String operacion = request.getParameter("operacion");
-        
+        if(request.getParameter("operacion").equals("cerrar")){
+            cerrarSesion(request,response);
+            return;
+        }
         if(operacion.equals("insertarE")){
             insertarUsuarioEmpleado(request, response);
         }
@@ -102,9 +105,6 @@ public class UsuariosController extends HttpServlet {
                 break;
             case "recuperarC":
                 recuperarContrasena(request, response);
-                break;
-            case "cerrar":
-                cerrarSesion(request,response);
                 break;
         }
 
