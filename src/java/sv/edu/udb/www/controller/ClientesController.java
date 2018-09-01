@@ -101,6 +101,10 @@ public class ClientesController extends HttpServlet {
                 case "cambiarC":
                     cambiarContrasena(request, response);
                     break;
+                case "facturar":
+                    request.getSession().setAttribute("id",request.getParameter("id"));
+                    response.sendRedirect(request.getContextPath()+"/facturar.do");
+                    break;
                 default:
                     inicio(request, response);
                     break;
@@ -347,15 +351,19 @@ public class ClientesController extends HttpServlet {
             if (!listaErrores.isEmpty()) {
                 request.setAttribute("listaErrores", listaErrores);
                 request.getRequestDispatcher("/clientes.do?operacion=comprarC").forward(request, response);
+            } else {
+                for (Oferta oferta : ofertas) {
+                    if (model.insertarCupon("" + oferta.getIdOferta(), request.getSession().getAttribute("idUsuario").toString()) == 0) {
+                        request.setAttribute("fracaso", "No se han comprado todos los cupones. Cantidad de algunos cupones han llegado a su cantidad limite.");
+                    }
+                }
+                ofertas.clear();
+                response.sendRedirect(request.getContextPath() + "/clientes.do?operacion=misCupones");
             }
-        } catch (IOException | ServletException ex) {
+        } catch (IOException | ServletException | SQLException ex) {
             Logger.getLogger(ClientesController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //request.setAttribute("fracaso", "Ingrese su nueva contraseña");
-        //request.setAttribute("Exito", "Ingrese su nueva contraseña");
-
-        //request.setAttribute("fracaso", "Ingrese su nueva contraseña");
-        //request.setAttribute("Exito", "Ingrese su nueva contraseña");
+        
     }
 
     private void cambiarContrasena(HttpServletRequest request, HttpServletResponse response) {
