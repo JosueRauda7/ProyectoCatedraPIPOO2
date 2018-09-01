@@ -225,6 +225,7 @@ public class OfertasModel extends Conexion {
                 oferta.setUrl_foto(rs.getString("Url_foto"));
                 oferta.setIngresos(rs.getString("valor"));
                 oferta.setComision(rs.getString("valor2"));
+                oferta.setCodigoEmpresa(rs.getString("CodigoEmpresa"));
                 lista.add(oferta);
             }
             this.desconectar();
@@ -547,5 +548,21 @@ public class OfertasModel extends Conexion {
             return 0;
         }
     }
-
+   public int aprobarOferta(int idcupo) throws SQLException{
+        try {
+            int filas;
+            String sql = "UPDATE ofertas SET IdEstado=2 WHERE IdOferta = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, idcupo);
+            filas = st.executeUpdate();
+            this.desconectar();
+            return filas;
+        } catch (SQLException ex) {
+            Logger.getLogger(CuponModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    
+    }
 }

@@ -91,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Aprobar oferta</button>
+        <a class="btn btn-success" href="${pageContext.request.contextPath}/administrador.do?operacion=aprobarof&idoferta=${ofertasEspera.idOferta}&codigo=${ofertasEspera.codigoEmpresa}">Aprobar oferta</a>
       </div>
     </div>
   </div>
@@ -496,6 +496,15 @@
             </div>
         </footer><!--/#footer-->
         <script>
+             <c:if test="${not empty exito}">
+                           alertify.success('${exito}');
+                          <c:set var="exito" value="" scope="session" />
+                       </c:if>
+                           <c:if test="${not empty fracaso}">
+                           alertify.error('${fracaso}');
+                           <c:set var="fracaso" value="" scope="session" />
+                       </c:if>
+                           
             document.getElementById("Espera").style.display="block";
               function openCity(evt, cityName) {
      

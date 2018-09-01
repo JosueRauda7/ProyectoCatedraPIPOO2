@@ -91,6 +91,9 @@ public class AdministradorController extends HttpServlet {
                 case "verCupones":
                     verCupones(request, response);
                     break;
+                case "aprobarof":
+                    aprobarOferta(request,response);
+                    break;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -501,6 +504,21 @@ public class AdministradorController extends HttpServlet {
             request.setAttribute("cuponesCanjeados", modelo5.obtenerCuponesCanjeados(idcliente));
             request.setAttribute("cuponesVencidos", modelo5.obtenerCuponesVencidos(idcliente));
             request.getRequestDispatcher("/Administrador/VerCupones.jsp").forward(request, response);
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void aprobarOferta(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int idoferta = Integer.parseInt(request.getParameter("idoferta"));
+            if(modelo3.aprobarOferta(idoferta)>0){
+                request.setAttribute("exito","la oferta se aprobro");
+                request.getRequestDispatcher("administrador.do?operacion=ofertasEmpresa").forward(request, response);
+            }else{
+                request.setAttribute("fracaso","la oferta no se aprobro");
+                request.getRequestDispatcher("administrador.do?operacion=ofertasEmpresa").forward(request, response);
+            }
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
         }

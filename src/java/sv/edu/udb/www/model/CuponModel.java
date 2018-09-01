@@ -126,4 +126,5 @@ public class CuponModel extends Conexion {
             this.desconectar();
         }
     }
+ 
 }
