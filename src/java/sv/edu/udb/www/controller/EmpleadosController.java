@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ public class EmpleadosController extends HttpServlet {
     UsuariosModel UM = new UsuariosModel();
     ArrayList listaErrores = new ArrayList();
     EmpleadosModel modelo = new EmpleadosModel();
+    EmpleadosModel model = new EmpleadosModel();
     UsuariosModel modeloUsuario = new UsuariosModel();
     OfertasModel modeloOfertas = new OfertasModel();
 
@@ -123,6 +125,27 @@ public class EmpleadosController extends HttpServlet {
     private void obtenerCupon(HttpServletRequest request, HttpServletResponse response) {
         try {
             String codigo = request.getParameter("codigo");
+
+            Cupon cup = new Cupon();
+            
+            cup = model.obtenerC(codigo);
+            
+            System.out.println(cup.getCodigoCupo());
+            
+            String kodigo = cup.getCodigoCupo();
+            
+            System.out.println(kodigo);
+
+            if (codigo.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese un código valido");
+                request.getRequestDispatcher("/empleados.do?operacion=canje").forward(request, response);
+            }
+
+            if (!codigo.equals(kodigo)){
+                request.setAttribute("Fracaso", "Ingrese un código valido");
+                request.getRequestDispatcher("/empleados.do?operacion=canje").forward(request, response);
+            }
+
             request.setAttribute("listaCupones", modelo.obtenerCupon(codigo));
             request.setAttribute("Obtenido", "El cupón ha sido encontrado");
 
@@ -156,8 +179,10 @@ public class EmpleadosController extends HttpServlet {
             String duiCanjeador = request.getParameter("duiCanjeador");
             String duiComprador = request.getParameter("duiComprador");
 
+
+
             if (!"Disponible".equals(estadoCupon)) {
-                request.setAttribute("Fracaso", "El cupón no esta disponible");
+                request.setAttribute("Fracaso1", "El cupón no esta disponible");
                 request.setAttribute("listaCupones", modelo.obtenerCupon(codigoCupon));
                 request.getRequestDispatcher("/empleados.do?operacion=canje").forward(request, response);
             } else if (!duiComprador.equals(duiCanjeador)) {
@@ -167,7 +192,7 @@ public class EmpleadosController extends HttpServlet {
             } else {
                 if (modelo.canjearCupon(codigoCupon) > 0) {
                     request.setAttribute("Exito", "El cupón ha sido canjeado, exitosamente");
-                    response.sendRedirect("/empleados.do?operacion=canje");
+                    request.getRequestDispatcher(request.getContextPath() + "/empleados.do?operacion=canje");
                 }
             }
         } catch (SQLException | ServletException | IOException ex) {
@@ -222,7 +247,7 @@ public class EmpleadosController extends HttpServlet {
                 request.getRequestDispatcher("/empleados.do?operacion=updateC").forward(request, response);
             } else {
                 if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
-                    request.getRequestDispatcher("/Empleado/Home.jsp").forward(request, response); //Se deberá de llamar al método cerrar sesión
+                    request.getRequestDispatcher("/empleados.do?operacion=cerrar").forward(request, response); //Se deberá de llamar al método cerrar sesión
                 }
             }
         } catch (SQLException | ServletException | IOException ex) {
@@ -234,7 +259,7 @@ public class EmpleadosController extends HttpServlet {
         try {
             request.getSession().setAttribute("correo", null);
             request.getSession().setAttribute("estadoUsuario", null);
-            response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
+            response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=cerrar");
         } catch (IOException ex) {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }

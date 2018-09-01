@@ -17,7 +17,6 @@ import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Rubro;
 import sv.edu.udb.www.beans.Usuario;
 import sv.edu.udb.www.model.ClientesModel;
-import sv.edu.udb.www.model.CuponModel;
 import sv.edu.udb.www.model.EmpresasModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.model.RubrosModel;
@@ -38,7 +37,6 @@ public class AdministradorController extends HttpServlet {
     UsuariosModel modelo2 = new UsuariosModel();
     OfertasModel modelo3 = new OfertasModel();
     ClientesModel modelo4 = new ClientesModel();
-    CuponModel modelo5 = new CuponModel();
     ArrayList listaErrores = new ArrayList<>();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -91,8 +89,8 @@ public class AdministradorController extends HttpServlet {
                 case "verCupones":
                     verCupones(request, response);
                     break;
-                case "aprobarof":
-                    aprobarOferta(request,response);
+                case "cerrar":
+                    cerrarSesion(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -480,7 +478,7 @@ public class AdministradorController extends HttpServlet {
                 request.getRequestDispatcher("/administrador.do?operacion=updateC").forward(request, response);
             } else {
                 if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
-                    request.getRequestDispatcher("/Administrador/Home.jsp").forward(request, response);
+                    request.getRequestDispatcher("/administrador.do?operacion=cerrar").forward(request, response);
                 }
             }
         } catch (SQLException | ServletException | IOException ex) {
@@ -490,7 +488,7 @@ public class AdministradorController extends HttpServlet {
 
     private void verClientes(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setAttribute("listaClientes",modelo4.listarClientes() );
+            request.setAttribute("listaClientes", modelo4.listarClientes());
             request.getRequestDispatcher("/Administrador/VerClientes.jsp").forward(request, response);
         } catch (SQLException | ServletException | IOException ex) {
             Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
@@ -498,29 +496,16 @@ public class AdministradorController extends HttpServlet {
     }
 
     private void verCupones(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            int idcliente = Integer.parseInt(request.getParameter("idcliente"));
-            request.setAttribute("cuponesDisponibles", modelo5.obtenerCuponesDisponibles(idcliente));
-            request.setAttribute("cuponesCanjeados", modelo5.obtenerCuponesCanjeados(idcliente));
-            request.setAttribute("cuponesVencidos", modelo5.obtenerCuponesVencidos(idcliente));
-            request.getRequestDispatcher("/Administrador/VerCupones.jsp").forward(request, response);
-        } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int idcliente = Integer.parseInt(request.getParameter("idcliente"));
     }
 
-    private void aprobarOferta(HttpServletRequest request, HttpServletResponse response) {
+    private void cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int idoferta = Integer.parseInt(request.getParameter("idoferta"));
-            if(modelo3.aprobarOferta(idoferta)>0){
-                request.setAttribute("exito","la oferta se aprobro");
-                request.getRequestDispatcher("administrador.do?operacion=ofertasEmpresa").forward(request, response);
-            }else{
-                request.setAttribute("fracaso","la oferta no se aprobro");
-                request.getRequestDispatcher("administrador.do?operacion=ofertasEmpresa").forward(request, response);
-            }
-        } catch (SQLException | ServletException | IOException ex) {
-            Logger.getLogger(AdministradorController.class.getName()).log(Level.SEVERE, null, ex);
+            request.getSession().setAttribute("correo", null);
+            request.getSession().setAttribute("estadoUsuario", null);
+            response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=cerrar");
+        } catch (IOException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
