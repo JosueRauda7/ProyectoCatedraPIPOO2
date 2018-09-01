@@ -51,10 +51,10 @@
                                     </div>                               
                                 </c:forEach>
                             </div><br>
-                            
+
                             <div id="botones">
-                            <input type="submit" class="btn btn-success canje" value="Canjear" name="Canjear">
-                            <a class="btn btn-danger cancelar" href="${pageContext.request.contextPath}/empleados.do?operacion=canje">Cancelar</a>
+                                <input type="submit" class="btn btn-success canje" value="Canjear" name="Canjear">
+                                <a class="btn btn-danger cancelar" href="${pageContext.request.contextPath}/empleados.do?operacion=canje">Cancelar</a>
                             </div>
                         </form>
                     </div>
@@ -62,15 +62,25 @@
             </div>
             <script>
                 <c:if test="${not empty Obtenido}">
-                    document.getElementById('botones').style.display = "block";
-                    document.getElementById('formularioCanje').style = "margin-top: 0.8%; height: 626px;";
+                document.getElementById('botones').style.display = "block";
+                document.getElementById('formularioCanje').style = "margin-top: 0.8%; height: 626px;";
                 </c:if>
                 <c:if test="${not empty Exito}">
+                document.getElementById('botones').style.display = "block";
+                document.getElementById('formularioCanje').style = "margin-top: 0.8%; height: 626px;";
                 alertify.success('${Exito}');
                     <c:set var="Exito" value="" scope="session"></c:set>
                 </c:if>
                 <c:if test="${not empty Fracaso}">
+                document.getElementById('botones').style.display = "none";
+                document.getElementById('formularioCanje').style = "margin-top: 8%;";
                 alertify.error('${Fracaso}');
+                    <c:set var="Fracaso" value="" scope="session"></c:set>
+                </c:if>
+                <c:if test="${not empty Fracaso1}">
+                document.getElementById('botones').style.display = "none";
+                document.getElementById('formularioCanje').style = "margin-top: 0.8%; height: 626px;";
+                alertify.error('${Fracaso1}');
                     <c:set var="Fracaso" value="" scope="session"></c:set>
                 </c:if>
             </script>                
