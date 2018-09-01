@@ -103,6 +103,9 @@ public class UsuariosController extends HttpServlet {
             case "recuperarC":
                 recuperarContrasena(request, response);
                 break;
+            case "cerrar":
+                cerrarSesion(request,response);
+                break;
         }
 
     }
