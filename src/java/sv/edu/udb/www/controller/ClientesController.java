@@ -204,11 +204,11 @@ public class ClientesController extends HttpServlet {
         try {
             if (model.listarEstadosCupon() == null) {
                 listaErrores.add("Error al cargar los rubros");
-            } else if (model.listarMisCupones("1") == null) {
+            } else if (model.listarMisCupones("1", request.getSession().getAttribute("idUsuario").toString()) == null) {
                 listaErrores.add("Error al cargar los cupones");
             } else {
                 estado = model.listarEstadosCupon();
-                request.setAttribute("ofertita", model.listarMisCupones("1"));
+                request.setAttribute("ofertita", model.listarMisCupones("1", request.getSession().getAttribute("idUsuario").toString()));
                 request.setAttribute("estado", estado);
                 request.getRequestDispatcher("/Cliente/MisCupones.jsp").forward(request, response);
             }
@@ -223,12 +223,12 @@ public class ClientesController extends HttpServlet {
         try {
             if (model.listarEstadosCupon() == null) {
                 listaErrores.add("Error al cargar los rubros");
-            } else if (model.listarMisCupones(request.getParameter("categoriaFiltro")) == null) {
+            } else if (model.listarMisCupones(request.getParameter("categoriaFiltro"), request.getSession().getAttribute("idUsuario").toString()) == null) {
                 listaErrores.add("Error al cargar los cupones");
             } else {
                 request.setAttribute("categoria", request.getParameter("categoriaFiltro"));
                 estado = model.listarEstadosCupon();
-                request.setAttribute("ofertita", model.listarMisCupones(request.getParameter("categoriaFiltro")));
+                request.setAttribute("ofertita", model.listarMisCupones(request.getParameter("categoriaFiltro"), request.getSession().getAttribute("idUsuario").toString()));
                 request.setAttribute("estado", estado);
                 request.getRequestDispatcher("/Cliente/MisCupones.jsp").forward(request, response);
             }
