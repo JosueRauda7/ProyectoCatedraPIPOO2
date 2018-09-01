@@ -104,4 +104,5 @@
             }
         </script>
     </body>
+    <jsp:include page="footerCliente.jsp"/>
 </html>

@@ -39,8 +39,8 @@
     </head>
     <body>
         <jsp:include page="menuCliente.jsp"/>
-        <section>
-            <div class="panel panel-default col-lg-8 col-sm-offset-2" style="margin-top: 5%;" >
+        <section class="mainservice">
+            <div class="panel panel-default col-lg-8 col-sm-offset-2" style="margin-top: 5%;margin-bottom: 5%;" >
                 <div class="row" >
                     <div class="thumbnail">
                         <h2 style="color:black;">Método de Pago</h2>
@@ -88,15 +88,17 @@
                                 <a class="btn btn-primary col-xs-5 col-sm-offset-2" href="${base}/clientes.do?operacion=cancelarCompra">Cancelar Compra</a><br>
                                 <small><a style="text-align: center;" href="${base}/clientes.do?operacion=listar">Regresar</a></small> 
                             </div>
+                            </form>
                             </div>
-                        </form>
+                        
 
                     </div>
 
                 </div>
-            </div>
+            
+            
         </section>
-        
+                            <jsp:include page="footerCliente.jsp"/>
     </body>
 </html>
 

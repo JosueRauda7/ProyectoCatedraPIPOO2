@@ -16,6 +16,9 @@
         <meta name="description" content="">
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
+        <script type="text/javascript">
+            history.forward();
+        </script>
         <!-- core CSS -->
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
@@ -25,7 +28,6 @@
         <link href="${pageContext.request.contextPath}/css/alertify.core.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/css/alertify.default.css" rel="stylesheet" type="text/css"/>
         <script src="${pageContext.request.contextPath}/js/jquery-1.12.0.min.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
@@ -75,11 +77,13 @@
                 </section>
                 <div class="row">
                     <c:forEach var="oferta" items="${requestScope.ofertita}">
+                        <c:if test="${oferta.getCantidadLimite()>0}">
                         <div class="col-sm-6 col-md-4">
                             <div class="thumbnail">
                                 <img class="img-responsive" style="max-height: 200px; min-height: 200px;" src="${base}/images/${oferta.getUrl_foto()}" alt="">
                                 <div class="caption">
                                     <h3>${oferta.getTituloOferta()}</h3>
+                                    <p><h4>Cantidad Limite: ${oferta.getCantidadLimite()}</h4></p>
                                     <p>Descripción:<br>${oferta.getDescripcionOferta()}</p>
                                     <p class="price">Fecha fin: ${oferta.getFechaFin()}</p>
                                     <p class="price">Fecha Límite: ${oferta.getFechaLimite()}</p>
@@ -90,6 +94,7 @@
                                 </div>
                             </div>
                         </div>
+                                </c:if>
                     </c:forEach>
                 </div>
             </div>

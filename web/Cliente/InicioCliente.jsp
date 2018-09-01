@@ -14,14 +14,19 @@
         <meta name="description" content="">
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
+        <script type="text/javascript">
+            history.forward();
+        </script>
         <!-- core CSS -->
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
         <link href="${base}/css/animate.min.css" rel="stylesheet"> 
         <link href="${base}/css/prettyPhoto.css" rel="stylesheet">
         <link href="${base}/css/styles.css" rel="stylesheet"> 
+        <link href="${pageContext.request.contextPath}/css/alertify.core.css" rel="stylesheet" type="text/css"/>
+        <link href="${pageContext.request.contextPath}/css/alertify.default.css" rel="stylesheet" type="text/css"/>
         <script src="${pageContext.request.contextPath}/js/jquery-1.12.0.min.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        
         <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
@@ -63,6 +68,16 @@
                 </div>
             </div>
         </section>
+        <script>
+            <c:if test="${not empty Exito}">
+            alertify.success('${Exito}');
+                <c:set var="Exito" value="" scope="session"></c:set>
+            </c:if>
+            <c:if test="${not empty Fracaso}">
+            alertify.error('${Fracaso}');
+                <c:set var="Fracaso" value="" scope="session"></c:set>
+            </c:if>
+        </script>  
         <jsp:include page="footerCliente.jsp"/>
     </body>
 </html>

@@ -16,6 +16,9 @@
         <meta name="author" content="webthemez">
         <title>Cuponera - Cliente</title>
         <!-- core CSS -->
+        <script type="text/javascript">
+            history.forward();
+        </script>
         <link href="${base}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${base}/css/font-awesome.min.css" rel="stylesheet">
         <link href="${base}/css/animate.min.css" rel="stylesheet"> 
@@ -96,6 +99,9 @@
             $(document).ready(function () {
                 $('#categoriaFiltro').select2();
             });
+            <c:if test="${not empty requestScope.Fracaso}">
+            alertify.error('${requestScope.Fracaso}');
+            </c:if>
         </script>
         <jsp:include page="footerCliente.jsp"/>
     </body>
