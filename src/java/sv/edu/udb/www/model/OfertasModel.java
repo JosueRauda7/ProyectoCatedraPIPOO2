@@ -55,7 +55,11 @@ public class OfertasModel extends Conexion {
                 oferta.setFechaInicio(rs.getString("FechaInicio"));
                 oferta.setFechaFin(rs.getString("FechaFin"));
                 oferta.setFechaLimite(rs.getString("FechaLimite"));
-                oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
+                if (rs.getString("CantidadLimite") == null) {
+                    oferta.setCantidadLimite(-1);
+                } else {
+                    oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
+                }
                 oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
                 oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
                 oferta.setEstadoOferta(new EstadoOferta(rs.getString("Estado")));
@@ -98,7 +102,11 @@ public class OfertasModel extends Conexion {
                 oferta.setFechaFin(rs.getString("FechaFin"));
                 oferta.setFechaLimite(rs.getString("FechaLimite"));
                 oferta.setCantidadVendida(cantidadCupones);
-                oferta.setCantidadLimite(Integer.parseInt(rs.getString("CantidadLimite")));
+                if (rs.getString("CantidadLimite") == null) {
+                    oferta.setCantidadLimite(-1);
+                } else {
+                    oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
+                }
                 oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
                 oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
                 oferta.setJustificacion(rs.getString("Justificacion"));
@@ -114,6 +122,54 @@ public class OfertasModel extends Conexion {
             return null;
         }
     }
+
+    public Oferta obtenerOferta(String correo, int idOferta) throws SQLException {
+        try {
+            Oferta oferta = new Oferta();
+            String sql = "Select * from ofertas o inner join estadooferta eo on o.idEstado=eo.idEstadoOferta "
+                    + "inner join empresas e on o.CodigoEmpresa=e.CodigoEmpresa inner join usuarios u ON e.IdUsuario = u.IdUsuario "
+                    + "WHERE u.correo = ? and o.IdOferta=?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, correo);
+            st.setInt(2, idOferta);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                
+                oferta.setIdOferta(rs.getInt("IdOferta"));
+                oferta.setTituloOferta(rs.getString("TituloOferta"));
+                oferta.setPrecioRegular(rs.getString("PrecioRegular"));
+                oferta.setPrecioOferta(rs.getString("PrecioOferta"));
+                oferta.setFechaInicio(rs.getString("FechaInicio"));
+                oferta.setFechaFin(rs.getString("FechaFin"));
+                oferta.setFechaLimite(rs.getString("FechaLimite"));
+                if (rs.getString("CantidadLimite") == null) {
+                    oferta.setCantidadLimite(-1);
+                } else {
+                    oferta.setCantidadLimite(rs.getInt("CantidadLimite"));
+                }
+                oferta.setDescripcionOferta(rs.getString("DescripcionOferta"));
+                oferta.setOtrosDetalles(rs.getString("OtrosDetalles"));
+                oferta.setEstadoOferta(new EstadoOferta(rs.getString("Estado")));
+                oferta.setJustificacion(rs.getString("Justificacion"));
+                oferta.setEmpresa(new Empresa(rs.getString("NombreEmpresa")));
+                oferta.setUrl_foto(rs.getString("Url_foto"));
+            }else{
+                this.desconectar();
+                return null;
+            }
+
+            this.desconectar();
+            return oferta;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
+    }
+    
+
 
     public void actualizarEstados() throws SQLException {
         Oferta oferta = new Oferta();
@@ -137,7 +193,7 @@ public class OfertasModel extends Conexion {
             }
 
             //Si el array tiene datos (tamaño distinto a 0), el proceso puede continuar
-            if (idoferta.size()!= 0) {
+            if (idoferta.size() != 0) {
 
                 //CURDATE() me da la fechaactual en formato año-mes-dia
                 sql = "Select CURDATE() as fechaActual";
@@ -312,6 +368,7 @@ public class OfertasModel extends Conexion {
             this.desconectar();
         }
     }
+
     public List<Oferta> ListarOfertasFinalizada(String codigo) throws SQLException {
         try {
             String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=4 and o.CodigoEmpresa=? GROUP by o.IdOferta";
@@ -348,6 +405,7 @@ public class OfertasModel extends Conexion {
             this.desconectar();
         }
     }
+
     public List<Oferta> ListarOfertasRechazada(String codigo) throws SQLException {
         try {
             String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=5 and o.CodigoEmpresa=? GROUP by o.IdOferta";
@@ -384,6 +442,7 @@ public class OfertasModel extends Conexion {
             this.desconectar();
         }
     }
+
     public List<Oferta> ListarOfertasDescartada(String codigo) throws SQLException {
         try {
             String sql = "SELECT o.*, (COUNT(c.CodigoCupo)* o.PrecioOferta) AS valor,ROUND((e.Comision*(COUNT(c.CodigoCupo)* o.PrecioOferta)),2) as valor2 FROM ofertas o LEFT JOIN cupones c on o.IdOferta = c.IdOferta INNER JOIN empresas e on o.CodigoEmpresa = e.CodigoEmpresa WHERE o.IdEstado=6 and o.CodigoEmpresa=? GROUP by o.IdOferta";
@@ -420,6 +479,7 @@ public class OfertasModel extends Conexion {
             this.desconectar();
         }
     }
+
     public int insertarOferta(Oferta oferta, String correo) throws SQLException {
         String codigoEmpresa = "";
         int filasAfectadas = 0;
@@ -548,7 +608,8 @@ public class OfertasModel extends Conexion {
             return 0;
         }
     }
-   public int aprobarOferta(int idcupo) throws SQLException{
+
+    public int aprobarOferta(int idcupo) throws SQLException {
         try {
             int filas;
             String sql = "UPDATE ofertas SET IdEstado=2 WHERE IdOferta = ?";
@@ -563,6 +624,6 @@ public class OfertasModel extends Conexion {
             this.desconectar();
             return 0;
         }
-    
+
     }
 }

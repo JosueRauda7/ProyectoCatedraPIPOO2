@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import sv.edu.udb.www.beans.Cliente;
 import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Usuario;
+import sv.edu.udb.www.model.EmpleadosModel;
 import sv.edu.udb.www.model.OfertasModel;
 import sv.edu.udb.www.utils.Correo;
 import sv.edu.udb.www.model.UsuariosModel;
@@ -31,6 +32,7 @@ public class UsuariosController extends HttpServlet {
 
     UsuariosModel UM = new UsuariosModel();
     UsuariosModel uM = new UsuariosModel();
+    EmpleadosModel EM = new EmpleadosModel();
     OfertasModel modeloOfertas = new OfertasModel();
     ArrayList listaErrores = new ArrayList();
 
@@ -49,6 +51,12 @@ public class UsuariosController extends HttpServlet {
         
         String operacion = request.getParameter("operacion");
         
+        if(operacion.equals("insertarE")){
+            insertarUsuarioEmpleado(request, response);
+        }
+        if(operacion.equals("modificarE")){
+            modificarUsuarioEmpleado(request,response);
+        }
         if (request.getSession().getAttribute("correo") != null || request.getSession().getAttribute("estadoUsuario") != null) {
             switch (request.getSession().getAttribute("estadoUsuario").toString()) {
                 case "1":
@@ -347,6 +355,45 @@ public class UsuariosController extends HttpServlet {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     private void modificarUsuarioEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        listaErrores.clear();
+        try {
+            int idEmpleado = Integer.parseInt(request.getParameter("id"));
+            Usuario usuario = new Usuario();
+            Empleado empleado = new Empleado();        
+            
+            empleado.setNombreEmpleado(request.getParameter("nombre"));
+            empleado.setApellidoEmpleado(request.getParameter("apellido"));
+
+            if (Validaciones.isEmpty(empleado.getNombreEmpleado())) {
+                listaErrores.add("El nombre es obligatorio");
+            }
+            if (Validaciones.isEmpty(empleado.getApellidoEmpleado())) {
+                listaErrores.add("El apellido es obligatorio");
+            }
+           
+            if (listaErrores.size() > 0) {
+                request.setAttribute("listaErrores", listaErrores);
+                
+                request.setAttribute("empleado", empleado);
+                request.getRequestDispatcher("/Empresa/ModificarEmpleado.jsp").forward(request, response);
+            } else {
+                if(EM.modificarEmpelado(empleado, (String) request.getSession().getAttribute("correo"), idEmpleado)==1){
+                    request.getSession().setAttribute("exito", "Empleado actualizado "
+                            + "existosamente.");
+                }else{
+                    request.getSession().setAttribute("fracaso", "No se pudo actualizar al empleado... ");                            
+                }
+                    
+                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=listarEmpleado");
+                
+            }
+        } catch (ServletException | IOException ex) {
+            Logger.getLogger(EmpleadosController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     private void confirmar(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -495,4 +542,6 @@ public class UsuariosController extends HttpServlet {
             Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+   
 }

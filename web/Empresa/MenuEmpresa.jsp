@@ -42,7 +42,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=updateC">Cambiar contraseña</a></li>
-                            <li><a href="${pageContext.request.contextPath}/usuarios.do?operacion=cerrar">Cerrar Sesión</a></li>
+                            <li><a href="${pageContext.request.contextPath}/empresas.do?operacion=cerrar">Cerrar Sesión</a></li>
                         </ul>
                     </li>                      
 

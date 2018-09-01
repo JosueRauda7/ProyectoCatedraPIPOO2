@@ -312,5 +312,30 @@ public class UsuariosModel extends Conexion {
             return 0;
         }
     }
+    
+    public Usuario obtenerUsuario(String correo) throws SQLException{
+        
+        try {
+            Usuario usuario=new Usuario();
+            String sql = "Select * from usuarios where Correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1, correo);
+            rs=st.executeQuery();
+            if(rs.next()){
+                usuario.setConfirmado(rs.getInt("Confirmado"));
+                usuario.setCorreo(rs.getString("Correo"));
+                usuario.setContrasenia(rs.getString("Contrasena"));
+                usuario.setId_confirmacion(rs.getString("Id_confirmacion"));                
+            }
+            this.desconectar();
+            return usuario;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuariosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
+        
+    }
 }
 

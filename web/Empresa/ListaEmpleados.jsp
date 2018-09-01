@@ -34,6 +34,11 @@
 
     </head>
     <body>
+        <style>
+            p{
+                color:black;
+            }
+        </style>
         <jsp:include page="/Empresa/MenuEmpresa.jsp"></jsp:include>
 
             <section style="margin-top: 5%;" >
@@ -63,7 +68,7 @@
                                         <td>${empleados.apellidoEmpleado}</td>
                                         <td>${empleados.usuario.correo}</td>                                                                               
                                         <td>
-                                            <a class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?operacion=obtener&id=${empleado.idEmpleado}"><span class="glyphicon glyphicon-edit"></span>Editar</a>
+                                            <a class="btn btn-info" href="${pageContext.request.contextPath}/empresas.do?operacion=obtenerEmpleado&id=${empleados.idEmpleado}"><span class="glyphicon glyphicon-edit"></span>Editar</a>
                                             <a class="btn btn-danger" href="javascript:eliminar('${empleados.idEmpleado}')"><span class="glyphicon glyphicon-trash"></span>Eliminar</a>
                                         </td>
                                     </tr>

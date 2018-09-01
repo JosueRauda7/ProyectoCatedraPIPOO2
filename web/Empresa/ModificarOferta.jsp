@@ -31,7 +31,14 @@
                         </div>
                     </c:if>
                     <form action="${base}/empresas.do" method="POST" enctype="multipart/form-data" style="padding: 5%;">
-                        <input type="hidden" name="operacion" value="insertarOferta"/>
+                        <div class="form-group">
+                            <label for="justificacion" style="color:black;">Justificación</label>
+                            <div class="input-group" style>                                
+                                <p style="color: red;">${oferta.justificacion}</p>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" value="${id}" />
+                        <input type="hidden" name="operacion" value="modificarOferta"/>
                         <div class="col-md-12" style="padding-bottom: 3%;">
                             <div class="well well-sm"><strong style="color:purple;"><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
                             <div class="form-group">
@@ -72,14 +79,14 @@
                             <div class="form-group">
                                 <label for="fechal" style="color:black;">Fecha limite de la oferta:</label>
                                 <div class="input-group">
-                                    <input type="date" name="fechal" id="fechal" class="form-control" maxlength="10" value="${oferta.fechaLimite}"/>
+                                    <input type="date" name="fechal" id="fechal" class="form-control" value="${oferta.fechaLimite}"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="cantidad" style="color:black;">Cantidad límite de cupones:</label><br>
                                 <c:choose>
-                                    <c:when test="${oferta.cantidadLimite == 0}">
+                                    <c:when test="${oferta.cantidadLimite <= 0}">
                                         <input type="radio" name="limitar" onclick="cantidad.disabled = true" value="0" checked><label style="color:gray">Ilímitado.</label><br>
                                         <input type="radio" name="limitar" onclick="cantidad.disabled = false" value="1" ><label style="color:gray">Limitados.</label>
                                         <div class="input-group">                                    
@@ -105,6 +112,7 @@
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="detalles" style="color:black;">Otros detalles:</label>
                                 <div class="input-group">
@@ -112,12 +120,13 @@
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="imagen" style="color:black;">Imagen de la oferta:</label>
                                 <input data-language="es" type="file" name="archivo" id="imagen" class="form-control file file-loading" data-allowed-file-extensions='["jpg", "png"]'
-                                       value="${base}/images/ofertas/${ofertas.url_foto}"/>
+                                       value="${base}/images/ofertas/${oferta.url_foto}"/>
                             </div>
-                            <button type="submit" class="btn" style="background-color: #c2185b">Registrar</button>
+                            <button type="submit" class="btn" style="background-color: #c2185b">Reenviar</button>
                             <button type="reset" class="btn btn-info">Limpiar</button>
                         </div>
                     </form>

@@ -17,7 +17,7 @@
                 </div><br><br>
                 <div class="row">
                     <div class="col-md-7">
-                        <form role="form" action="${pageContext.request.contextPath}/empresas.do" method="POST">
+                        <form role="form" action="${pageContext.request.contextPath}/ofertas.do" method="POST">
                             <div class="form-group">
                                 <div>
                                     <input type="hidden" name="operacion" value="cambiarC" />

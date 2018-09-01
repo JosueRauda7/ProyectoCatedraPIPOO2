@@ -38,7 +38,7 @@
                         <div class="thumbnail">
                             <img class="img-responsive" src="images/portfolio/contra.jpg" alt="">
                             <div class="caption">
-                                <h3>Cambio de contraseña</h3>
+                                <h3><a href="${pageContext.request.contextPath}/empresas.do?operacion=updateC" style="text-decoration: none; color:#c2185b;">Cambio de contraseña</a></h3>
                                 <p>Cambia tu contraseña cuando quieras.</p>
                             </div>
                         </div>

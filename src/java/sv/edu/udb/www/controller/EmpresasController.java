@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
+import sv.edu.udb.www.beans.Empleado;
 import sv.edu.udb.www.beans.Empresa;
 import sv.edu.udb.www.beans.Oferta;
 import sv.edu.udb.www.beans.Usuario;
@@ -52,9 +53,9 @@ public class EmpresasController extends HttpServlet {
     OfertasModel modelo3 = new OfertasModel();*/
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
-        
+
         try (PrintWriter out = response.getWriter()) {
             modeloOfertas.actualizarEstados();
             if (request.getSession().getAttribute("correo") == null || !request.getSession().getAttribute("estadoUsuario").toString().equals("2")) {
@@ -86,11 +87,20 @@ public class EmpresasController extends HttpServlet {
                 case "eliminarEmpleado":
                     eliminarEmpleado(request, response);
                     break;
+                case "obtenerEmpleado":
+                    obtenerEmpleado(request,response);
+                    break;
                 case "updateC":
                     request.getRequestDispatcher("/Empresa/cambiarContrasena.jsp").forward(request, response);
                     break;
                 case "cambiarC":
                     cambiarContrasena(request, response);
+                    break;
+                case "obtenerOferta":
+                    obtenerOferta(request, response);
+                    break;
+                case "cerrar":
+                    cerrarSesion(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -127,7 +137,7 @@ public class EmpresasController extends HttpServlet {
         listaErrores.clear();
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         String directorio = getServletContext().getRealPath("/images/ofertas");
         MultipartRequest multi = new MultipartRequest(request, directorio, 1 * 1024 * 1024, new DefaultFileRenamePolicy());
         String operacion = multi.getParameter("operacion");
@@ -137,6 +147,8 @@ public class EmpresasController extends HttpServlet {
             } catch (ParseException ex) {
                 Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else if (operacion.equals("modificarOferta")) {
+            modificarOferta(multi, request, response);
         }
 
     }
@@ -157,7 +169,7 @@ public class EmpresasController extends HttpServlet {
             if (request.getParameter("tipoOferta") != null) {
                 tipoOferta = Integer.parseInt(request.getParameter("tipoOferta"));
             }
-                                                
+
             request.setAttribute("listaOfertas", modeloOfertas.listarOferta((String) request.getSession().getAttribute("correo"), tipoOferta));
             try {
                 request.getRequestDispatcher("/Empresa/ListaOfertas.jsp").forward(request, response);
@@ -187,14 +199,12 @@ public class EmpresasController extends HttpServlet {
         try {
             int ilimitado = 0;
             Oferta oferta = new Oferta();
-            Date hoy = new Date();
-            String actual = formato.format(hoy);
 
             ilimitado = Integer.parseInt(multi.getParameter("limitar"));
             oferta.setTituloOferta(multi.getParameter("titulo"));
             oferta.setPrecioRegular(multi.getParameter("precior"));
             oferta.setPrecioOferta(multi.getParameter("precioo"));
-            oferta.setFechaInicio(actual);
+            oferta.setFechaInicio(multi.getParameter("fechai"));
             oferta.setFechaFin(multi.getParameter("fechaf"));
             oferta.setFechaLimite(multi.getParameter("fechal"));
             oferta.setDescripcionOferta(multi.getParameter("descripcion"));
@@ -239,6 +249,9 @@ public class EmpresasController extends HttpServlet {
 
             }
 
+            if (Validaciones.isEmpty(oferta.getFechaInicio())) {
+                listaErrores.add("La fecha inicial de la oferta es obligatoria");
+            }
             if (Validaciones.isEmpty(oferta.getFechaFin())) {
                 listaErrores.add("La fecha final de la oferta es obligatoria");
             }
@@ -275,7 +288,7 @@ public class EmpresasController extends HttpServlet {
                         request.getSession().setAttribute("fracaso", "Ocurrio un error, no se pudo registrar la oferta...");
                     }
 
-                    response.sendRedirect(request.getContextPath() + "/ofertas.do?operacion=listar");
+                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=listarOferta");
                 } else {
                     request.setAttribute("listaErrores", listaErrores);
                     request.setAttribute("oferta", oferta);
@@ -316,7 +329,12 @@ public class EmpresasController extends HttpServlet {
             Empresa empresa = modeloEmpresa.detalleEmpresa((String) request.getSession().getAttribute("correo"));
             JSONObject json = new JSONObject();
             json.put("CuponesVendidos", oferta.getCantidadVendida());
-            json.put("CuponesDisponibles", oferta.getCantidadLimite());
+            if (oferta.getCantidadLimite() == -1) {
+                json.put("CuponesDisponibles", "Ilimitada");
+            } else {
+                json.put("CuponesDisponibles", oferta.getCantidadLimite());
+            }
+
             json.put("IngresosTotales", (oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
             json.put("Cargoporservicios", (Double.parseDouble(empresa.getComision())) * (oferta.getCantidadVendida() * Double.parseDouble(oferta.getPrecioOferta())));
             json.put("Descripcion", oferta.getDescripcionOferta());
@@ -401,4 +419,160 @@ public class EmpresasController extends HttpServlet {
         }
     }
 
+    private void obtenerOferta(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int codigo = Integer.parseInt(request.getParameter("id"));
+            Oferta oferta = modeloOfertas.obtenerOferta((String) request.getSession().getAttribute("correo"), codigo);
+            if (oferta != null) {
+                request.setAttribute("oferta", oferta);
+                request.setAttribute("id", codigo);
+                request.getRequestDispatcher("/Empresa/ModificarOferta.jsp").forward(request, response);
+            } else {
+                request.getSession().setAttribute("fracaso", "Ocurrio un error, no se pudo encontrar la oferta...");
+                response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=listarOferta");
+            }
+        } catch (SQLException | IOException | ServletException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void modificarOferta(MultipartRequest multi, HttpServletRequest request, HttpServletResponse response) {
+        listaErrores.clear();
+        //Si la cantidad es ilimitada o no 
+        DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            int ilimitado = 0;
+            Oferta oferta = new Oferta();
+            int idOferta = Integer.parseInt(multi.getParameter("id"));
+
+            ilimitado = Integer.parseInt(multi.getParameter("limitar"));
+            oferta.setTituloOferta(multi.getParameter("titulo"));
+            oferta.setPrecioRegular(multi.getParameter("precior"));
+            oferta.setPrecioOferta(multi.getParameter("precioo"));
+            oferta.setFechaInicio(multi.getParameter("fechai"));
+            oferta.setFechaFin(multi.getParameter("fechaf"));
+            oferta.setFechaLimite(multi.getParameter("fechal"));
+            oferta.setDescripcionOferta(multi.getParameter("descripcion"));
+            oferta.setOtrosDetalles(multi.getParameter("detalles"));
+
+            oferta.setDescripcionOferta(multi.getParameter("descripcion"));
+            oferta.setOtrosDetalles(multi.getParameter("detalles"));
+
+            if (Validaciones.isEmpty(oferta.getTituloOferta())) {
+                listaErrores.add("Titulo es obligatorio");
+            }
+            if (Validaciones.isEmpty(oferta.getPrecioRegular())) {
+                listaErrores.add("Precio regular es obligatorio");
+            } else if (!Validaciones.esDecimal(oferta.getPrecioRegular())) {
+                listaErrores.add("Precio regular debe ser un decimal");
+            } else if (!Validaciones.esDecimalPositivo(oferta.getPrecioRegular())) {
+                listaErrores.add("Precio regular debe ser un decimal positivo");
+            }
+
+            if (Validaciones.isEmpty(oferta.getPrecioOferta())) {
+                listaErrores.add("Precio oferta es obligatorio");
+            } else if (!Validaciones.esDecimal(oferta.getPrecioOferta())) {
+                listaErrores.add("Precio oferta debe ser un decimal");
+            } else if (!Validaciones.esDecimalPositivo(oferta.getPrecioOferta())) {
+                listaErrores.add("Precio oferta debe ser un decimal positivo");
+            }
+
+            if (ilimitado == 0) {
+                oferta.setCantidadLimite(0);
+            }
+
+            if (ilimitado == 1) {
+                if (Validaciones.isEmpty(multi.getParameter("cantidad"))) {
+                    listaErrores.add("La cantidad de cupones es obligatorio");
+                    oferta.setCantidadLimite(1);
+                } else if (Integer.parseInt(multi.getParameter("cantidad")) <= 0) {
+                    listaErrores.add("La cantidad de cupones debe ser mayor a 0");
+                    oferta.setCantidadLimite(1);
+                } else {
+                    oferta.setCantidadLimite(Integer.parseInt(multi.getParameter("cantidad")));
+                }
+
+            }
+            if (Validaciones.isEmpty(oferta.getFechaInicio())) {
+                listaErrores.add("La fecha inicial de la oferta es obligatoria");
+            }
+            if (Validaciones.isEmpty(oferta.getFechaFin())) {
+                listaErrores.add("La fecha final de la oferta es obligatoria");
+            }
+
+            if (Validaciones.isEmpty(oferta.getFechaLimite())) {
+                listaErrores.add("La fecha limite de la oferta es obligatoria");
+            }
+
+            if (Validaciones.isEmpty(oferta.getDescripcionOferta())) {
+                listaErrores.add("Agrega una descripción a la oferta");
+            }
+            if (Validaciones.isEmpty(oferta.getOtrosDetalles())) {
+                listaErrores.add("Agrege otros detalles a la oferta");
+            }
+            if (multi.getFile("archivo") == null) {
+                listaErrores.add("La imagen es obligatoria");
+            } else {
+                File ficheroTemp = multi.getFile("archivo");
+                oferta.setUrl_foto(ficheroTemp.getName());
+            }
+
+            if (listaErrores.isEmpty()) {
+
+                if (Double.parseDouble(oferta.getPrecioOferta()) > Double.parseDouble(oferta.getPrecioRegular())) {
+                    listaErrores.add("El precio de la oferta no debe superar el precio regular");
+                }
+
+                //VALIDACION DE COMPARACION DE FECHAS AQUI
+                //***************************************
+                if (listaErrores.isEmpty()) {
+                    if (modeloOfertas.modificarOferta(oferta, (String) request.getSession().getAttribute("correo"), idOferta) == 1) {
+                        request.getSession().setAttribute("exito", "Oferta reenviada existosamente.");
+                    } else {
+                        request.getSession().setAttribute("fracaso", "Ocurrio un error, no se pudo reenviar la oferta...");
+                    }
+
+                    response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=listarOferta");
+                } else {
+                    request.setAttribute("listaErrores", listaErrores);
+                    request.setAttribute("oferta", oferta);
+                    request.getRequestDispatcher("/Empresa/ModificarOferta.jsp").forward(request, response);
+                }
+
+            } else {
+                request.setAttribute("listaErrores", listaErrores);
+                request.setAttribute("oferta", oferta);
+                request.getRequestDispatcher("/Empresa/ModificarOferta.jsp").forward(request, response);
+            }
+        } catch (IOException | ServletException | SQLException ex) {
+            Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getSession().setAttribute("correo", null);
+            request.getSession().setAttribute("estadoUsuario", null);
+            response.sendRedirect(request.getContextPath() + "/usuarios.do?operacion=login");
+        } catch (IOException ex) {
+            Logger.getLogger(UsuariosController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void obtenerEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int codigo = Integer.parseInt(request.getParameter("id"));
+            Empleado empleado = modeloEmpleado.obtenerEmpleado((String) request.getSession().getAttribute("correo"), codigo);            
+            if (empleado != null) {
+                request.setAttribute("empleado", empleado);                
+                request.setAttribute("id", codigo);
+                request.getRequestDispatcher("/Empresa/ModificarEmpleado.jsp").forward(request, response);
+            } else {
+                request.getSession().setAttribute("fracaso", "Ocurrio un error, no se pudo encontrar al empleado...");
+                response.sendRedirect(request.getContextPath() + "/empresas.do?operacion=listarEmpleado");
+            }
+        } catch (SQLException | IOException | ServletException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

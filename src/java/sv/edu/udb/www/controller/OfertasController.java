@@ -28,6 +28,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import sv.edu.udb.www.beans.Oferta;
+import sv.edu.udb.www.beans.Usuario;
+import sv.edu.udb.www.model.UsuariosModel;
 import sv.edu.udb.www.utils.Validaciones;
 
 /**
@@ -39,9 +41,8 @@ public class OfertasController extends HttpServlet {
 
     OfertasModel modeloOfertas = new OfertasModel();
     EstadoOfertaModel modeloEstado = new EstadoOfertaModel();
-
+    UsuariosModel UM = new UsuariosModel();
     ArrayList listaErrores = new ArrayList();
-
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -74,6 +75,9 @@ public class OfertasController extends HttpServlet {
                 ingresar(request, response);
                 break;
 
+            case "cambiarC":
+                cambiarContrasena(request, response);
+                break;
 
         }
     }
@@ -104,19 +108,7 @@ public class OfertasController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        listaErrores.clear();
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String directorio = getServletContext().getRealPath("/images/ofertas");
-        MultipartRequest multi = new MultipartRequest(request, directorio, 1 * 1024 * 1024, new DefaultFileRenamePolicy());
-        String operacion = multi.getParameter("operacion");
-        if (operacion.equals("insertar")) {
-            try {
-                insertar(multi, request, response);
-            } catch (ParseException ex) {
-                Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        processRequest(request, response);
 
     }
 
@@ -160,7 +152,6 @@ public class OfertasController extends HttpServlet {
             Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 
     private void insertar(MultipartRequest multi, HttpServletRequest request, HttpServletResponse response) throws ParseException {
         listaErrores.clear();
@@ -207,18 +198,18 @@ public class OfertasController extends HttpServlet {
             if (ilimitado == 0) {
                 oferta.setCantidadLimite(0);
             }
-            
-            if(ilimitado==1){
+
+            if (ilimitado == 1) {
                 if (Validaciones.isEmpty(multi.getParameter("cantidad"))) {
                     listaErrores.add("La cantidad de cupones es obligatorio");
                     oferta.setCantidadLimite(1);
                 } else if (Integer.parseInt(multi.getParameter("cantidad")) <= 0) {
                     listaErrores.add("La cantidad de cupones debe ser mayor a 0");
                     oferta.setCantidadLimite(1);
-                }else{
+                } else {
                     oferta.setCantidadLimite(Integer.parseInt(multi.getParameter("cantidad")));
                 }
-                
+
             }
 
             if (Validaciones.isEmpty(oferta.getFechaFin())) {
@@ -228,7 +219,6 @@ public class OfertasController extends HttpServlet {
             if (Validaciones.isEmpty(oferta.getFechaLimite())) {
                 listaErrores.add("La fecha limite de la oferta es obligatoria");
             }
-
 
             if (Validaciones.isEmpty(oferta.getDescripcionOferta())) {
                 listaErrores.add("Agrega una descripción a la oferta");
@@ -250,7 +240,6 @@ public class OfertasController extends HttpServlet {
                 }
 
                 //VALIDACION DE COMPARACION DE FECHAS AQUI
-                
                 //***************************************
                 if (listaErrores.isEmpty()) {
                     if (modeloOfertas.insertarOferta(oferta, (String) request.getSession().getAttribute("correo")) == 1) {
@@ -273,6 +262,61 @@ public class OfertasController extends HttpServlet {
             }
         } catch (IOException | ServletException | SQLException ex) {
             Logger.getLogger(OfertasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cambiarContrasena(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String contrasenaActual = request.getParameter("contrasenaActual");
+            String confirmContra = request.getParameter("confirmarContrasena");
+            String nuevaContrasena = request.getParameter("nuevaContrasena");
+
+            //Se obtiene la variable de sesión, idUsuario
+            int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+            System.out.println("Variable sesión: " + idUsuario);
+
+            //Se manda a llamar el método para obtener la contraseña
+            Usuario contrasenabdd = UM.obtenerContrasena(idUsuario);
+
+            //Tipo de usuario que se recoge del formulario
+            String tipoUsuario = request.getParameter("tipo");
+
+            System.out.println(tipoUsuario);
+            System.out.println(contrasenaActual);
+            System.out.println(confirmContra);
+            System.out.println(nuevaContrasena);
+            System.out.println("BDD" + contrasenabdd.getContrasenia());
+
+            if (contrasenaActual.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (confirmContra.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su contraseña actual");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (nuevaContrasena.equals("")) {
+                request.setAttribute("Fracaso", "Ingrese su nueva contraseña");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenabdd.getContrasenia().equals(contrasenaActual)) {
+                request.setAttribute("Fracaso", "Contraseña incorrecta");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            }
+
+            if (!contrasenaActual.equals(confirmContra)) {
+                request.setAttribute("Fracaso", "Las contraseñas no coinciden");
+                request.getRequestDispatcher("/empresas.do?operacion=updateC").forward(request, response);
+            } else {
+                if (UM.cambiarContrasena(idUsuario, nuevaContrasena) > 0) {
+                    request.getRequestDispatcher("/Empresa/Home.jsp").forward(request, response);
+                }
+            }
+        } catch (SQLException | ServletException | IOException ex) {
+            Logger.getLogger(EmpresasController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -156,6 +156,32 @@ public class EmpleadosModel extends Conexion {
             return 0;
         }
     }
+    
+    public int modificarEmpelado(Empleado empleado,String correo, int idEmpleado) throws SQLException{
+        try {
+            int filasAfectadas=0;
+            String sql="select * from empresas e inner join usuarios u on e.IdUsuario=u.IdUsuario where u.correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1,correo);
+            rs=st.executeQuery();
+            rs.next();
+            String codigoEmpresa= rs.getString("CodigoEmpresa");
+            
+            sql ="Update empleado SET NombreEmpleado=?, ApellidoEmpleado=? where IdEmpleado=?";
+            st=conexion.prepareStatement(sql);
+            st.setString(1,empleado.getNombreEmpleado());
+            st.setString(2, empleado.getApellidoEmpleado());
+            st.setInt(3, idEmpleado);            
+            filasAfectadas=st.executeUpdate();
+            this.desconectar();            
+            return filasAfectadas;
+        } catch (SQLException ex) {
+            Logger.getLogger(EmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
 
     public int eliminarEmpleado(int idEmpleado) throws SQLException{
             int IdUsuario=0;
@@ -196,5 +222,42 @@ public class EmpleadosModel extends Conexion {
             return 0;
         }
         
+    }
+    
+    public Empleado obtenerEmpleado(String correo, int idEmpleado) throws SQLException{
+        try {
+            
+            Empleado empleado = new Empleado();
+            String sql="Select e.CodigoEmpresa from empresas e inner join usuarios u on e.IdUsuario=u.IdUsuario where u.correo=?";
+            this.conectar();
+            st=conexion.prepareStatement(sql);
+            st.setString(1, correo);
+            rs=st.executeQuery();
+            rs.next();
+            
+            String CodigoEmpresa=rs.getString("CodigoEmpresa");
+            
+            sql="Select * from empleado e inner join empresas em on e.CodigoEmpresa=em.CodigoEmpresa"
+                    + " inner join usuarios u on e.IdUsuario=u.IdUsuario where em.CodigoEmpresa=? and e.IdEmpleado=?";
+            st=conexion.prepareStatement(sql);
+            st.setString(1,CodigoEmpresa);
+            st.setInt(2,idEmpleado);
+            
+            rs=st.executeQuery();
+            while(rs.next()){
+                
+                empleado.setIdEmpleado(rs.getInt("IdEmpleado"));
+                empleado.setNombreEmpleado(rs.getString("NombreEmpleado"));
+                empleado.setApellidoEmpleado(rs.getString("ApellidoEmpleado"));
+                empleado.setUsuario(new Usuario(rs.getString("correo")));
+                
+            }
+            this.desconectar();
+            return empleado;
+        } catch (SQLException ex) {
+            Logger.getLogger(OfertasModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return null;
+        }
     }
 }
