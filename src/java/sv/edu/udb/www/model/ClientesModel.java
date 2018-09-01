@@ -252,6 +252,66 @@ public class ClientesModel extends Conexion {
             return null;
         }
     }
+    
+    public int obtenerIdCliente(String idUsuario) throws SQLException{
+        try {
+            String sql="SELECT IdCliente FROM clientes WHERE IdUsuario=?";
+            int idCliente=0;
+            this.conectar();
+            st2=conexion.prepareStatement(sql);
+            st2.setInt(1, Integer.parseInt(idUsuario));
+            rs2=st2.executeQuery();
+            rs2.next();
+            idCliente=rs2.getInt("IdCliente");
+            this.desconectar();
+            return idCliente;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
+    
+    public int insertarCupon(String idOferta, String idCliente) throws SQLException {
+        try {
+            int filasAfectadas = 0;
+            String sql = "INSERT INTO cupones VALUES (?,?,0000-00-00,?,?,1)";
+            Oferta oferta = new Oferta();
+            Date fechaActual = null;
+            int cliente = this.obtenerIdCliente(idCliente);
+            oferta = this.obtenerCupones(idOferta);
+            this.conectar();
+            //CURDATE() me da la fechaactual en formato año-mes-dia
+            String sqlF = "SELECT CURRENT_DATE AS fechaActual";
+            st = conexion.prepareStatement(sqlF);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                fechaActual = rs.getDate("fechaActual");
+            }
+            if (oferta.getCantidadLimite() > 0) {
+                //Restar cantidad limite
+                String sqlC = "UPDATE ofertas SET CantidadLimite=(SELECT CantidadLimite)-1 WHERE IdOferta=?";
+                st = conexion.prepareStatement(sqlC);
+                st.setInt(1, Integer.parseInt(idOferta));
+                filasAfectadas = st.executeUpdate();
+                //insercion de cupon
+                st = conexion.prepareStatement(sql);
+                st.setString(1, oferta.getCodigoEmpresa()+(int)(Math.random() * 8999999 + 1000000));
+                st.setString(2, fechaActual.toString());
+                st.setInt(3, cliente);
+                st.setInt(4, Integer.parseInt(idOferta));
+                filasAfectadas = st.executeUpdate();
+                this.desconectar();
+                return filasAfectadas;
+            }
+            this.desconectar();
+            return 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesModel.class.getName()).log(Level.SEVERE, null, ex);
+            this.desconectar();
+            return 0;
+        }
+    }
 
     public Oferta obtenerOferta(int idOferta) {
 
