@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e36be1e7-69e7-40e8-bb6e-20d1bcba3134">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="94"/>
+	<parameter name="P_CUPON" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT cupones.CodigoCupo,
+       cupones.FechaCompra,
+       ofertas.TituloOferta,
+       ofertas.PrecioOferta,
+       ofertas.FechaLimite,
+       ofertas.DescripcionOferta,
+       clientes.NombreClientes,
+       clientes.ApellidosClientes,
+       empresas.NombreEmpresa,
+       empresas.Telefono
+FROM ((bddpoo.ofertas ofertas
+       INNER JOIN bddpoo.empresas empresas
+          ON (ofertas.CodigoEmpresa = empresas.CodigoEmpresa))
+      INNER JOIN bddpoo.cupones cupones
+         ON (cupones.IdOferta = ofertas.IdOferta))
+     INNER JOIN bddpoo.clientes clientes
+        ON (cupones.IdCliente = clientes.IdCliente)
+        WHERE cupones.CodigoCupo=$P{P_CUPON}]]>
+	</queryString>
+	<field name="CodigoCupo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FechaCompra" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TituloOferta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PrecioOferta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FechaLimite" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DescripcionOferta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NombreClientes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ApellidosClientes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NombreEmpresa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9642a1d4-0c68-409b-8494-883e955aeb27" x="39" y="14" width="500" height="48"/>
+				<textElement textAlignment="Center">
+					<font size="28" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Factura de La Cuponera UDB]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9d4f79f9-2f77-4c1a-ad8e-4bcc67b08d54" x="39" y="10" width="129" height="24"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código de Cupon:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2815f6c8-710c-4cf2-9fe8-9fa1e4e971d9" x="182" y="10" width="194" height="24"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CodigoCupo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a6197382-0009-424a-9261-b3ba5d4ea2f7" x="39" y="10" width="116" height="38"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Título de Oferta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="60b94e47-da54-4090-8d50-72be93d2346c" x="155" y="12" width="384" height="36"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TituloOferta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3557d68c-09b0-4b41-bd64-81abbe6ea734" x="39" y="13" width="129" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Descripción de Cupon:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b3eff2c7-9aa3-4a45-8c23-91a94f3f6bf3" x="43" y="41" width="496" height="44"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{DescripcionOferta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="404bad6c-079e-4a19-96cb-c32f173fc268" x="39" y="13" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio Oferta: $]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="93b0dde2-d738-4d14-9ad2-b62b9ee7ebb1" x="143" y="13" width="396" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PrecioOferta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="107" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="74338d13-a759-494b-8b39-1b942b2f3cdb" x="39" y="11" width="83" height="17"/>
+				<textElement/>
+				<text><![CDATA[A nombre de ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="97202347-5969-4e48-b11a-852000e6d51c" x="39" y="38" width="83" height="18"/>
+				<textElement/>
+				<text><![CDATA[Fecha límite de canje: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9f797c0c-9de6-4b55-840e-561f50396c09" x="136" y="14" width="197" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{NombreClientes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6b11031b-bb93-438c-adc9-ecc00fff2c68" x="348" y="14" width="191" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ApellidosClientes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="0f2a4cd3-5c1d-4e2c-a835-a1e6de99656e" x="136" y="38" width="197" height="18"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{FechaLimite}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cfa4bcad-ea42-45b2-9044-b3c82fbd4df0" x="43" y="71" width="496" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NombreEmpresa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
